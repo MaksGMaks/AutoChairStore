@@ -8,32 +8,24 @@
 #include "DatabaseQueries.hpp"
 #include "../../_common/src/Repositories.hpp"
 
-#include "UserTable.hpp"
-#include "SuppliersTable.hpp"
-#include "PurchaseOrdersTable.hpp"
-#include "ProductsTable.hpp"
-#include "ProductInfoTable.hpp"
-#include "PhotosTable.hpp"
-#include "ManagersTable.hpp"
-#include "InventoryTable.hpp"
+#include "ITableFactory.hpp"
 
 using json = nlohmann::json;
 
 class DatabaseManager {
 public:
-    DatabaseManager();
+    explicit DatabaseManager(std::unique_ptr<ITableFactory> tableFactory);
     ~DatabaseManager();
 
     void readRequest(Request request, Common::Dataset &entity);
 private:
     sqlite3 *dataTable;
 
-    UsersTable *users;
-    SuppliersTable *suppliers;
-    PurchaseOrdersTable *purchaseOrders;
-    ProductsTable *products;
-    ProductInfoTable *productInfo;
-    PhotosTable *photos;
-    ManagersTable *managers;
-    InventoryTable *inventory;
+    std::unique_ptr<ITable> users;
+    std::unique_ptr<ITable> suppliers;
+    std::unique_ptr<ITable> purchaseOrders;
+    std::unique_ptr<ITable> products;
+    std::unique_ptr<ITable> productInfo;
+    std::unique_ptr<ITable> photos;
+    std::unique_ptr<ITable> inventory;
 };
