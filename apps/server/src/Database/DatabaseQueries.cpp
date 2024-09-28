@@ -86,13 +86,51 @@ bool database::create_db(sqlite3*& db) {
         return false;
     }
 
-    rc = sqlite3_exec(db,  query.c_str(), 0, 0, 0);
+    users = new UsersTable(dataTable);
+    suppliers = new SuppliersTable(dataTable);
+    purchaseOrders = new PurchaseOrdersTable(dataTable);
+    products = new ProductsTable(dataTable);
+    productInfo = new ProductInfoTable(dataTable);
+    photos = new PhotosTable(dataTable);
+    managers = new ManagersTable(dataTable);
+    inventory = new InventoryTable(dataTable);
+}
 
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << 0 << std::endl;
-        sqlite3_free(0);
-        sqlite3_close(db);
-        return false;
+DatabaseManager::~DatabaseManager() {}
+
+void DatabaseManager::readRequest(Request request, Common::Dataset &entity) {
+    
+    if(entity["TABLE:"].front() == Common::Users::TABLE_NAME) {
+        switch (request)
+        {
+        case Request::GETALL:
+            std::cout << "[UserTable::GETALL] >> operation started\n";
+            entity.clear();
+            entity = users->getAll();
+            break;
+
+        case Request::GET:
+            std::cout << "[UserTable::GET] >> operation started\n";
+            users->get(entity);
+            break;
+        case Request::ADD:
+            std::cout << "[UserTable::ADD] >> operation started\n";
+            if(!users->add(entity))
+                std::cout << "[UserTable::ADD] >> operation failed\n";
+            break;
+        case Request::UPDATE:
+            std::cout << "[UserTable::UPDATE] >> operation started\n";
+            if(!users->update(entity))
+                std::cout << "[UserTable::UPDATE] >> operation failed\n";
+            break;
+        case Request::DELETE:
+            std::cout << "[UserTable::DELETE] >> operation started\n";
+            if(!users->deleteAt(entity))
+                std::cout << "[UserTable::DELETE] >> operation failed\n";
+            break;
+        default:
+            break;
+        }
     }
 
     sqlite3_close(db);
