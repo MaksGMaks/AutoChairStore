@@ -3,13 +3,16 @@ add_executable(${SERVER_NAME} ${ALL_SERVER_SOURCES})
 
 # Include directories
 target_include_directories(${SERVER_NAME} PUBLIC ${SERVER_SOURCES_DIR})
+# include_directories(${CMAKE_SOURCE_DIR}/../_common/src)
 
 # Link libs
 target_link_libraries(
     ${SERVER_NAME} 
     PUBLIC
+    common
     boost_common 
     SQLite::SQLite3
+    nlohmann_json::nlohmann_json
     $<$<PLATFORM_ID:Windows>:Ws2_32>
     $<$<PLATFORM_ID:Windows>:Wsock32>
 )
