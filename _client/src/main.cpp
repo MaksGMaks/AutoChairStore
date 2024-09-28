@@ -2,8 +2,6 @@
 #include "Network/NetworkManager.hpp"
 
 int main() {
-    NetworkManager *network = new NetworkManager();
-    network->sendMessage();
-    network->readResponse();
+    std::unique_ptr<NetworkManager> network = std::make_unique<NetworkManager>();
     return 0;
 }
