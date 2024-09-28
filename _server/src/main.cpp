@@ -1,45 +1,14 @@
 #include <iostream>
-#include <boost/asio.hpp>
 
 #include "Database/DatabaseManager.hpp"
+#include "Network/NetworkManager.hpp"
 
-namespace bt_ai = boost::asio;
-namespace bt_ip = bt_ai::ip;
-
-std::string read_(bt_ip::tcp::socket & socket) {
-      boost::asio::streambuf buf;
-      boost::asio::read_until( socket, buf, "\n" );
-      std::string data = boost::asio::buffer_cast<const char*>(buf.data());
-      return data;
-}
-void send_(boost::asio::ip::tcp::socket & socket, const std::string& message) {
-      const std::string msg = message + "\n";
-      boost::asio::write( socket, boost::asio::buffer(message) );
-}
 
 int main() {
-      sqlite3* db = nullptr;
-      if(database::create_db(db)) {
-            std::cout << "Database was successfully created" << std::endl;
-      }
+      DatabaseManager *databaseManager = new DatabaseManager();
 
-      boost::asio::io_service io_service;
+      NetworkManager *network = new NetworkManager(databaseManager);
+      network->listen();
 
-      //listen for new connection
-      bt_ip::tcp::acceptor acceptor_(io_service, bt_ip::tcp::endpoint(bt_ip::tcp::v4(), 1234 ));
-      
-      //socket creation 
-      bt_ip::tcp::socket socket_(io_service);
-      
-      //waiting for connection
-      acceptor_.accept(socket_);
-
-      //read operation
-      std::string message = read_(socket_);
-      std::cout << message << std::endl;
-
-      //write operation
-      send_(socket_, "Hello From Server!");
-      std::cout << "Servent sent Hello message to Client!" << std::endl;
       return 0;
 }

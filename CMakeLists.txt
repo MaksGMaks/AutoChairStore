@@ -14,10 +14,11 @@ option(BUILD_SERVER "Build the server application." OFF)
 
 # Common includes and sources
 set(COMMON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/_common")
+#include_directories(${CMAKE_SOURCE_DIR}/_common/src)
 
-# if(BUILD_CLIENT OR BUILD_SERVER)
-#     add_subdirectory(_common)
-# endif()
+if(BUILD_CLIENT OR BUILD_SERVER)
+    add_subdirectory(_common)
+endif()
 
 if(BUILD_CLIENT)
     add_subdirectory(_client)

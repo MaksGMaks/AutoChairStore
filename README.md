@@ -16,15 +16,48 @@
    ```
    into your .bashrc file. INPORTANT: version of qt is 6.6.2
 
-2. Go to build folder and run cmake with presets
+3. Go to build folder and run cmake with presets
 
    ```
    cd build
    cmake .. --preset conan-debug -DBUILD_CLIENT=ON -DBUILD_SERVER=ON
    ```
 
-3. Build the project
+4. Build the project
 
    ```
    cmake --build .
    ```
+## If conan not installed
+If you don't have conan, install it via official site
+   ```
+   https://conan.io
+   ```
+   or, if you in Linux
+   ```
+   sudo apt install python3-pip
+   sudo pip install conan
+   ```
+To start, use
+```
+conan profile detect
+```
+then find path to profile
+```
+conan profile path default
+```
+and paste next into it
+```
+[settings]
+arch=x86_64
+build_type=Debug
+compiler=gcc
+compiler.cppstd=gnu20
+compiler.libcxx=libstdc++11
+compiler.version=11
+os=Linux
+[options]
+*:shared=True
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+```
