@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 
 #include "DatabaseQueries.hpp"
-#include "../../_common/src/Repositories.hpp"
+#include "Repositories.hpp"
 
 class ITable {
 

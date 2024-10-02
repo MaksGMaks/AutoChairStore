@@ -6,18 +6,16 @@
 #include <nlohmann/json.hpp>
 
 #include "DatabaseQueries.hpp"
-#include "../../_common/src/Repositories.hpp"
+#include "Repositories.hpp"
 
 #include "ITableFactory.hpp"
-
-using json = nlohmann::json;
 
 class DatabaseManager {
 public:
     explicit DatabaseManager(std::unique_ptr<ITableFactory> tableFactory);
     ~DatabaseManager();
 
-    void readRequest(Request request, Common::Dataset &entity);
+    void readRequest(Common::Request request, Common::Dataset &entity);
 private:
     sqlite3 *dataTable;
 

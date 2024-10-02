@@ -4,8 +4,8 @@
 #include <boost/asio.hpp>
 #include <nlohmann/json.hpp>
 
-#include "../../_common/src/Repositories.hpp"
-#include "../../_common/src/StructureSerializer.hpp"
+#include "Repositories.hpp"
+#include "StructureSerializer.hpp"
 
 namespace bt_ai = boost::asio;
 namespace bt_ip = bt_ai::ip;
@@ -13,8 +13,8 @@ namespace bt_ip = bt_ai::ip;
 class NetworkManager {
 public:
     NetworkManager();
-    void sendMessage();
-    void readResponse();
+    void sendRequest(const Common::Dataset data, const Common::Request request);
+    Common::Dataset readResponse();
 
 private:
     boost::asio::io_service io_service;
