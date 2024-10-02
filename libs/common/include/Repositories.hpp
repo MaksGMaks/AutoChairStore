@@ -20,17 +20,6 @@ namespace Common {
         std::string password{};
     };
 
-    struct Managers {
-        static constexpr const char *TABLE_NAME     = "Managers";
-        static constexpr const char *ID_KEY         = "id";
-        static constexpr const char *USERNAME_KEY   = "username";
-        static constexpr const char *PASSWORD_KEY   = "password";
-    
-        std::string id{};
-        std::string username{};
-        std::string password{};
-    };
-
     struct Suppliers {
         static constexpr const char *TABLE_NAME = "Suppliers";
         static constexpr const char *ID_KEY     = "id";
@@ -124,17 +113,14 @@ namespace Common {
     };
     
     using Data    = std::list<std::string>;
-    using Dataset = std::unordered_map<std::string, Data>;
-    
-    
-    
-    
-}
+    using Dataset = std::unordered_map<std::string, Data>;   
 
-enum class Request {
+    enum class Request {
     GET = 0,
     ADD = 1,
     DELETE = 2,
     UPDATE = 3,
     GETALL = 4
 };
+
+}

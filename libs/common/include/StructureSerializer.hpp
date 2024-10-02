@@ -4,11 +4,10 @@
 #include <string>
 
 #include "Repositories.hpp"
-using json = nlohmann::json;
 
 namespace Serializer
 {
-    json serialize(const Common::Dataset& data);
+    nlohmann::json serialize(const Common::Dataset& data);
 
-    Common::Dataset deserialize(const json& buffer);
+    Common::Dataset deserialize(const nlohmann::json& buffer);
 } // namespace Serializer

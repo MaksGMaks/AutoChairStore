@@ -4,7 +4,7 @@
 #include <sqlite3.h>
 #include <vector>
 
-#include "../../_common/src/Repositories.hpp"
+#include "Repositories.hpp"
 
 namespace database
 {
