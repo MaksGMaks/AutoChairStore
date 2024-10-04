@@ -6,8 +6,8 @@
 class ApiManager : public QObject {
     Q_OBJECT
 public:
-    explicit ApiManager(NetworkManager &NetworkManager);
-    ~ApiManager();
+    ApiManager(NetworkManager &NetworkManager);
+    virtual ~ApiManager();
 
 private:
     NetworkManager &m_networkManager;

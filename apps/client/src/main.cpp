@@ -1,25 +1,22 @@
 #include <iostream>
+#include <QApplication>
+
 #include "Network/NetworkManager.hpp"
+#include "Network/ApiManager.hpp"
+#include "Ui/MainWindow.hpp"
 
-int main() {
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
     std::unique_ptr<NetworkManager> network = std::make_unique<NetworkManager>();
+    ApiManager apiManager(*network);
+    
+    ModelFactory modelFactory(apiManager);
+    ViewModelFactory vmFactory;
+    ViewFactory viewFactory;
 
-    Common::Dataset data;
-    data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
-    data[Common::COLUMN_KEY] = {Common::Users::EMAIL_KEY};
-    data[Common::Users::EMAIL_KEY] = {"test2"};
+    std::unique_ptr<MainWindow> mainWindow = std::make_unique<MainWindow>(modelFactory, vmFactory, viewFactory);
+    mainWindow->show();
 
-    Common::Request request = Common::Request::GETSPECIAL;
-    network->sendRequest(data, request);
-
-    Common::Dataset data2 = network->readResponse();
-
-    for(auto &user : data2) {
-        for(auto &data : user.second) {
-            std::cout << data << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    return 0;
+    return app.exec();
 }

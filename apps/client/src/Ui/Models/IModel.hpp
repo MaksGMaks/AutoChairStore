@@ -6,8 +6,8 @@ class IModel : public QObject {
     Q_OBJECT
 
 public:
-    explicit IModel(QObject *parent = nullptr);
-    virtual ~IModel();
+    IModel(QObject *parent = nullptr);
+    virtual ~IModel() = default;
 
 signals:
     void errorOccurred(const QString &errorMessage);
