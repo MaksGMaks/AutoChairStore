@@ -22,10 +22,7 @@ set(DATABASE
     ${SERVER_SOURCES_DIR}/Database/DatabaseManager.cpp
     ${SERVER_SOURCES_DIR}/Database/DatabaseQueries.cpp
     ${SERVER_SOURCES_DIR}/Database/InventoryTable.cpp
-<<<<<<< HEAD:apps/server/CMakeLists.txt
     ${SERVER_SOURCES_DIR}/Database/ITableFactory.cpp
-=======
->>>>>>> 180c82f (Server is ready):_server/CMakeLists.txt
     ${SERVER_SOURCES_DIR}/Database/PhotosTable.cpp
     ${SERVER_SOURCES_DIR}/Database/ProductInfoTable.cpp
     ${SERVER_SOURCES_DIR}/Database/ProductsTable.cpp

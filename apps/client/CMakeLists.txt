@@ -22,9 +22,26 @@ else()
     message(FATAL_ERROR "Boost not found")
 endif()
 
+set(FACTORY_SOURCES 
+    ${CLIENT_SOURCES_DIR}/Ui/Factory/ModelFactory.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Factory/ViewFactory.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Factory/ViewModelFactory.cpp
+)
+
+
 set(MODEL_SOURCES 
     ${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
+)
+
+set(VIEWMODEL_SOURCES 
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/AccountViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp
+)
+
+set(VIEW_SOURCES 
+    ${CLIENT_SOURCES_DIR}/Ui/Views/AccountView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/IView.cpp
 )
 
 set(NETWORK_SOURCES
@@ -36,8 +53,11 @@ set(NETWORK_SOURCES
 set(ALL_CLIENT_SOURCES
     ${CLIENT_SOURCES_DIR}/main.cpp
     ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
+    ${FACTORY_SOURCES}
     ${MODEL_SOURCES}
     ${NETWORK_SOURCES}
+    ${VIEW_SOURCES}
+    ${VIEWMODEL_SOURCES}
     
 )
 

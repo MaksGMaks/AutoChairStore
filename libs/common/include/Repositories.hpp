@@ -112,15 +112,15 @@ namespace Common {
         std::string deliveryDate{};
     };
     
-    using Data    = std::list<std::string>;
-    using Dataset = std::unordered_map<std::string, Data>;   
+    typedef std::list<std::string> Data;
+    typedef std::unordered_map<std::string, Data> Dataset;
 
     enum class Request {
-    GET = 0,
-    ADD = 1,
-    DELETE = 2,
-    UPDATE = 3,
-    GETALL = 4
-};
+        GET = 0,
+        ADD = 1,
+        DELETE = 2,
+        UPDATE = 3,
+        GETALL = 4
+    };
 
 }
