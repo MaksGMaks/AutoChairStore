@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <memory>
+#include <QSharedPointer>
 #include <QWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -16,10 +16,10 @@ public:
 private:
     void setupUI();
 
-    std::unique_ptr<QPushButton> m_accountButton;
-    std::unique_ptr<QPushButton> m_purchaseBusketButton;
-    std::unique_ptr<QPushButton> m_catalogButton;
-    std::unique_ptr<QHBoxLayout> m_layout;
+    QSharedPointer<QPushButton> m_accountButton;
+    QSharedPointer<QPushButton> m_purchaseBusketButton;
+    QSharedPointer<QPushButton> m_catalogButton;
+    QSharedPointer<QHBoxLayout> m_layout;
 
 signals:
     void accountButtonClicked();

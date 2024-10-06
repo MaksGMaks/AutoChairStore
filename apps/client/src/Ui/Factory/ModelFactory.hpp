@@ -1,5 +1,5 @@
 #pragma once
-#include <memory>
+#include <QSharedPointer>
 
 #include "IFactory.hpp"
 #include "Ui/Models/IModel.hpp"
@@ -9,7 +9,7 @@ class ModelFactory : public IFactory {
 public:
     explicit ModelFactory(ApiManager &api);
     ~ModelFactory() = default;
-    std::unique_ptr<IModel> getUserModel(QObject *parent);
+    QSharedPointer<IModel> getUserModel(QObject *parent);
 
 private:
     ApiManager &m_api;

@@ -13,10 +13,10 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
 }
 
 void MainWindow::setupUi() {
-    m_menu = std::make_unique<Menu>(this);
+    m_menu = QSharedPointer<Menu>::create(this);
     m_menu->setFixedHeight(50);
     setMenuWidget(m_menu.get());
-    stackedWidget = std::make_unique<QStackedWidget>(this);
+    stackedWidget = QSharedPointer<QStackedWidget>::create(this);
     stackedWidget->addWidget(m_accountView.get());
     
     setCentralWidget(stackedWidget.get());
