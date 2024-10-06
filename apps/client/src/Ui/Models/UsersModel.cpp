@@ -34,6 +34,6 @@ void UsersModel::onUserDeleted() {
 
 }
 
-void UsersModel::onUserList(const std::vector<Common::Users> &users) {
-    std::vector<Common::Users> userList = users;
+void UsersModel::onUser(const Common::Users &entity) {
+    Common::Users user = entity;
 }

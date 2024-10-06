@@ -28,7 +28,6 @@ set(FACTORY_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/Factory/ViewModelFactory.cpp
 )
 
-
 set(MODEL_SOURCES 
     ${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
@@ -44,6 +43,15 @@ set(VIEW_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/Views/IView.cpp
 )
 
+set(UI_SOUCES
+    ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Menu.cpp
+    ${FACTORY_SOURCES}
+    ${MODEL_SOURCES}
+    ${VIEW_SOURCES}
+    ${VIEWMODEL_SOURCES}
+)
+
 set(NETWORK_SOURCES
     ${CLIENT_SOURCES_DIR}/Network/ApiManager.cpp
     ${CLIENT_SOURCES_DIR}/Network/NetworkManager.cpp
@@ -52,12 +60,8 @@ set(NETWORK_SOURCES
 # All sources
 set(ALL_CLIENT_SOURCES
     ${CLIENT_SOURCES_DIR}/main.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
-    ${FACTORY_SOURCES}
-    ${MODEL_SOURCES}
     ${NETWORK_SOURCES}
-    ${VIEW_SOURCES}
-    ${VIEWMODEL_SOURCES}
+    ${UI_SOUCES}
     
 )
 

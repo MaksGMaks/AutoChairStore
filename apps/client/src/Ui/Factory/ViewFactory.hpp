@@ -8,5 +8,5 @@
 
 class ViewFactory : public IFactory {
 public:
-    std::unique_ptr<IView> getAccountView(std::unique_ptr<IViewModel> viewModel, QObject *parent);
+    std::unique_ptr<IView> getAccountView(std::unique_ptr<IViewModel> viewModel, QWidget *parent);
 };
