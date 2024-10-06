@@ -1,6 +1,6 @@
 #include "ViewModelFactory.hpp"
 
-QSharedPointer<IViewModel> ViewModelFactory::getAccountVM(QSharedPointer<IModel> model, QObject *parent) {
-    QSharedPointer<IViewModel> viewModel = QSharedPointer<AccountViewModel>::create(std::move(model), parent);
+IViewModel* ViewModelFactory::getAccountVM(IModel *model, QObject *parent) {
+    IViewModel *viewModel = new AccountViewModel(model, parent);
     return viewModel;
 }

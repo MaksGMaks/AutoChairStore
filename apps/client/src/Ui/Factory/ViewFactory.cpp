@@ -1,6 +1,6 @@
 #include "ViewFactory.hpp"
 
-QSharedPointer<IView> ViewFactory::getAccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent) {
-    QSharedPointer<IView> view = QSharedPointer<AccountView>::create(std::move(viewModel), parent);
+IView* ViewFactory::getAccountView(IViewModel *viewModel, QWidget *parent) {
+    IView *view = new AccountView(viewModel, parent);
     return view;
 }

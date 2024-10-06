@@ -27,15 +27,15 @@ private:
     void setupUi();
     void setupConnections();
     // Ui
-    QSharedPointer<QStackedWidget> stackedWidget;
-    QSharedPointer<Menu> m_menu;
+    QStackedWidget *stackedWidget;
+    Menu *m_menu;
 
     // Models
-    QSharedPointer<IModel> m_userModel;
+    IModel *m_userModel;
     
     // View Models
-    QSharedPointer<IViewModel> m_accountViewModel;
+    IViewModel *m_accountViewModel;
     
     // Views
-    QSharedPointer<IView> m_accountView;
+    IView *m_accountView;
 };

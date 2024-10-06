@@ -9,7 +9,7 @@ class ModelFactory : public IFactory {
 public:
     explicit ModelFactory(ApiManager &api);
     ~ModelFactory() = default;
-    QSharedPointer<IModel> getUserModel(QObject *parent);
+    IModel *getUserModel(QObject *parent);
 
 private:
     ApiManager &m_api;

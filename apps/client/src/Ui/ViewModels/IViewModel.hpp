@@ -7,7 +7,7 @@ class IViewModel : public QObject {
     Q_OBJECT
 
 public:
-    IViewModel(IModel &model, QObject *parent = nullptr);
+    IViewModel(IModel *model, QObject *parent = nullptr);
     virtual ~IViewModel() = default;
 
 signals:
