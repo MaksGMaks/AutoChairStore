@@ -2,6 +2,10 @@
 
 #include <QApplication>
 #include <QMainWindow>
+#include <QStackedWidget>
+#include <QVBoxLayout>
+
+#include "Menu.hpp"
 
 #include "Factory/ModelFactory.hpp"
 #include "Factory/ViewModelFactory.hpp"
@@ -14,8 +18,24 @@ public:
     explicit MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, ViewFactory &viewFactory, QWidget *parent = nullptr);
     virtual ~MainWindow() = default;
 
+public slots:
+    void onAccountButtonClicked();
+    void onPurchaseBusketButtonClicked();
+    void onCatalogButtonClicked();
+
 private:
-    std::unique_ptr<IModel> m_userModel;
-    std::unique_ptr<IViewModel> m_accountViewModel;
-    std::unique_ptr<IView> m_accountView;
+    void setupUi();
+    void setupConnections();
+    // Ui
+    QStackedWidget *stackedWidget;
+    Menu *m_menu;
+
+    // Models
+    IModel *m_userModel;
+    
+    // View Models
+    IViewModel *m_accountViewModel;
+    
+    // Views
+    IView *m_accountView;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <QSharedPointer>
 
 #include "IFactory.hpp"
 #include "Ui/ViewModels/IViewModel.hpp"
@@ -8,6 +8,6 @@
 
 class ViewModelFactory : public IFactory {
 public:
-    std::unique_ptr<IViewModel> getAccountVM(std::unique_ptr<IModel> model, QObject *parent);
+    IViewModel* getAccountVM(IModel *model, QObject *parent);
 };
 

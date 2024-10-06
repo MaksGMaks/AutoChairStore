@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QObject>
+#include <QWidget>
 
 #include "Ui/ViewModels/IViewModel.hpp"
 
-class IView : public QObject {
+class IView : public QWidget {
     Q_OBJECT
 public:
-    explicit IView(IViewModel &viewModel, QObject *parent = nullptr);
+    IView(IViewModel *viewModel, QWidget *parent = nullptr);
     virtual ~IView() = default;
 
 signals:

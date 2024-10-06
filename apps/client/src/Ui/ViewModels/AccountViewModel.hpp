@@ -1,13 +1,15 @@
 #pragma once
 
+#include <QSharedPointer>
+
 #include "IViewModel.hpp"
 
 class AccountViewModel : public IViewModel {
     Q_OBJECT
 public:
-    explicit AccountViewModel(std::unique_ptr<IModel> model, QObject *parent = nullptr);
+    explicit AccountViewModel(IModel *model, QObject *parent = nullptr);
     virtual ~AccountViewModel() = default;
 
 private:
-    std::unique_ptr<IModel> m_users;
+    IModel *m_users;
 };

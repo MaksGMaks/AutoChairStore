@@ -8,14 +8,14 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    std::unique_ptr<NetworkManager> network = std::make_unique<NetworkManager>();
+    NetworkManager *network = new NetworkManager();
     ApiManager apiManager(*network);
     
     ModelFactory modelFactory(apiManager);
     ViewModelFactory vmFactory;
     ViewFactory viewFactory;
 
-    std::unique_ptr<MainWindow> mainWindow = std::make_unique<MainWindow>(modelFactory, vmFactory, viewFactory);
+    MainWindow *mainWindow = new MainWindow(modelFactory, vmFactory, viewFactory);
     mainWindow->show();
 
     return app.exec();
