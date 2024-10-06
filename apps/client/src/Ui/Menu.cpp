@@ -5,9 +5,9 @@ Menu::Menu(QWidget *parent) : QWidget(parent) {
 }
 
 void Menu::setupUI() {
-    m_accountButton = std::make_unique<QPushButton>("Account");
-    m_purchaseBusketButton = std::make_unique<QPushButton>("Purchase Busket");
-    m_catalogButton = std::make_unique<QPushButton>("Catalog");
+    m_accountButton = QSharedPointer<QPushButton>::create("Account");
+    m_purchaseBusketButton = QSharedPointer<QPushButton>::create("Purchase Busket");
+    m_catalogButton = QSharedPointer<QPushButton>::create("Catalog");
 
     m_accountButton->setFixedSize(100, 30);
     m_purchaseBusketButton->setFixedSize(100, 30);
@@ -17,13 +17,13 @@ void Menu::setupUI() {
     connect(m_purchaseBusketButton.get(), &QPushButton::clicked, this, &Menu::onPurchaseBusketButtonClicked);
     connect(m_catalogButton.get(), &QPushButton::clicked, this, &Menu::onCatalogButtonClicked);
 
-    m_layout = std::make_unique<QHBoxLayout>();
+    m_layout = QSharedPointer<QHBoxLayout>::create();
     
     m_layout->addWidget(m_accountButton.get());
     m_layout->addWidget(m_purchaseBusketButton.get());
     m_layout->addWidget(m_catalogButton.get());
 
-    setLayout(m_layout.release());
+    setLayout(m_layout.get());
 }
 
 void Menu::onAccountButtonClicked() {

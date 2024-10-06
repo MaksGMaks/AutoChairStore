@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <memory>
+#include <QSharedPointer>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -18,45 +18,45 @@ class AccountView : public IView {
     Q_OBJECT
 
 public:
-    explicit AccountView(std::unique_ptr<IViewModel> viewModel, QWidget *parent = nullptr);
+    explicit AccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent = nullptr);
     virtual ~AccountView() = default;
 
 private:
     // View Models
-    std::unique_ptr<IViewModel> m_accountVM;
+    QSharedPointer<IViewModel> m_accountVM;
 
     // Layouts
-    std::unique_ptr<QVBoxLayout> m_profileLayout;
-    std::unique_ptr<QHBoxLayout> m_profileWidgetLayout;
-    std::unique_ptr<QVBoxLayout> m_ordersLayout;
-    std::unique_ptr<QHBoxLayout> m_mainLayout;
+    QSharedPointer<QVBoxLayout> m_profileLayout;
+    QSharedPointer<QHBoxLayout> m_profileWidgetLayout;
+    QSharedPointer<QVBoxLayout> m_ordersLayout;
+    QSharedPointer<QHBoxLayout> m_mainLayout;
 
     // Spacers
-    std::unique_ptr<QSpacerItem> m_hRSpacer;
-    std::unique_ptr<QSpacerItem> m_hLSpacer;
-    std::unique_ptr<QSpacerItem> m_vUSpacer;
-    std::unique_ptr<QSpacerItem> m_vDSpacer;
+    QSharedPointer<QSpacerItem> m_hRSpacer;
+    QSharedPointer<QSpacerItem> m_hLSpacer;
+    QSharedPointer<QSpacerItem> m_vUSpacer;
+    QSharedPointer<QSpacerItem> m_vDSpacer;
 
     // Labels
-    std::unique_ptr<QLabel> m_surnameLabel;
-    std::unique_ptr<QLabel> m_nameLabel;
-    std::unique_ptr<QLabel> m_emailLabel;
-    std::unique_ptr<QLabel> m_passwordLabel;
+    QSharedPointer<QLabel> m_surnameLabel;
+    QSharedPointer<QLabel> m_nameLabel;
+    QSharedPointer<QLabel> m_emailLabel;
+    QSharedPointer<QLabel> m_passwordLabel;
 
     // Buttons
-    std::unique_ptr<QPushButton> m_editButton;
-    std::unique_ptr<QPushButton> m_saveButton;
+    QSharedPointer<QPushButton> m_editButton;
+    QSharedPointer<QPushButton> m_saveButton;
 
     // Line Edits
-    std::unique_ptr<QLineEdit> m_surnameEdit;
-    std::unique_ptr<QLineEdit> m_nameEdit;
-    std::unique_ptr<QLineEdit> m_emailEdit;
-    std::unique_ptr<QLineEdit> m_passwordEdit;
+    QSharedPointer<QLineEdit> m_surnameEdit;
+    QSharedPointer<QLineEdit> m_nameEdit;
+    QSharedPointer<QLineEdit> m_emailEdit;
+    QSharedPointer<QLineEdit> m_passwordEdit;
 
     // Others
-    std::unique_ptr<QTableWidget> m_ordersTable;
-    std::unique_ptr<QWidget> m_profileWidget;
-    std::unique_ptr<QWidget> m_ordersWidget;
+    QSharedPointer<QTableWidget> m_ordersTable;
+    QSharedPointer<QWidget> m_profileWidget;
+    QSharedPointer<QWidget> m_ordersWidget;
 
     // Methods
     void setupUI();

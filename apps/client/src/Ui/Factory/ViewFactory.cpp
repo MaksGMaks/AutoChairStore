@@ -1,6 +1,6 @@
 #include "ViewFactory.hpp"
 
-std::unique_ptr<IView> ViewFactory::getAccountView(std::unique_ptr<IViewModel> viewModel, QWidget *parent) {
-    std::unique_ptr<IView> view = std::make_unique<AccountView>(std::move(viewModel), parent);
+QSharedPointer<IView> ViewFactory::getAccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent) {
+    QSharedPointer<IView> view = QSharedPointer<AccountView>::create(std::move(viewModel), parent);
     return view;
 }
