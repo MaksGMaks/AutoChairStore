@@ -25,7 +25,7 @@ private slots:
     void onUserAdded();
     void onUserUpdated();
     void onUserDeleted();
-    void onUserList(const std::vector<Common::Users> &users);
+    void onUser(const Common::Users &entity);
 
 private:
     ApiManager &m_apiManager;
