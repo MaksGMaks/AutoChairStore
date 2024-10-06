@@ -1,25 +1,25 @@
 #include "AccountView.hpp"
 
-AccountView::AccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent) 
-    : IView(*viewModel, parent), m_accountVM(std::move(viewModel)) {
+AccountView::AccountView(IViewModel *viewModel, QWidget *parent) 
+    : IView(viewModel, parent), m_accountVM(viewModel) {
     std::cout << "[AccountView::AccountView] constructor" << std::endl;
     setupUI();
 }
 
 void AccountView::setupUI() {
     std::cout << "[AccountView::setupUI] Setting up UI" << std::endl;
-    m_surnameLabel = QSharedPointer<QLabel>::create("Surname: ", this);
-    m_nameLabel = QSharedPointer<QLabel>::create("Name: ", this);
-    m_emailLabel = QSharedPointer<QLabel>::create("Email: ", this);
-    m_passwordLabel = QSharedPointer<QLabel>::create("Password: ", this);
+    m_surnameLabel = new QLabel("Surname: ", this);
+    m_nameLabel = new QLabel("Name: ", this);
+    m_emailLabel = new QLabel("Email: ", this);
+    m_passwordLabel = new QLabel("Password: ", this);
     
-    m_editButton = QSharedPointer<QPushButton>::create("Edit", this);
-    m_saveButton = QSharedPointer<QPushButton>::create("Save", this);
+    m_editButton = new QPushButton("Edit", this);
+    m_saveButton = new QPushButton("Save", this);
 
-    m_surnameEdit = QSharedPointer<QLineEdit>::create(this);
-    m_nameEdit = QSharedPointer<QLineEdit>::create(this);
-    m_emailEdit = QSharedPointer<QLineEdit>::create(this);
-    m_passwordEdit = QSharedPointer<QLineEdit>::create(this);
+    m_surnameEdit = new QLineEdit(this);
+    m_nameEdit = new QLineEdit(this);
+    m_emailEdit = new QLineEdit(this);
+    m_passwordEdit = new QLineEdit(this);
 
     m_surnameLabel->setGeometry(10, 10, 100, 30);
     m_nameLabel->setGeometry(10, 10, 100, 30);
@@ -33,7 +33,7 @@ void AccountView::setupUI() {
     m_emailEdit->setGeometry(120, 50, 200, 30);
     m_passwordEdit->setGeometry(120, 90, 200, 30);
 
-    connect(m_editButton.get(), &QPushButton::clicked, this, [this]() {
+    connect(m_editButton, &QPushButton::clicked, this, [this]() {
         std::cout << "[AccountView::setupUI] Edit button clicked" << std::endl;
         m_surnameEdit->setReadOnly(false);
         m_nameEdit->setReadOnly(false);
@@ -41,46 +41,46 @@ void AccountView::setupUI() {
         
     });
 
-    connect(m_saveButton.get(), &QPushButton::clicked, this, [this]() {
+    connect(m_saveButton, &QPushButton::clicked, this, [this]() {
         std::cout << "[AccountView::setupUI] Save button clicked" << std::endl;
 
     });
     
-    m_hLSpacer = QSharedPointer<QSpacerItem>::create(30, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
-    m_hRSpacer = QSharedPointer<QSpacerItem>::create(30, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
-    m_vUSpacer = QSharedPointer<QSpacerItem>::create(30, 30, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    m_vDSpacer = QSharedPointer<QSpacerItem>::create(30, 30, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    m_hLSpacer = new QSpacerItem(30, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    m_hRSpacer = new QSpacerItem(30, 30, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    m_vUSpacer = new QSpacerItem(30, 30, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    m_vDSpacer = new QSpacerItem(30, 30, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 
-    m_profileLayout = QSharedPointer<QVBoxLayout>::create();
-    m_profileLayout->addItem(m_vUSpacer.get());
-    m_profileLayout->addWidget(m_surnameLabel.get());
-    m_profileLayout->addWidget(m_surnameEdit.get());
-    m_profileLayout->addWidget(m_nameLabel.get());
-    m_profileLayout->addWidget(m_nameEdit.get());
-    m_profileLayout->addWidget(m_emailLabel.get());
-    m_profileLayout->addWidget(m_emailEdit.get());
-    m_profileLayout->addWidget(m_passwordLabel.get());
-    m_profileLayout->addWidget(m_passwordEdit.get());
-    m_profileLayout->addWidget(m_editButton.get());
-    m_profileLayout->addWidget(m_saveButton.get());
-    m_profileLayout->addItem(m_vDSpacer.get());
+    m_profileLayout = new QVBoxLayout();
+    m_profileLayout->addItem(m_vUSpacer);
+    m_profileLayout->addWidget(m_surnameLabel);
+    m_profileLayout->addWidget(m_surnameEdit);
+    m_profileLayout->addWidget(m_nameLabel);
+    m_profileLayout->addWidget(m_nameEdit);
+    m_profileLayout->addWidget(m_emailLabel);
+    m_profileLayout->addWidget(m_emailEdit);
+    m_profileLayout->addWidget(m_passwordLabel);
+    m_profileLayout->addWidget(m_passwordEdit);
+    m_profileLayout->addWidget(m_editButton);
+    m_profileLayout->addWidget(m_saveButton);
+    m_profileLayout->addItem(m_vDSpacer);
 
-    m_profileWidgetLayout = QSharedPointer<QHBoxLayout>::create();
-    m_profileWidgetLayout->addItem(m_hLSpacer.get());
-    m_profileWidgetLayout->addLayout(m_profileLayout.get());
-    m_profileWidgetLayout->addItem(m_hRSpacer.get());
+    m_profileWidgetLayout = new QHBoxLayout();
+    m_profileWidgetLayout->addItem(m_hLSpacer);
+    m_profileWidgetLayout->addLayout(m_profileLayout);
+    m_profileWidgetLayout->addItem(m_hRSpacer);
 
-    m_profileWidget = QSharedPointer<QWidget>::create(this);
-    m_profileWidget->setLayout(m_profileWidgetLayout.get());
+    m_profileWidget = new QWidget(this);
+    m_profileWidget->setLayout(m_profileWidgetLayout);
 
-    m_ordersTable = QSharedPointer<QTableWidget>::create(this);
+    m_ordersTable = new QTableWidget(this);
     m_ordersTable->setColumnCount(3);
     m_ordersTable->setHorizontalHeaderLabels({"Order ID", "Date", "Total"});
     m_ordersTable->setGeometry(10, 10, 500, 300);
 
-    m_mainLayout = QSharedPointer<QHBoxLayout>::create();
-    m_mainLayout->addWidget(m_profileWidget.get());
-    m_mainLayout->addWidget(m_ordersTable.get());
+    m_mainLayout = new QHBoxLayout();
+    m_mainLayout->addWidget(m_profileWidget);
+    m_mainLayout->addWidget(m_ordersTable);
 
-    setLayout(m_mainLayout.get());
+    setLayout(m_mainLayout);
 }

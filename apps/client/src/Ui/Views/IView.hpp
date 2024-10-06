@@ -7,7 +7,7 @@
 class IView : public QWidget {
     Q_OBJECT
 public:
-    IView(IViewModel &viewModel, QWidget *parent = nullptr);
+    IView(IViewModel *viewModel, QWidget *parent = nullptr);
     virtual ~IView() = default;
 
 signals:

@@ -16,10 +16,10 @@ public:
 private:
     void setupUI();
 
-    QSharedPointer<QPushButton> m_accountButton;
-    QSharedPointer<QPushButton> m_purchaseBusketButton;
-    QSharedPointer<QPushButton> m_catalogButton;
-    QSharedPointer<QHBoxLayout> m_layout;
+    QPushButton *m_accountButton;
+    QPushButton *m_purchaseBusketButton;
+    QPushButton *m_catalogButton;
+    QHBoxLayout *m_layout;
 
 signals:
     void accountButtonClicked();

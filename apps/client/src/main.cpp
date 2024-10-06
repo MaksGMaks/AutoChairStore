@@ -8,14 +8,14 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    QSharedPointer<NetworkManager> network = QSharedPointer<NetworkManager>::create();
+    NetworkManager *network = new NetworkManager();
     ApiManager apiManager(*network);
     
     ModelFactory modelFactory(apiManager);
     ViewModelFactory vmFactory;
     ViewFactory viewFactory;
 
-    QSharedPointer<MainWindow> mainWindow = QSharedPointer<MainWindow>::create(modelFactory, vmFactory, viewFactory);
+    MainWindow *mainWindow = new MainWindow(modelFactory, vmFactory, viewFactory);
     mainWindow->show();
 
     return app.exec();

@@ -8,6 +8,6 @@
 
 class ViewModelFactory : public IFactory {
 public:
-    QSharedPointer<IViewModel> getAccountVM(QSharedPointer<IModel> model, QObject *parent);
+    IViewModel* getAccountVM(IModel *model, QObject *parent);
 };
 

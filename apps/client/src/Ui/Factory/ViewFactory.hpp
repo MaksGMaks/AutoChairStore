@@ -8,5 +8,5 @@
 
 class ViewFactory : public IFactory {
 public:
-    QSharedPointer<IView> getAccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent);
+    IView *getAccountView(IViewModel *viewModel, QWidget *parent);
 };

@@ -18,45 +18,45 @@ class AccountView : public IView {
     Q_OBJECT
 
 public:
-    explicit AccountView(QSharedPointer<IViewModel> viewModel, QWidget *parent = nullptr);
+    explicit AccountView(IViewModel *viewModel, QWidget *parent = nullptr);
     virtual ~AccountView() = default;
 
 private:
     // View Models
-    QSharedPointer<IViewModel> m_accountVM;
+    IViewModel *m_accountVM;
 
     // Layouts
-    QSharedPointer<QVBoxLayout> m_profileLayout;
-    QSharedPointer<QHBoxLayout> m_profileWidgetLayout;
-    QSharedPointer<QVBoxLayout> m_ordersLayout;
-    QSharedPointer<QHBoxLayout> m_mainLayout;
+    QVBoxLayout *m_profileLayout;
+    QHBoxLayout *m_profileWidgetLayout;
+    QVBoxLayout *m_ordersLayout;
+    QHBoxLayout *m_mainLayout;
 
     // Spacers
-    QSharedPointer<QSpacerItem> m_hRSpacer;
-    QSharedPointer<QSpacerItem> m_hLSpacer;
-    QSharedPointer<QSpacerItem> m_vUSpacer;
-    QSharedPointer<QSpacerItem> m_vDSpacer;
+    QSpacerItem *m_hRSpacer;
+    QSpacerItem *m_hLSpacer;
+    QSpacerItem *m_vUSpacer;
+    QSpacerItem *m_vDSpacer;
 
     // Labels
-    QSharedPointer<QLabel> m_surnameLabel;
-    QSharedPointer<QLabel> m_nameLabel;
-    QSharedPointer<QLabel> m_emailLabel;
-    QSharedPointer<QLabel> m_passwordLabel;
+    QLabel *m_surnameLabel;
+    QLabel *m_nameLabel;
+    QLabel *m_emailLabel;
+    QLabel *m_passwordLabel;
 
     // Buttons
-    QSharedPointer<QPushButton> m_editButton;
-    QSharedPointer<QPushButton> m_saveButton;
+    QPushButton *m_editButton;
+    QPushButton *m_saveButton;
 
     // Line Edits
-    QSharedPointer<QLineEdit> m_surnameEdit;
-    QSharedPointer<QLineEdit> m_nameEdit;
-    QSharedPointer<QLineEdit> m_emailEdit;
-    QSharedPointer<QLineEdit> m_passwordEdit;
+    QLineEdit *m_surnameEdit;
+    QLineEdit *m_nameEdit;
+    QLineEdit *m_emailEdit;
+    QLineEdit *m_passwordEdit;
 
     // Others
-    QSharedPointer<QTableWidget> m_ordersTable;
-    QSharedPointer<QWidget> m_profileWidget;
-    QSharedPointer<QWidget> m_ordersWidget;
+    QTableWidget *m_ordersTable;
+    QWidget *m_profileWidget;
+    QWidget *m_ordersWidget;
 
     // Methods
     void setupUI();

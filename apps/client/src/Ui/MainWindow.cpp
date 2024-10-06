@@ -13,19 +13,19 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
 }
 
 void MainWindow::setupUi() {
-    m_menu = QSharedPointer<Menu>::create(this);
+    m_menu = new Menu(this);
     m_menu->setFixedHeight(50);
-    setMenuWidget(m_menu.get());
-    stackedWidget = QSharedPointer<QStackedWidget>::create(this);
-    stackedWidget->addWidget(m_accountView.get());
+    setMenuWidget(m_menu);
+    stackedWidget = new QStackedWidget(this);
+    stackedWidget->addWidget(m_accountView);
     
-    setCentralWidget(stackedWidget.get());
+    setCentralWidget(stackedWidget);
 }
 
 void MainWindow::setupConnections() {
-    connect(m_menu.get(), &Menu::accountButtonClicked, this, &MainWindow::onAccountButtonClicked);
-    connect(m_menu.get(), &Menu::purchaseBusketButtonClicked, this, &MainWindow::onPurchaseBusketButtonClicked);
-    connect(m_menu.get(), &Menu::catalogButtonClicked, this, &MainWindow::onCatalogButtonClicked);
+    connect(m_menu, &Menu::accountButtonClicked, this, &MainWindow::onAccountButtonClicked);
+    connect(m_menu, &Menu::purchaseBusketButtonClicked, this, &MainWindow::onPurchaseBusketButtonClicked);
+    connect(m_menu, &Menu::catalogButtonClicked, this, &MainWindow::onCatalogButtonClicked);
 }
 
 void MainWindow::onAccountButtonClicked() {
