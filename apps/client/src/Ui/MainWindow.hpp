@@ -27,15 +27,18 @@ private:
     void setupUi();
     void setupConnections();
     // Ui
-    QStackedWidget *stackedWidget;
+    QStackedWidget *m_stackedWidget;
     Menu *m_menu;
 
     // Models
-    IModel *m_userModel;
+    UsersModel *m_userModel;
     
     // View Models
-    IViewModel *m_accountViewModel;
+    AccountViewModel *m_accountViewModel;
+    LoginRegistrationViewModel *m_loginRegistrationViewModel;
     
     // Views
     IView *m_accountView;
+    IView *m_catalogueView;
+    IView *m_loginRegistrationView;
 };

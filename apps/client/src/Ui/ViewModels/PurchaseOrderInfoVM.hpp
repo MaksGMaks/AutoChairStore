@@ -1,15 +1,16 @@
 #pragma once
 
-#include <QSharedPointer>
+
 
 #include "IViewModel.hpp"
+#include "Ui/Models/PurchaseOrdersModel.hpp"
 
 class PurchaseOrderInfoVM : public IViewModel {
     Q_OBJECT
 public:
-    explicit PurchaseOrderInfoVM(IModel *model, QObject *parent = nullptr);
+    explicit PurchaseOrderInfoVM(PurchaseOrdersModel *model, QObject *parent = nullptr);
     virtual ~PurchaseOrderInfoVM() = default;
 
 private:
-    IModel m_purchaseOrder;
+    PurchaseOrdersModel *m_purchaseOrder;
 };

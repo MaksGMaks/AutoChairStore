@@ -20,8 +20,9 @@
 
    ```
    cd build
-   cmake .. --preset conan-debug -DBUILD_CLIENT=ON -DBUILD_SERVER=ON
+   cmake .. --preset conan-debug
    ```
+   If you want to build utilits, add -DBUILD_UTILIT=ON after previous line
 
 4. Build the project
 
