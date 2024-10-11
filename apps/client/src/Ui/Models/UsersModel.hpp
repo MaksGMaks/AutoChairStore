@@ -9,24 +9,33 @@ public:
     explicit UsersModel(ApiManager &apiManager, QObject *parent = nullptr);
     virtual ~UsersModel() = default;
 
+    Common::Users user() const;
+
 signals:
-    void userAdded();
     void userChanged();
-    void userEdited();
-    void userDeleted();
+
+    void loginSuccessfull();
+    void loginFail();
+
+    void registrationSuccessfull();
+    void registrationFail();
 
 public slots:
-    void addUser(const Common::Users &entity);
-    void fetchUser();
+    void loginUser(const Common::Users &entity);
+    void registerUser(const Common::Users &entity);
+
+    void fetchUser(const std::string &id);
     void editUser(const Common::Users &entity);
     void deleteUser(const std::string &id);
 
 private slots:
-    void onUserAdded();
+    void onUSerLogin();
+    void onUserRegistered();
     void onUserUpdated();
     void onUserDeleted();
     void onUser(const Common::Users &entity);
 
 private:
     ApiManager &m_apiManager;
+    Common::Users m_users;
 };

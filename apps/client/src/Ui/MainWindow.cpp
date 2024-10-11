@@ -2,24 +2,36 @@
 
 MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, ViewFactory &viewFactory, QWidget *parent)
     : QMainWindow(parent) {
-    m_userModel = std::move(modelFactory.getUserModel(this));
-    m_accountViewModel = std::move(vmFactory.getAccountVM(std::move(m_userModel), this));
-    m_accountView = std::move(viewFactory.getAccountView(std::move(m_accountViewModel), this));
+    // Models
+    m_userModel = std::move(modelFactory.getUserModel());
+    
+    // View Models
+    m_accountViewModel = std::move(vmFactory.getAccountVM(std::move(m_userModel)));
+    m_loginRegistrationViewModel = std::move(vmFactory.getLoginRegistrationVM(std::move(m_userModel)));
+
+    // Views
+    m_accountView = std::move(viewFactory.getAccountView(std::move(m_accountViewModel)));
+    m_catalogueView = std::move(viewFactory.getCatalogueView(std::move(m_accountViewModel)));
+    m_loginRegistrationView = std::move(viewFactory.getLoginRegistrationView(std::move(m_loginRegistrationViewModel)));
 
     setWindowTitle("Autochair Shop");
     resize(800, 600);
 
     setupUi();
+    setupConnections();
+    m_menu->setVisible(false);
 }
 
 void MainWindow::setupUi() {
     m_menu = new Menu(this);
     m_menu->setFixedHeight(50);
     setMenuWidget(m_menu);
-    stackedWidget = new QStackedWidget(this);
-    stackedWidget->addWidget(m_accountView);
+    m_stackedWidget = new QStackedWidget(this);
+    m_stackedWidget->addWidget(m_loginRegistrationView);
+    m_stackedWidget->addWidget(m_accountView);
+    m_stackedWidget->addWidget(m_catalogueView);
     
-    setCentralWidget(stackedWidget);
+    setCentralWidget(m_stackedWidget);
 }
 
 void MainWindow::setupConnections() {
@@ -30,6 +42,7 @@ void MainWindow::setupConnections() {
 
 void MainWindow::onAccountButtonClicked() {
     std::cout << "[MainWindow::onAccountButtonClicked] Account button clicked" << std::endl;
+    m_stackedWidget->setCurrentWidget(m_accountView);
 }
 
 void MainWindow::onPurchaseBusketButtonClicked() {
@@ -38,4 +51,5 @@ void MainWindow::onPurchaseBusketButtonClicked() {
 
 void MainWindow::onCatalogButtonClicked() {
     std::cout << "[MainWindow::onCatalogButtonClicked] Catalog button clicked" << std::endl;
+    m_stackedWidget->setCurrentWidget(m_catalogueView);
 }

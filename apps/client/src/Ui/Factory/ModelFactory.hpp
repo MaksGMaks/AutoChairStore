@@ -1,15 +1,20 @@
 #pragma once
-#include <QSharedPointer>
 
-#include "IFactory.hpp"
-#include "Ui/Models/IModel.hpp"
-#include "Ui/Models/UsersModel.hpp"
+#include "IModelFactory.hpp"
 
-class ModelFactory : public IFactory {
+class ModelFactory : public IModelFactory {
 public:
     explicit ModelFactory(ApiManager &api);
     ~ModelFactory() = default;
-    IModel *getUserModel(QObject *parent);
+    
+    InventoryModel *getInventoryModel(QObject *parent = nullptr) override;
+    PhotosModel *getPhotosModel(QObject *parent = nullptr) override;
+    ProductInfoModel *getProductInfoModel(QObject *parent = nullptr) override;
+    ProductsModel *getProductsModel(QObject *parent = nullptr) override;
+    PurchaseOrdersModel *getPurchaseOrdersModel(QObject *parent = nullptr) override;
+    SuppliersModel *getSuppliersModel(QObject *parent = nullptr) override;
+    UsersModel *getUserModel(QObject *parent = nullptr) override;
+
 
 private:
     ApiManager &m_api;

@@ -29,39 +29,61 @@ set(FACTORY_SOURCES
 )
 
 set(MODEL_SOURCES 
-    ${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
-)
-
-set(VIEWMODEL_SOURCES 
-    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/AccountViewModel.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp
-)
-
-set(VIEW_SOURCES 
-    ${CLIENT_SOURCES_DIR}/Ui/Views/AccountView.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/Views/IView.cpp
-)
-
-set(UI_SOUCES
-    ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/Menu.cpp
-    ${FACTORY_SOURCES}
-    ${MODEL_SOURCES}
-    ${VIEW_SOURCES}
-    ${VIEWMODEL_SOURCES}
-)
+${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/InventoryModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/PhotosModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/ProductInfoModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/ProductsModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/PurchaseOrdersModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/SuppliersModel.cpp
+${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
+)    
 
 set(NETWORK_SOURCES
     ${CLIENT_SOURCES_DIR}/Network/ApiManager.cpp
     ${CLIENT_SOURCES_DIR}/Network/NetworkManager.cpp
+    ${CLIENT_SOURCES_DIR}/Network/EmailSender.cpp
 )
+
+set(VIEW_SOURCES 
+    ${CLIENT_SOURCES_DIR}/Ui/Views/AccountView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/CatalogueView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/LoginRegistrationView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/IView.cpp
+)    
+
+set(VIEWMODEL_SOURCES 
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/AccountViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/CatalogueViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/LoginRegistrationViewModel.cpp
+)    
+
+set(SUBVIEW_SOURCES
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueMenuSV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueProductSV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchSV.cpp
+)    
+
+set(UI_SOUCES
+    ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Menu.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/MessageBox.cpp
+    ${FACTORY_SOURCES}
+    ${MODEL_SOURCES}
+    ${VIEW_SOURCES}
+    ${VIEWMODEL_SOURCES}
+    ${SUBVIEW_SOURCES}
+)    
+
+qt6_add_resources(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 
 # All sources
 set(ALL_CLIENT_SOURCES
     ${CLIENT_SOURCES_DIR}/main.cpp
     ${NETWORK_SOURCES}
     ${UI_SOUCES}
+    ${RESOURCES}
     
 )
 

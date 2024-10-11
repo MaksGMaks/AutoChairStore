@@ -8,8 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Options to build different components
 option(BUILD_CLIENT "Build the client application." ON)
 option(BUILD_SERVER "Build the server application." ON)
+option(BUILD_UTILIT "Build the utility application." OFF)
 
 add_subdirectory(libs/common)
+
+if(BUILD_UTILIT)
+    add_subdirectory(apps/utilit)
+endif()
 
 if(BUILD_CLIENT)
     add_subdirectory(apps/client)

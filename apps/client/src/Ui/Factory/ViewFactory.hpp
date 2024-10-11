@@ -1,12 +1,10 @@
 #pragma once
 
-#include <QSharedPointer>
+#include "IViewFactory.hpp"
 
-#include "IFactory.hpp"
-#include "Ui/Views/IView.hpp"
-#include "Ui/Views/AccountView.hpp"
-
-class ViewFactory : public IFactory {
+class ViewFactory : public IViewFactory {
 public:
-    IView *getAccountView(IViewModel *viewModel, QWidget *parent);
+    AccountView *getAccountView(AccountViewModel *viewModel, QWidget *parent = nullptr) override;
+    CatalogueView *getCatalogueView(IViewModel *viewModel, QWidget *parent = nullptr) override;
+    LoginRegistrationView *getLoginRegistrationView(LoginRegistrationViewModel *viewModel, QWidget *parent = nullptr) override;
 };

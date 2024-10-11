@@ -1,10 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include <QSharedPointer>
+
 #include <QWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QIcon>
 
 class Menu : public QWidget {
     Q_OBJECT
@@ -16,10 +17,18 @@ public:
 private:
     void setupUI();
 
+    // Buttons
     QPushButton *m_accountButton;
     QPushButton *m_purchaseBusketButton;
     QPushButton *m_catalogButton;
+    
+    // Layout
     QHBoxLayout *m_layout;
+
+    // Icons
+    QIcon m_accountIcon;
+    QIcon m_purchaseBusketIcon;
+    QIcon m_catalogIcon;
 
 signals:
     void accountButtonClicked();

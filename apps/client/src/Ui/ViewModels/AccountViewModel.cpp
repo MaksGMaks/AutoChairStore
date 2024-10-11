@@ -1,4 +1,4 @@
 #include "AccountViewModel.hpp"
 
-AccountViewModel::AccountViewModel(IModel *model, QObject *parent) 
+AccountViewModel::AccountViewModel(UsersModel *model, QObject *parent) 
     : IViewModel(model, parent), m_users(model) {}
