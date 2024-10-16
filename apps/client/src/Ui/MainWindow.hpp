@@ -32,10 +32,12 @@ private:
 
     // Models
     UsersModel *m_userModel;
+    ProductsModel *m_productsModel;
     
     // View Models
     AccountViewModel *m_accountViewModel;
     LoginRegistrationViewModel *m_loginRegistrationViewModel;
+    CatalogueViewModel *m_catalogueViewModel;
     
     // Views
     IView *m_accountView;

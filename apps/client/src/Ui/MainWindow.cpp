@@ -4,14 +4,16 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
     : QMainWindow(parent) {
     // Models
     m_userModel = std::move(modelFactory.getUserModel());
+    m_productsModel = std::move(modelFactory.getProductsModel());
     
     // View Models
     m_accountViewModel = std::move(vmFactory.getAccountVM(std::move(m_userModel)));
     m_loginRegistrationViewModel = std::move(vmFactory.getLoginRegistrationVM(std::move(m_userModel)));
+    m_catalogueViewModel = std::move(vmFactory.getCatalogueVM(std::move(m_productsModel)));
 
     // Views
     m_accountView = std::move(viewFactory.getAccountView(std::move(m_accountViewModel)));
-    m_catalogueView = std::move(viewFactory.getCatalogueView(std::move(m_accountViewModel)));
+    m_catalogueView = std::move(viewFactory.getCatalogueView(std::move(m_catalogueViewModel)));
     m_loginRegistrationView = std::move(viewFactory.getLoginRegistrationView(std::move(m_loginRegistrationViewModel)));
 
     setWindowTitle("Autochair Shop");
@@ -19,7 +21,8 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
 
     setupUi();
     setupConnections();
-    m_menu->setVisible(false);
+    
+    //m_menu->setVisible(false);
 }
 
 void MainWindow::setupUi() {

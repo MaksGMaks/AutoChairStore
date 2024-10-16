@@ -12,28 +12,50 @@ public:
     Common::Users user() const;
 
 signals:
-    void userChanged();
+    // Login and registration
+    void loginRegistrationError(const QString &errorMessage);
 
-    void loginSuccessfull();
-    void loginFail();
+    void userLoginSuccessfull();
+    void codeSentSuccessfully();
 
-    void registrationSuccessfull();
-    void registrationFail();
+    // Account
+    void accountError(const QString &errorMessage);
+
+    void fetchUser();
+    void emailCodeSentSuccessfully();
+    void changeCodeSentSuccessfully();
+    void passwordChangedSuccessfully();
+    void deleteAccountSuccessfully();
 
 public slots:
-    void loginUser(const Common::Users &entity);
-    void registerUser(const Common::Users &entity);
+    // Login and registration
+    void onLoginUser(const Common::Users &entity);
+    void onRegisterUser(const Common::Users &entity);
+    void onSendCode(const std::string &email);
 
-    void fetchUser(const std::string &id);
-    void editUser(const Common::Users &entity);
-    void deleteUser(const std::string &id);
+    // Account
+    void onEditUser(const Common::Users &entity);
+    void onEmailChangeCode(const std::string &email);
+    void onChangeCode(const std::string &email);
+    void onEmailChange(const std::string &oldEmail, const std::string &newEmail, const std::string &code);
+    void onPasswordChange(const std::string &email, const std::string &oldPassword, const std::string &newPassword, const std::string &code);
+    void onDeleteAccount(const std::string &email, const std::string &code);
 
 private slots:
-    void onUSerLogin();
-    void onUserRegistered();
-    void onUserUpdated();
-    void onUserDeleted();
-    void onUser(const Common::Users &entity);
+    // Login and registration
+    void onLoginRegistrationError(const QString &errorMessage);
+    void onLoginUserSuccessfull();
+    void onRegisterUserSuccessfull();
+    void onCodeSentSuccessfully();
+
+    // Account
+    void onAccountError(const QString &errorMessage);
+    void onUserFetched(const Common::Users &entity);
+    void onEmailCodeSentSuccessfully();
+    void onChangeCodeSentSuccessfully();
+    void onEmailChangedSuccessfully(const Common::Users &entity);
+    void onPasswordChangedSuccessfully();
+    void onDeleteAccountSuccessfull();
 
 private:
     ApiManager &m_apiManager;

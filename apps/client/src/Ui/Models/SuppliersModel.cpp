@@ -1,8 +1,8 @@
 #include "SuppliersModel.hpp"
 
 SuppliersModel::SuppliersModel(ApiManager &apiManager, QObject *parent)
-    : IModel(parent), 
-      m_apiManager(apiManager) {
+: IModel(parent), 
+m_apiManager(apiManager) {
     
 }
 

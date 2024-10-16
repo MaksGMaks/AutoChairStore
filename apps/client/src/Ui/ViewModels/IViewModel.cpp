@@ -1,5 +1,8 @@
 #include "IViewModel.hpp"
 
-IViewModel::IViewModel(IModel *model, QObject *parent) : QObject(parent) {
-    connect(this, &IViewModel::errorOccurred, model, &IModel::errorOccurred);
+IViewModel::IViewModel(QObject *parent) : QObject(parent) {
+}
+
+void IViewModel::onErrorOccurred(const QString &errorMessage) {
+    emit errorOccurred(errorMessage);
 }

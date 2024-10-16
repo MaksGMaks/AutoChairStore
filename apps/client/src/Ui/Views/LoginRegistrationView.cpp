@@ -1,12 +1,14 @@
 #include "LoginRegistrationView.hpp"
 
 LoginRegistrationView::LoginRegistrationView(LoginRegistrationViewModel *viewModel, QWidget *parent) 
-    : IView(viewModel, parent),
-      m_loginRegistrationVM(viewModel) {
+: IView(viewModel, parent),
+m_loginRegistrationVM(viewModel) {
     std::cout << "[LoginRegistrationView::LoginRegistrationView] Constructor" << std::endl;
     setupUI();
     setupConnection();
 }
+
+        // Ui setup
 
 void LoginRegistrationView::setupUI() {
     std::cout << "[LoginRegistrationView::setupUI] Setting up UI" << std::endl;
@@ -36,24 +38,27 @@ void LoginRegistrationView::setupUI() {
     setLayout(m_mainLayout);
 }
 
+            // Connection setup
+
 void LoginRegistrationView::setupConnection() {
     std::cout << "[LoginRegistrationView::setupConnection] Setting up connections" << std::endl;
     connect(m_loginButton, &QPushButton::clicked, this, &LoginRegistrationView::onLoginButtonClicked);
     connect(m_registrationLinkButton, &QPushButton::clicked, this, &LoginRegistrationView::onRegistrationLinkButtonClicked);
     connect(m_createAccountButton, &QPushButton::clicked, this, &LoginRegistrationView::onCreateAccountButtonClicked);
     connect(m_loginLinkButton, &QPushButton::clicked, this, &LoginRegistrationView::onLoginLinkButtonClicked);
+    connect(m_sendCodeButton, &QPushButton::clicked, this, &LoginRegistrationView::onSendCodeButtonClicked);
 
     connect(m_unsavedDataLoginMessage, &MessageBox::approveButtonClicked, this, &LoginRegistrationView::approveRegistrationLinkButtonClicked);
     connect(m_unsavedDataRegistrationMessage, &MessageBox::approveButtonClicked, this, &LoginRegistrationView::approveLoginLinkButtonClicked);
 
-    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::loginSuccessfull, this, &LoginRegistrationView::onUserLogin);
-    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::loginFail, this, &LoginRegistrationView::onUserLoginFailed);
-    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::registrationSuccessfull, this, &LoginRegistrationView::onUserRegistered);
-    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::registrationFail, this, &LoginRegistrationView::onUserRegisterationFailed);
-
     connect(this, &LoginRegistrationView::loginUser, m_loginRegistrationVM, &LoginRegistrationViewModel::onLoginUser);
     connect(this, &LoginRegistrationView::registerUser, m_loginRegistrationVM, &LoginRegistrationViewModel::onRegisterUser);
+    connect(this, &LoginRegistrationView::sendCode, m_loginRegistrationVM, &LoginRegistrationViewModel::onSendCode);
+
+    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::codeSentSuccessfully, this, &LoginRegistrationView::onCodeSentSuccessfully);
 }
+
+            // Login slots
 
 void LoginRegistrationView::onLoginButtonClicked() {
     std::cout << "[LoginRegistrationView::onLoginButtonClicked] Login button clicked" << std::endl;
@@ -69,6 +74,31 @@ void LoginRegistrationView::onLoginButtonClicked() {
     emit loginUser(user);
 }
 
+void LoginRegistrationView::onLoginLinkButtonClicked() {
+    std::cout << "[LoginRegistrationView::onLoginLinkButtonClicked] Login link button clicked" << std::endl;
+    if(m_firstNameRegistrationLineEdit->text().isEmpty() && m_lastNameRegistrationLineEdit->text().isEmpty() && 
+    m_emailRegistrationLineEdit->text().isEmpty() && m_emailCodeRegistrationLineEdit->text().isEmpty() && 
+    m_passwordRegistrationLineEdit->text().isEmpty() && m_confirmPasswordRegistrationLineEdit->text().isEmpty()) {
+        m_stackedWidget->setCurrentWidget(m_loginWidget);
+        return;
+    }
+
+    m_unsavedDataRegistrationMessage->showMessageBox("Unsaved data", "Input data will be cleared", "Leave", "Stay", QMessageBox::Warning);
+}
+
+void LoginRegistrationView::approveLoginLinkButtonClicked() {
+    std::cout << "[LoginRegistrationView::approveLoginLinkButtonClicked] Approve login link button clicked" << std::endl;
+    m_firstNameRegistrationLineEdit->clear();
+    m_lastNameRegistrationLineEdit->clear();
+    m_emailRegistrationLineEdit->clear();
+    m_emailCodeRegistrationLineEdit->clear();
+    m_passwordRegistrationLineEdit->clear();
+    m_confirmPasswordRegistrationLineEdit->clear();
+    m_stackedWidget->setCurrentWidget(m_loginWidget);
+}
+
+        // Registration slots
+
 void LoginRegistrationView::onRegistrationLinkButtonClicked() {
     std::cout << "[LoginRegistrationView::onRegistrationLinkButtonClicked] Registration link button clicked" << std::endl;
     if(m_emailLineEdit->text().isEmpty() && m_passwordLineEdit->text().isEmpty()) {
@@ -76,6 +106,16 @@ void LoginRegistrationView::onRegistrationLinkButtonClicked() {
         return;
     }
     m_unsavedDataLoginMessage->showMessageBox("Unsaved data", "Input data will be cleared", "Leave", "Stay", QMessageBox::Warning);
+}
+
+void LoginRegistrationView::onSendCodeButtonClicked() {
+    std::cout << "[LoginRegistrationView::onSendCodeButtonClicked] Send code button clicked" << std::endl;
+    if(m_emailRegistrationLineEdit->text().isEmpty()) {
+        std::cout << "[LoginRegistrationView::onSendCodeButtonClicked] Email is empty" << std::endl;
+        m_emptyRegistrationError->showErrorMessage("Email is empty");
+        return;
+    }
+    emit sendCode(m_emailRegistrationLineEdit->text());
 }
 
 void LoginRegistrationView::approveRegistrationLinkButtonClicked() {
@@ -94,8 +134,8 @@ void LoginRegistrationView::onCreateAccountButtonClicked() {
     user.password = m_passwordRegistrationLineEdit->text();
     
     if(m_firstNameRegistrationLineEdit->text().isEmpty() || m_lastNameRegistrationLineEdit->text().isEmpty() || 
-       m_emailRegistrationLineEdit->text().isEmpty() || m_passwordRegistrationLineEdit->text().isEmpty() || 
-       m_confirmPasswordRegistrationLineEdit->text().isEmpty()) {
+    m_emailRegistrationLineEdit->text().isEmpty() || m_emailCodeRegistrationLineEdit->text().isEmpty() ||
+    m_passwordRegistrationLineEdit->text().isEmpty() || m_confirmPasswordRegistrationLineEdit->text().isEmpty()) {
         std::cout << "[LoginRegistrationView::onCreateAccountButtonClicked] Input fields are empty" << std::endl;
         m_emptyRegistrationError->showErrorMessage("Input fields are empty");
         return;
@@ -110,27 +150,14 @@ void LoginRegistrationView::onCreateAccountButtonClicked() {
     emit registerUser(user);
 }
 
-void LoginRegistrationView::onLoginLinkButtonClicked() {
-    std::cout << "[LoginRegistrationView::onLoginLinkButtonClicked] Login link button clicked" << std::endl;
-    if(m_firstNameRegistrationLineEdit->text().isEmpty() && m_lastNameRegistrationLineEdit->text().isEmpty() && 
-       m_emailRegistrationLineEdit->text().isEmpty() && m_passwordRegistrationLineEdit->text().isEmpty() && 
-       m_confirmPasswordRegistrationLineEdit->text().isEmpty()) {
-        m_stackedWidget->setCurrentWidget(m_loginWidget);
-        return;
-    }
+        // Code sent successfully
 
-    m_unsavedDataRegistrationMessage->showMessageBox("Unsaved data", "Input data will be cleared", "Leave", "Stay", QMessageBox::Warning);
+void LoginRegistrationView::onCodeSentSuccessfully() {
+    std::cout << "[LoginRegistrationView::onCodeSentSuccessfully] Code sent successfully" << std::endl;
+
 }
 
-void LoginRegistrationView::approveLoginLinkButtonClicked() {
-    std::cout << "[LoginRegistrationView::approveLoginLinkButtonClicked] Approve login link button clicked" << std::endl;
-    m_firstNameRegistrationLineEdit->clear();
-    m_lastNameRegistrationLineEdit->clear();
-    m_emailRegistrationLineEdit->clear();
-    m_passwordRegistrationLineEdit->clear();
-    m_confirmPasswordRegistrationLineEdit->clear();
-    m_stackedWidget->setCurrentWidget(m_loginWidget);
-}
+        // Login widget
 
 void LoginRegistrationView::setupLoginWidget() {
     std::cout << "[LoginRegistrationView::setupLoginWidget] Setting up login widget" << std::endl;
@@ -178,6 +205,8 @@ void LoginRegistrationView::setupLoginWidget() {
     m_loginWidget->setLayout(m_loginLayout);
 }
 
+        // Registration widget
+
 void LoginRegistrationView::setupRegistrationWidget() {
     std::cout << "[LoginRegistrationView::setupRegistrationWidget] Setting up registration widget" << std::endl;
     m_registrationWidget = new QWidget();
@@ -188,6 +217,8 @@ void LoginRegistrationView::setupRegistrationWidget() {
 
     m_createAccountButton = new QPushButton("Create account");
     m_createAccountButton->setFixedSize(300, 50);
+    m_sendCodeButton = new QPushButton("Send code");
+    m_sendCodeButton->setFixedSize(300, 50);
     m_loginLinkButton = new QPushButton("Login");
     m_loginLinkButton->setFixedSize(150, 30);
 
@@ -202,6 +233,9 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_lastNameRegistrationLineEdit->setPlaceholderText("Last name");
     m_emailRegistrationLineEdit = new QLineEdit();
     m_emailRegistrationLineEdit->setPlaceholderText("Email");
+    m_emailCodeRegistrationLineEdit = new QLineEdit();
+    m_emailCodeRegistrationLineEdit->setPlaceholderText("Email code 8 digits");
+    m_emailCodeRegistrationLineEdit->setMaxLength(8);
     m_passwordRegistrationLineEdit = new QLineEdit();
     m_passwordRegistrationLineEdit->setPlaceholderText("Password");
     m_passwordRegistrationLineEdit->setEchoMode(QLineEdit::Password);
@@ -214,6 +248,11 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_registrationButtonLayout->addWidget(m_createAccountButton);
     m_registrationButtonLayout->addItem(m_hRCenterRegistrationSpacer);
 
+    m_sendCodeButtonLayout = new QHBoxLayout();
+    m_sendCodeButtonLayout->addItem(m_hLCenterRegistrationSpacer);
+    m_sendCodeButtonLayout->addWidget(m_sendCodeButton);
+    m_sendCodeButtonLayout->addItem(m_hRCenterRegistrationSpacer);
+
     m_loginLinkLayout = new QHBoxLayout();
     m_loginLinkLayout->addItem(m_hLCenterRegistrationSpacer);
     m_loginLinkLayout->addWidget(m_loginLinkButton);
@@ -224,11 +263,13 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_registrationLayout->addWidget(m_firstNameRegistrationLineEdit);
     m_registrationLayout->addWidget(m_lastNameRegistrationLineEdit);
     m_registrationLayout->addWidget(m_emailRegistrationLineEdit);
+    m_registrationLayout->addWidget(m_emailCodeRegistrationLineEdit);
     m_registrationLayout->addWidget(m_passwordRegistrationLineEdit);
     m_registrationLayout->addWidget(m_confirmPasswordRegistrationLineEdit);
     m_registrationLayout->addItem(m_vButtonLoginSpacer);
     m_registrationLayout->addLayout(m_registrationButtonLayout);
     m_registrationLayout->addItem(m_vRegistrationSpacer);
+    m_registrationLayout->addLayout(m_sendCodeButtonLayout);
     m_registrationLayout->addLayout(m_loginLinkLayout);
     m_registrationLayout->addItem(m_vDSpacer);
 

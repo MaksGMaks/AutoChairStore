@@ -7,8 +7,11 @@ class IViewModel : public QObject {
     Q_OBJECT
 
 public:
-    IViewModel(IModel *model, QObject *parent = nullptr);
+    IViewModel(QObject *parent = nullptr);
     virtual ~IViewModel() = default;
+
+protected slots:
+    void onErrorOccurred(const QString &errorMessage);
 
 signals:
     void errorOccurred(const QString &errorMessage);

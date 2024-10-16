@@ -1,7 +1,7 @@
 #include "CatalogueProductSV.hpp"
 
 CatalogueProductSV::CatalogueProductSV(QString &productName, QString &productPrice, QString &unitPrice, QString &imageBytes, QWidget *parent) 
-    : QWidget(parent) {
+: QWidget(parent) {
     m_productImage = new QImage();
     m_productImage->loadFromData(QByteArray::fromHex(imageBytes.toUtf8()));
 

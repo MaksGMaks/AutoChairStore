@@ -1,7 +1,7 @@
 #include "CatalogueMenuSV.hpp"
 
 CatalogueMenuSV::CatalogueMenuSV(QWidget *parent) 
-    : QWidget(parent) {
+: QWidget(parent) {
     setupUI();
 }
 

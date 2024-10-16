@@ -1,10 +1,36 @@
 #include "CatalogueView.hpp"
 
 CatalogueView::CatalogueView(IViewModel *viewModel, QWidget *parent) 
-    : IView(viewModel, parent), 
-      m_productsVM(viewModel) {
+: IView(viewModel, parent), 
+m_productsVM(viewModel) {
     std::cout << "[CatalogueView::CatalogueView] constructor" << std::endl;
     setupUI();
+}
+
+void CatalogueView::getProductList(const QVector<displayData::Products> &products) {
+    std::cout << "[CatalogueView::getProductList] Getting product list" << std::endl;
+    int count = 0;
+    QVector<displayData::Products> products_copy;
+    for(auto product : products) {
+        count++;
+        products_copy.push_back(product);
+        if(count == 4) {
+            count = 0;
+            QHBoxLayout *productLine = new QHBoxLayout();
+            for(auto product : products_copy) {
+                CatalogueProductSV *productSV = new CatalogueProductSV(product.name, product.price, product.priceUnit, product.photo);
+                productSV->setFixedSize(190, 300);
+                productLine->addWidget(productSV);
+            }
+            QWidget *productLineWidget = new QWidget(this);
+            productLineWidget->setLayout(productLine);
+            QListWidgetItem *productLineItem = new QListWidgetItem();
+            productLineItem->setSizeHint(productLineWidget->sizeHint());
+            m_catalogueList->addItem(productLineItem);
+            products_copy.clear();
+        }
+
+    }
 }
 
 void CatalogueView::setupUI() {
@@ -71,14 +97,6 @@ void CatalogueView::setupUI() {
     productLine3Item->setSizeHint(productLine3Widget->sizeHint());
     
     m_catalogueList = new QListWidget(this);
-    m_catalogueList->addItem(productLine1Item);
-    m_catalogueList->setItemWidget(productLine1Item, productLine1Widget);
-
-    m_catalogueList->addItem(productLine2Item);
-    m_catalogueList->setItemWidget(productLine2Item, productLine2Widget);
-
-    m_catalogueList->addItem(productLine3Item);
-    m_catalogueList->setItemWidget(productLine3Item, productLine3Widget);
 
     m_catalogueSearch = new CatalogueSearchSV(this);
     m_catalogueSearch->setFixedWidth(200);
