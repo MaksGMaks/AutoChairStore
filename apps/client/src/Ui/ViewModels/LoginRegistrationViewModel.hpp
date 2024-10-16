@@ -12,34 +12,23 @@ public:
     explicit LoginRegistrationViewModel(UsersModel *model, QObject *parent = nullptr);
     virtual ~LoginRegistrationViewModel() = default;
 
-    displayData::Users user() const;
-
 signals:
-    void loginSuccessfull();
-    void loginFail();
-    
-    void registrationSuccessfull();
-    void registrationFail();
+    void modelLoginUser(const Common::Users &entity);
+    void modelRegisterUser(const Common::Users &entity);
+    void modelSendCode(const std::string &email);
 
-    void loginUser(const Common::Users &entity);
-    void registerUser(const Common::Users &entity);
-    
-    void errorOccurred(const QString &errorMessage);
-
-private slots:
-    void onUserLogin();
-    void onUserLoginFailed();
-    void onUserRegistered();
-    void onUserRegisterationFailed();
+    void codeSentSuccessfully();
 
 public slots:
     void onLoginUser(const displayData::Users &entity);
     void onRegisterUser(const displayData::Users &entity);
+    void onSendCode(const QString &email);
+
+private slots:
+    void onCodeSentSuccessfully();
 
 private:
     UsersModel *m_users;
-
-    displayData::Users m_usersData;
 
     displayData::Users convertToDisplayData(const Common::Users &entity);
     Common::Users convertToEntity(const displayData::Users &entity);

@@ -20,6 +20,15 @@ namespace Common {
         std::string password{};
     };
 
+    struct RegistrationInfo {
+        static constexpr const char *CODE         = "code";
+        static constexpr const char *IS_EMAIL_EXISTS     = "EmailExists";
+        static constexpr const char *IS_EMAIL_FREE    = "EmailFree";
+
+        std::string emailExists{};
+        std::string emailFree{};
+    };
+
     struct Suppliers {
         static constexpr const char *TABLE_NAME = "Suppliers";
         static constexpr const char *ID_KEY     = "id";

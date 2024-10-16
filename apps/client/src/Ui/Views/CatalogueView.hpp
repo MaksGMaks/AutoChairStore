@@ -4,11 +4,13 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QVector>
 
 #include "IView.hpp"
 #include "SubViews/CatalogueMenuSV.hpp"
 #include "SubViews/CatalogueProductSV.hpp"
 #include "SubViews/CatalogueSearchSV.hpp"
+#include "Ui/DisplayData/DisplayData.hpp"
 
 #include "Ui/TEST_UTILS.hpp"
 
@@ -17,6 +19,9 @@ class CatalogueView : public IView {
 public:
     explicit CatalogueView(IViewModel *viewModel, QWidget *parent = nullptr);
     virtual ~CatalogueView() = default;
+
+private slots:
+    void getProductList(const QVector<displayData::Products> &products);
 
 private:
     void setupUI();

@@ -1,5 +1,10 @@
 #include "IView.hpp"
 
 IView::IView(IViewModel *viewModel, QWidget *parent) : QWidget(parent) {
-    connect(this, &IView::errorOccurred, viewModel, &IViewModel::errorOccurred);
+    m_errorMessageBox = new MessageBox(this);
+    connect(viewModel, &IViewModel::errorOccurred, this, &IView::onErrorOccurred);
+}
+
+void IView::onErrorOccurred(const QString &errorMessage) {
+    m_errorMessageBox->showErrorMessage(errorMessage);
 }

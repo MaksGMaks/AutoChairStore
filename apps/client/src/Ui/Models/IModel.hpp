@@ -8,7 +8,4 @@ class IModel : public QObject {
 public:
     IModel(QObject *parent = nullptr);
     virtual ~IModel() = default;
-
-signals:
-    void errorOccurred(const QString &errorMessage);
 };

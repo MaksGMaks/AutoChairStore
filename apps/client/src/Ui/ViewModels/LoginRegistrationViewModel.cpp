@@ -1,40 +1,30 @@
 #include "LoginRegistrationViewModel.hpp"
 
 LoginRegistrationViewModel::LoginRegistrationViewModel(UsersModel *model, QObject *parent)
-    : IViewModel(model, parent), 
-      m_users(model) {
-    connect(m_users, &UsersModel::loginSuccessfull, this,
-            &LoginRegistrationViewModel::onUserLogin);
-    connect(m_users, &UsersModel::loginFail, this,
-            &LoginRegistrationViewModel::onUserLoginFailed);
-    
-    connect(m_users, &UsersModel::registrationSuccessfull, this,
-            &LoginRegistrationViewModel::onUserRegistered);
-    connect(m_users, &UsersModel::registrationFail, this,
-            &LoginRegistrationViewModel::onUserRegisterationFailed);
-    
-    connect(m_users, &UsersModel::errorOccurred, this,
-            &LoginRegistrationViewModel::errorOccurred);
+: IViewModel(parent), 
+m_users(model) {
+    connect(m_users, &UsersModel::loginRegistrationError, this, &LoginRegistrationViewModel::onErrorOccurred);
+    connect(m_users, &UsersModel::codeSentSuccessfully, this, &LoginRegistrationViewModel::onCodeSentSuccessfully);
+
+    connect(this, &LoginRegistrationViewModel::modelLoginUser, m_users, &UsersModel::onLoginUser);
+    connect(this, &LoginRegistrationViewModel::modelRegisterUser, m_users, &UsersModel::onRegisterUser);
+    connect(this, &LoginRegistrationViewModel::modelSendCode, m_users, &UsersModel::onSendCode);
 }
 
-displayData::Users LoginRegistrationViewModel::user() const {
-    return m_usersData;
+void LoginRegistrationViewModel::onLoginUser(const displayData::Users &entity) {
+    emit modelLoginUser(convertToEntity(entity));
 }
 
-void LoginRegistrationViewModel::onUserLogin() {
-    emit loginSuccessfull();
+void LoginRegistrationViewModel::onRegisterUser(const displayData::Users &entity) {
+    emit modelRegisterUser(convertToEntity(entity));
 }
 
-void LoginRegistrationViewModel::onUserLoginFailed() {
-    emit loginFail();
+void LoginRegistrationViewModel::onSendCode(const QString &email) {
+    emit modelSendCode(email.toStdString());
 }
 
-void LoginRegistrationViewModel::onUserRegistered() {
-    emit registrationSuccessfull();
-}
-
-void LoginRegistrationViewModel::onUserRegisterationFailed() {
-    emit registrationFail();
+void LoginRegistrationViewModel::onCodeSentSuccessfully() {
+    emit codeSentSuccessfully();
 }
 
 displayData::Users LoginRegistrationViewModel::convertToDisplayData(const Common::Users &entity) {

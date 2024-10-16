@@ -1,8 +1,8 @@
 #include "PhotosModel.hpp"
 
 PhotosModel::PhotosModel(ApiManager &apiManager, QObject *parent)
-    : IModel(parent), 
-      m_apiManager(apiManager) {
+: IModel(parent), 
+m_apiManager(apiManager) {
     
 }
 
