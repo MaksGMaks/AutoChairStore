@@ -8,24 +8,25 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpacerItem>
-#include <QTimer>
 
 #include "IView.hpp"
 #include "Ui/ViewModels/LoginRegistrationViewModel.hpp"
 #include "Ui/DisplayData/DisplayData.hpp"
 #include "Ui/MessageBox.hpp"
+#include "Ui/TimerButton.hpp"
 
 class LoginRegistrationView : public IView {
     Q_OBJECT
 public:
     explicit LoginRegistrationView(LoginRegistrationViewModel *viewModel, QWidget *parent = nullptr);
-    virtual ~LoginRegistrationView() = default;
+    ~LoginRegistrationView() = default;
 
 signals:
     // Sends the user data to the view model on login or registration
     void loginUser(const displayData::Users &user);
-    void registerUser(const displayData::Users &user);
+    void registerUser(const displayData::Users &user, const QString &code);
     void sendCode(const QString &email);
+    void loginRegistrationSuccessfull();
 
 private slots:
     // Button clicked slots
@@ -39,7 +40,8 @@ private slots:
     void approveLoginLinkButtonClicked();
 
     // Result slots
-    void onCodeSentSuccessfully();
+    void onLoginSuccessfull();
+    void onRegistrationSuccessfull();
 
 private:
     void setupUI();
@@ -84,8 +86,6 @@ private:
     // Registration widget
     QWidget *m_registrationWidget;
 
-    QTimer *m_codeTimer;
-
     MessageBox *m_emptyRegistrationError;
     MessageBox *m_differentPasswordsRegistrationError;
     MessageBox *m_unsavedDataRegistrationMessage;
@@ -100,6 +100,9 @@ private:
     QLineEdit *m_emailCodeRegistrationLineEdit;
     QLineEdit *m_passwordRegistrationLineEdit;
     QLineEdit *m_confirmPasswordRegistrationLineEdit;
+
+    QLabel *m_codeTimerLabel;
+    TimerButton *m_timerButton;
 
     QSpacerItem *m_vRegistrationSpacer;
     QSpacerItem *m_vLoginLinkSpacer;

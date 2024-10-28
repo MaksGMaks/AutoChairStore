@@ -29,14 +29,11 @@ set(FACTORY_SOURCES
 )
 
 set(MODEL_SOURCES 
-${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/InventoryModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/PhotosModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/ProductInfoModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/ProductsModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/PurchaseOrdersModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/SuppliersModel.cpp
-${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Models/IModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Models/PhotosModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Models/ProductsModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Models/PurchaseOrdersModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Models/UsersModel.cpp
 )    
 
 set(NETWORK_SOURCES
@@ -50,6 +47,9 @@ set(VIEW_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/Views/CatalogueView.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/LoginRegistrationView.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/IView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/PurchaseOrderInfoV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/ProductPageView.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/BasketView.cpp
 )    
 
 set(VIEWMODEL_SOURCES 
@@ -57,18 +57,24 @@ set(VIEWMODEL_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/CatalogueViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/LoginRegistrationViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/PurchaseOrderInfoVM.cpp
 )    
 
 set(SUBVIEW_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueMenuSV.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueProductSV.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchSV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/BaseSeatPage.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/ChildSeatPage.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/SportSeatPage.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/LuxurySeatPage.cpp
 )    
 
 set(UI_SOUCES
     ${CLIENT_SOURCES_DIR}/Ui/MainWindow.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Menu.cpp
     ${CLIENT_SOURCES_DIR}/Ui/MessageBox.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/TimerButton.cpp
     ${FACTORY_SOURCES}
     ${MODEL_SOURCES}
     ${VIEW_SOURCES}
@@ -84,7 +90,6 @@ set(ALL_CLIENT_SOURCES
     ${NETWORK_SOURCES}
     ${UI_SOUCES}
     ${RESOURCES}
-    
 )
 
 # Create client executable

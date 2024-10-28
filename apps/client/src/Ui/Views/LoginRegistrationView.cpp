@@ -55,7 +55,8 @@ void LoginRegistrationView::setupConnection() {
     connect(this, &LoginRegistrationView::registerUser, m_loginRegistrationVM, &LoginRegistrationViewModel::onRegisterUser);
     connect(this, &LoginRegistrationView::sendCode, m_loginRegistrationVM, &LoginRegistrationViewModel::onSendCode);
 
-    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::codeSentSuccessfully, this, &LoginRegistrationView::onCodeSentSuccessfully);
+    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::userLoginSuccessfull, this, &LoginRegistrationView::onLoginSuccessfull);
+    connect(m_loginRegistrationVM, &LoginRegistrationViewModel::userRegisteredSuccessfully, this, &LoginRegistrationView::onRegistrationSuccessfull);
 }
 
             // Login slots
@@ -112,6 +113,7 @@ void LoginRegistrationView::onSendCodeButtonClicked() {
     std::cout << "[LoginRegistrationView::onSendCodeButtonClicked] Send code button clicked" << std::endl;
     if(m_emailRegistrationLineEdit->text().isEmpty()) {
         std::cout << "[LoginRegistrationView::onSendCodeButtonClicked] Email is empty" << std::endl;
+        m_timerButton->stopTimer();
         m_emptyRegistrationError->showErrorMessage("Email is empty");
         return;
     }
@@ -147,14 +149,27 @@ void LoginRegistrationView::onCreateAccountButtonClicked() {
         return;
     }
     
-    emit registerUser(user);
+    emit registerUser(user, m_emailCodeRegistrationLineEdit->text());
 }
 
-        // Code sent successfully
+        // Result successfully
 
-void LoginRegistrationView::onCodeSentSuccessfully() {
-    std::cout << "[LoginRegistrationView::onCodeSentSuccessfully] Code sent successfully" << std::endl;
+void LoginRegistrationView::onLoginSuccessfull() {
+    std::cout << "[LoginRegistrationView::onLoginSuccessfull] Login successfull" << std::endl;
+    m_emailLineEdit->clear();
+    m_passwordLineEdit->clear();
+    emit loginRegistrationSuccessfull();
+}
 
+void LoginRegistrationView::onRegistrationSuccessfull() {
+    std::cout << "[LoginRegistrationView::onRegistrationSuccessfull] Registration successfull" << std::endl;
+    m_firstNameRegistrationLineEdit->clear();
+    m_lastNameRegistrationLineEdit->clear();
+    m_emailRegistrationLineEdit->clear();
+    m_emailCodeRegistrationLineEdit->clear();
+    m_passwordRegistrationLineEdit->clear();
+    m_confirmPasswordRegistrationLineEdit->clear();
+    emit loginRegistrationSuccessfull();
 }
 
         // Login widget
@@ -243,6 +258,8 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_confirmPasswordRegistrationLineEdit->setPlaceholderText("Confirm password");
     m_confirmPasswordRegistrationLineEdit->setEchoMode(QLineEdit::Password);
 
+    m_codeTimerLabel = new QLabel("");
+
     m_registrationButtonLayout = new QHBoxLayout();
     m_registrationButtonLayout->addItem(m_hLCenterRegistrationSpacer);
     m_registrationButtonLayout->addWidget(m_createAccountButton);
@@ -252,6 +269,11 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_sendCodeButtonLayout->addItem(m_hLCenterRegistrationSpacer);
     m_sendCodeButtonLayout->addWidget(m_sendCodeButton);
     m_sendCodeButtonLayout->addItem(m_hRCenterRegistrationSpacer);
+
+    QHBoxLayout *m_timerLabelLayout = new QHBoxLayout();
+    m_timerLabelLayout->addItem(m_hLCenterRegistrationSpacer);
+    m_timerLabelLayout->addWidget(m_codeTimerLabel);
+    m_timerLabelLayout->addItem(m_hRCenterRegistrationSpacer);
 
     m_loginLinkLayout = new QHBoxLayout();
     m_loginLinkLayout->addItem(m_hLCenterRegistrationSpacer);
@@ -269,9 +291,12 @@ void LoginRegistrationView::setupRegistrationWidget() {
     m_registrationLayout->addItem(m_vButtonLoginSpacer);
     m_registrationLayout->addLayout(m_registrationButtonLayout);
     m_registrationLayout->addItem(m_vRegistrationSpacer);
+    m_registrationLayout->addLayout(m_timerLabelLayout);
     m_registrationLayout->addLayout(m_sendCodeButtonLayout);
     m_registrationLayout->addLayout(m_loginLinkLayout);
     m_registrationLayout->addItem(m_vDSpacer);
 
     m_registrationWidget->setLayout(m_registrationLayout);
+
+    m_timerButton = new TimerButton(m_sendCodeButton, m_codeTimerLabel);
 }

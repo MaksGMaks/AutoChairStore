@@ -14,18 +14,20 @@ public:
 
 signals:
     void modelLoginUser(const Common::Users &entity);
-    void modelRegisterUser(const Common::Users &entity);
+    void modelRegisterUser(const Common::Users &entity, const std::string &code);
     void modelSendCode(const std::string &email);
 
-    void codeSentSuccessfully();
+    void userLoginSuccessfull();
+    void userRegisteredSuccessfully();
 
 public slots:
     void onLoginUser(const displayData::Users &entity);
-    void onRegisterUser(const displayData::Users &entity);
+    void onRegisterUser(const displayData::Users &entity, const QString &code);
     void onSendCode(const QString &email);
 
 private slots:
-    void onCodeSentSuccessfully();
+    void onUserLoginSuccessfull();
+    void onUserRegisteredSuccessfully();
 
 private:
     UsersModel *m_users;

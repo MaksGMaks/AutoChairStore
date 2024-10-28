@@ -11,7 +11,7 @@ public:
     virtual ~IViewModel() = default;
 
 protected slots:
-    void onErrorOccurred(const QString &errorMessage);
+    void onErrorOccurred(const std::string &errorMessage);
 
 signals:
     void errorOccurred(const QString &errorMessage);

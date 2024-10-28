@@ -11,7 +11,7 @@ class CatalogueSearchSV : public QWidget {
     Q_OBJECT
 public:
     explicit CatalogueSearchSV(QWidget *parent = nullptr);
-    virtual ~CatalogueSearchSV() = default;
+    ~CatalogueSearchSV() = default;
 
 private:
     void setupUI();

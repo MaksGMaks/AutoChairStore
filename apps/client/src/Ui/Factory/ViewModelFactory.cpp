@@ -1,7 +1,7 @@
 #include "ViewModelFactory.hpp"
 
-AccountViewModel* ViewModelFactory::getAccountVM(UsersModel *model, QObject *parent) {
-    return new AccountViewModel(model, parent);
+AccountViewModel* ViewModelFactory::getAccountVM(UsersModel *usrModel, PurchaseOrdersModel *ordersModel, ProductsModel *prodModel, PhotosModel *photoModel, QObject *parent) {
+    return new AccountViewModel(usrModel, ordersModel, prodModel, photoModel, parent);
 }
 
 CatalogueViewModel* ViewModelFactory::getCatalogueVM(ProductsModel *model, QObject *parent) {
@@ -10,4 +10,8 @@ CatalogueViewModel* ViewModelFactory::getCatalogueVM(ProductsModel *model, QObje
 
 LoginRegistrationViewModel* ViewModelFactory::getLoginRegistrationVM(UsersModel *model, QObject *parent) {
     return new LoginRegistrationViewModel(model, parent);
+}
+
+PurchaseOrderInfoVM* ViewModelFactory::getPurchaseOrderInfoVM(PurchaseOrdersModel *model, QObject *parent) {
+    return new PurchaseOrderInfoVM(model, parent);
 }

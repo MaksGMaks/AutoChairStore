@@ -18,7 +18,12 @@ class CatalogueView : public IView {
     Q_OBJECT
 public:
     explicit CatalogueView(IViewModel *viewModel, QWidget *parent = nullptr);
-    virtual ~CatalogueView() = default;
+    ~CatalogueView() = default;
+
+signals:
+    void openProductPage(const QString &productId);
+    void addToBasket(const QString &productId);
+    void buyProduct(const QString &productId);
 
 private slots:
     void getProductList(const QVector<displayData::Products> &products);
@@ -46,19 +51,6 @@ private:
     QVBoxLayout *m_mainLayout;
     QHBoxLayout *m_catalogueLayout;
 
-    // test data
-    QHBoxLayout *m_productLine1;
-    QHBoxLayout *m_productLine2;
-    QHBoxLayout *m_productLine3;
-
-    CatalogueProductSV *m_product1;
-    CatalogueProductSV *m_product2;
-    CatalogueProductSV *m_product3;
-    CatalogueProductSV *m_product4;
-    CatalogueProductSV *m_product5;
-    CatalogueProductSV *m_product6;
-    CatalogueProductSV *m_product7;
-    CatalogueProductSV *m_product8;
-    CatalogueProductSV *m_product9;
-    CatalogueProductSV *m_product10;
+    // Test data
+    QVector<displayData::Products> m_products;
 };

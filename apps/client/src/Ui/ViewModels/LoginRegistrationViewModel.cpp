@@ -4,27 +4,33 @@ LoginRegistrationViewModel::LoginRegistrationViewModel(UsersModel *model, QObjec
 : IViewModel(parent), 
 m_users(model) {
     connect(m_users, &UsersModel::loginRegistrationError, this, &LoginRegistrationViewModel::onErrorOccurred);
-    connect(m_users, &UsersModel::codeSentSuccessfully, this, &LoginRegistrationViewModel::onCodeSentSuccessfully);
 
     connect(this, &LoginRegistrationViewModel::modelLoginUser, m_users, &UsersModel::onLoginUser);
     connect(this, &LoginRegistrationViewModel::modelRegisterUser, m_users, &UsersModel::onRegisterUser);
     connect(this, &LoginRegistrationViewModel::modelSendCode, m_users, &UsersModel::onSendCode);
+
+    connect(m_users, &UsersModel::userLoginSuccessfull, this, &LoginRegistrationViewModel::onUserLoginSuccessfull);
+    connect(m_users, &UsersModel::userRegisteredSuccessfully, this, &LoginRegistrationViewModel::onUserRegisteredSuccessfully);
 }
 
 void LoginRegistrationViewModel::onLoginUser(const displayData::Users &entity) {
     emit modelLoginUser(convertToEntity(entity));
 }
 
-void LoginRegistrationViewModel::onRegisterUser(const displayData::Users &entity) {
-    emit modelRegisterUser(convertToEntity(entity));
+void LoginRegistrationViewModel::onRegisterUser(const displayData::Users &entity, const QString &code) {
+    emit modelRegisterUser(convertToEntity(entity), code.toStdString());
 }
 
 void LoginRegistrationViewModel::onSendCode(const QString &email) {
     emit modelSendCode(email.toStdString());
 }
 
-void LoginRegistrationViewModel::onCodeSentSuccessfully() {
-    emit codeSentSuccessfully();
+void LoginRegistrationViewModel::onUserLoginSuccessfull() {
+    emit userLoginSuccessfull();
+}
+
+void LoginRegistrationViewModel::onUserRegisteredSuccessfully() {
+    emit userRegisteredSuccessfully();
 }
 
 displayData::Users LoginRegistrationViewModel::convertToDisplayData(const Common::Users &entity) {

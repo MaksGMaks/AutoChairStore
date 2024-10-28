@@ -3,6 +3,6 @@
 IViewModel::IViewModel(QObject *parent) : QObject(parent) {
 }
 
-void IViewModel::onErrorOccurred(const QString &errorMessage) {
-    emit errorOccurred(errorMessage);
+void IViewModel::onErrorOccurred(const std::string &errorMessage) {
+    emit errorOccurred(QString::fromStdString(errorMessage));
 }

@@ -9,7 +9,7 @@ class CatalogueMenuSV : public QWidget {
     Q_OBJECT
 public:
     explicit CatalogueMenuSV(QWidget *parent = nullptr);
-    virtual ~CatalogueMenuSV() = default;
+    ~CatalogueMenuSV() = default;
 
 private:
     void setupUI();
@@ -18,7 +18,6 @@ private:
     QPushButton *m_baseSeatsButton;
     QPushButton *m_childSeatsBusketButton;
     QPushButton *m_sportSeatsButton;
-    QPushButton *m_bucketSeatsButton;
     QPushButton *m_luxureSeatsButton;
 
     // Layout

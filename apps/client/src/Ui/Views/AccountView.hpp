@@ -14,13 +14,14 @@
 #include "IView.hpp"
 #include "Ui/ViewModels/AccountViewModel.hpp"
 #include "Ui/MessageBox.hpp"
+#include "Ui/TimerButton.hpp"
 
 class AccountView : public IView {
     Q_OBJECT
 
 public:
     explicit AccountView(AccountViewModel *viewModel, QWidget *parent = nullptr);
-    virtual ~AccountView() = default;
+    ~AccountView() = default;
 
 signals:
     void vmEditUser(const displayData::Users &user);
@@ -29,6 +30,9 @@ signals:
     void vmEmailChange(const QString &oldEmail, const QString &newEmail, const QString &code);
     void vmPasswordChange(const QString &email, const QString &oldPassword, const QString &newPassword, const QString &code);
     void vmDeleteAccount(const QString &email, const QString &code);
+
+    void vmFetchPurchaseOrders(const QString &userId);
+    void openOrder(const QString &id);
 
     void accountDeleted();
 
@@ -51,12 +55,14 @@ private slots:
     void onDeleteAccountConfirmButtonClicked();
     void onDeleteAccountConfirmed();
 
+    void onOrderClicked();
+
     // View Model slots
     void onUserFetched();
-    void onEmailCodeSent();
-    void onChangeCodeSent();
     void onPasswordChanged();
     void onDeleteAccountSuccess();
+
+    void onPurchaseOrdersFetched();
 
 private:
     // Methods
@@ -124,6 +130,9 @@ private:
     QSpacerItem *m_hLChangeEmailSpacer;
     QSpacerItem *m_hRChangeEmailSpacer;
 
+    QLabel *m_emailChangeCodeTimerLabel;
+    TimerButton *m_emailChangeCodeTimer;
+
     QVBoxLayout *m_changeEmailVLayout;
     QHBoxLayout *m_changeEmailHLayout;
 
@@ -145,6 +154,9 @@ private:
     QSpacerItem *m_hLChangePasswordSpacer;
     QSpacerItem *m_hRChangePasswordSpacer;
 
+    QLabel *m_passwordChangeCodeTimerLabel;
+    TimerButton *m_passwordChangeCodeTimer;
+
     QVBoxLayout *m_changePasswordVLayout;
     QHBoxLayout *m_changePasswordHLayout;
 
@@ -154,6 +166,11 @@ private:
     QPushButton *m_sendDeleteAccountCodeButton;
     QPushButton *m_deleteAccountConfirmButton;
     MessageBox *m_deleteAccountDialog;
+    MessageBox *m_deleteAccountSuccessDialog;
+    MessageBox *m_deleteAccountErrorDialog;
+
+    QLabel *m_deleteAccountCodeLabel;
+    TimerButton *m_deleteAccountCodeTimer;
 
     // Others
     QTableWidget *m_ordersTable;

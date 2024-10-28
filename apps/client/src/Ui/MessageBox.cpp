@@ -33,6 +33,17 @@ void MessageBox::showErrorMessage(const QString &message) {
     exec();
 }
 
+void MessageBox::showInformationMessage(const QString &title, const QString &message) {
+    setWindowTitle(title);
+    setText(message);
+    setIcon(QMessageBox::Information);
+
+    m_rejectButton->hide();
+    m_approveButton->setText("Ok");
+    
+    exec();
+}
+
 void MessageBox::onApproveButtonClicked() {
     emit approveButtonClicked();
 }
@@ -44,4 +55,7 @@ void MessageBox::onRejectButtonClicked() {
 void MessageBox::setupConnections() {
     connect(m_approveButton, &QPushButton::clicked, this, &MessageBox::onApproveButtonClicked);
     connect(m_rejectButton, &QPushButton::clicked, this, &MessageBox::onRejectButtonClicked);
+    connect(this, &QMessageBox::buttonClicked, this, [this] {
+        emit anyAction();
+    });
 }

@@ -13,24 +13,23 @@ public:
 
 signals:
     // Login and registration
-    void loginRegistrationError(const QString &errorMessage);
+    void loginRegistrationError(const std::string &errorMessage);
 
     void userLoginSuccessfull();
+    void userRegisteredSuccessfully();
     void codeSentSuccessfully();
 
     // Account
-    void accountError(const QString &errorMessage);
+    void accountError(const std::string &errorMessage);
 
     void fetchUser();
-    void emailCodeSentSuccessfully();
-    void changeCodeSentSuccessfully();
     void passwordChangedSuccessfully();
     void deleteAccountSuccessfully();
 
 public slots:
     // Login and registration
     void onLoginUser(const Common::Users &entity);
-    void onRegisterUser(const Common::Users &entity);
+    void onRegisterUser(const Common::Users &entity, const std::string &code);
     void onSendCode(const std::string &email);
 
     // Account
@@ -43,16 +42,13 @@ public slots:
 
 private slots:
     // Login and registration
-    void onLoginRegistrationError(const QString &errorMessage);
-    void onLoginUserSuccessfull();
-    void onRegisterUserSuccessfull();
-    void onCodeSentSuccessfully();
+    void onLoginRegistrationError(const std::string &errorMessage);
+    void onLoginUserSuccessfull(const Common::Users &entity);
+    void onRegisterUserSuccessfull(const Common::Users &entity);
 
     // Account
-    void onAccountError(const QString &errorMessage);
+    void onAccountError(const std::string &errorMessage);
     void onUserFetched(const Common::Users &entity);
-    void onEmailCodeSentSuccessfully();
-    void onChangeCodeSentSuccessfully();
     void onEmailChangedSuccessfully(const Common::Users &entity);
     void onPasswordChangedSuccessfully();
     void onDeleteAccountSuccessfull();

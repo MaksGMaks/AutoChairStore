@@ -18,10 +18,13 @@ public:
     explicit MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, ViewFactory &viewFactory, QWidget *parent = nullptr);
     virtual ~MainWindow() = default;
 
-public slots:
+private slots:
     void onAccountButtonClicked();
     void onPurchaseBusketButtonClicked();
     void onCatalogButtonClicked();
+
+    void onLoginSuccessfull();
+    void onAccountDeleted();
 
 private:
     void setupUi();
@@ -33,14 +36,20 @@ private:
     // Models
     UsersModel *m_userModel;
     ProductsModel *m_productsModel;
-    
+    PurchaseOrdersModel *m_purchaseOrdersModel;
+    PhotosModel *m_photosModel;
+
     // View Models
     AccountViewModel *m_accountViewModel;
     LoginRegistrationViewModel *m_loginRegistrationViewModel;
     CatalogueViewModel *m_catalogueViewModel;
+    PurchaseOrderInfoVM *m_purchaseOrderInfoVM;
     
     // Views
-    IView *m_accountView;
-    IView *m_catalogueView;
-    IView *m_loginRegistrationView;
+    AccountView *m_accountView;
+    CatalogueView *m_catalogueView;
+    LoginRegistrationView *m_loginRegistrationView;
+    PurchaseOrderInfoV *m_purchaseOrderInfoV;
+    ProductPageView *m_productPageView;
+    BasketView *m_basketView;
 };

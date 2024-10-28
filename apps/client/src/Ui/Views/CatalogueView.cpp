@@ -5,17 +5,46 @@ CatalogueView::CatalogueView(IViewModel *viewModel, QWidget *parent)
 m_productsVM(viewModel) {
     std::cout << "[CatalogueView::CatalogueView] constructor" << std::endl;
     setupUI();
+    setupConnections();
+    getProductList(m_products);
 }
 
 void CatalogueView::getProductList(const QVector<displayData::Products> &products) {
     std::cout << "[CatalogueView::getProductList] Getting product list" << std::endl;
     int count = 0;
     QVector<displayData::Products> products_copy;
-    for(auto product : products) {
+    for(auto product_ : products) {
         count++;
-        products_copy.push_back(product);
+        products_copy.push_back(product_);
         if(count == 4) {
             count = 0;
+            QHBoxLayout *productLine = new QHBoxLayout();
+            for(auto product : products_copy) {
+                CatalogueProductSV *productSV = new CatalogueProductSV(product.name, product.price, product.priceUnit, product.photo);
+                connect(productSV, &CatalogueProductSV::openProductPage, this, [this, product]() {
+                    std::cout << "[CatalogueView::getProductList] Opening page for product with id " << product.id.toStdString() << std::endl;
+                    emit openProductPage(product.id);
+                });
+                connect(productSV, &CatalogueProductSV::addToBasketClicked, this, [this, product]() {
+                    std::cout << "[CatalogueView::getProductList] Adding to basket product with id " << product.id.toStdString() << std::endl;
+                    emit addToBasket(product.id);
+                });
+                connect(productSV, &CatalogueProductSV::buyClicked, this, [this, product]() {
+                    std::cout << "[CatalogueView::getProductList] Buying product with id " << product.id.toStdString() << std::endl;
+                    emit buyProduct(product.id);
+                });
+                productSV->setFixedSize(190, 300);
+                productLine->addWidget(productSV);
+            }
+            QWidget *productLineWidget = new QWidget(this);
+            productLineWidget->setLayout(productLine);
+            QListWidgetItem *productLineItem = new QListWidgetItem();
+            productLineItem->setSizeHint(productLineWidget->sizeHint());
+            m_catalogueList->addItem(productLineItem);
+            m_catalogueList->setItemWidget(productLineItem, productLineWidget);
+            products_copy.clear();
+        }
+        if(product_ == products.last()) {
             QHBoxLayout *productLine = new QHBoxLayout();
             for(auto product : products_copy) {
                 CatalogueProductSV *productSV = new CatalogueProductSV(product.name, product.price, product.priceUnit, product.photo);
@@ -27,76 +56,44 @@ void CatalogueView::getProductList(const QVector<displayData::Products> &product
             QListWidgetItem *productLineItem = new QListWidgetItem();
             productLineItem->setSizeHint(productLineWidget->sizeHint());
             m_catalogueList->addItem(productLineItem);
+            m_catalogueList->setItemWidget(productLineItem, productLineWidget);
             products_copy.clear();
         }
-
     }
 }
 
 void CatalogueView::setupUI() {
     std::cout << "[CatalogueView::setupUI] Setting up UI" << std::endl;
+
+    test_utils testUtils;
+
+    displayData::Products product;
+    product.name = testUtils.productName1;
+    product.price = testUtils.price1;
+    product.priceUnit = testUtils.priceUnit;
+    product.photo = testUtils.image1;
+
+    displayData::Products product2;
+    product2.name = testUtils.productName2;
+    product2.price = testUtils.price2;
+    product2.priceUnit = testUtils.priceUnit;
+    product2.photo = testUtils.image2;
+
+    for(int i = 0; i < 10; i++) {
+        if(i % 2 == 0) {
+            product.id = QString::number(i);
+            m_products.push_back(product);
+        } else {
+            product2.id = QString::number(i);
+            m_products.push_back(product2);
+        }
+    }
+
     m_catalogueMenu = new CatalogueMenuSV(this);
     m_catalogueMenu->setFixedHeight(50);
 
-    test_utils test;
-
-    m_product1 = new CatalogueProductSV(test.productName1, test.price1, test.priceUnit, test.image1);
-    m_product2 = new CatalogueProductSV(test.productName2, test.price2, test.priceUnit, test.image2);
-    m_product3 = new CatalogueProductSV(test.productName1, test.price1, test.priceUnit, test.image1);
-    m_product4 = new CatalogueProductSV(test.productName2, test.price2, test.priceUnit, test.image2);
-    m_product5 = new CatalogueProductSV(test.productName1, test.price1, test.priceUnit, test.image1);
-    m_product6 = new CatalogueProductSV(test.productName2, test.price2, test.priceUnit, test.image2);
-    m_product7 = new CatalogueProductSV(test.productName1, test.price1, test.priceUnit, test.image1);
-    m_product8 = new CatalogueProductSV(test.productName2, test.price2, test.priceUnit, test.image2);
-    m_product9 = new CatalogueProductSV(test.productName1, test.price1, test.priceUnit, test.image1);
-    m_product10 = new CatalogueProductSV(test.productName2, test.price2, test.priceUnit, test.image2);
-    
-    m_product1->setFixedSize(190, 300);
-    m_product2->setFixedSize(190, 300);
-    m_product3->setFixedSize(190, 300);
-    m_product4->setFixedSize(190, 300);
-    m_product5->setFixedSize(190, 300);
-    m_product6->setFixedSize(190, 300);
-    m_product7->setFixedSize(190, 300);
-    m_product8->setFixedSize(190, 300);
-    m_product9->setFixedSize(190, 300);
-    m_product10->setFixedSize(190, 300);
-
-    m_productLine1 = new QHBoxLayout();
-    m_productLine1->addWidget(m_product1);
-    m_productLine1->addWidget(m_product2);
-    m_productLine1->addWidget(m_product3);
-    m_productLine1->addWidget(m_product4);
-
-    m_productLine2 = new QHBoxLayout();
-    m_productLine2->addWidget(m_product5);
-    m_productLine2->addWidget(m_product6);
-    m_productLine2->addWidget(m_product7);
-    m_productLine2->addWidget(m_product8);
-
-    m_productLine3 = new QHBoxLayout();
-    m_productLine3->addWidget(m_product9);
-    m_productLine3->addWidget(m_product10);
-
-    QWidget *productLine1Widget = new QWidget(this);
-    productLine1Widget->setLayout(m_productLine1);
-
-    QListWidgetItem *productLine1Item = new QListWidgetItem();
-    productLine1Item->setSizeHint(productLine1Widget->sizeHint());
-
-    QWidget *productLine2Widget = new QWidget(this);
-    productLine2Widget->setLayout(m_productLine2);
-
-    QListWidgetItem *productLine2Item = new QListWidgetItem();
-    productLine2Item->setSizeHint(productLine2Widget->sizeHint());
-
-    QWidget *productLine3Widget = new QWidget(this);
-    productLine3Widget->setLayout(m_productLine3);
-
-    QListWidgetItem *productLine3Item = new QListWidgetItem();
-    productLine3Item->setSizeHint(productLine3Widget->sizeHint());
-    
     m_catalogueList = new QListWidget(this);
+    m_catalogueList->setSelectionMode(QAbstractItemView::NoSelection);
 
     m_catalogueSearch = new CatalogueSearchSV(this);
     m_catalogueSearch->setFixedWidth(200);

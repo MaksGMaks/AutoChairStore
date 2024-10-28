@@ -10,6 +10,21 @@ CatalogueProductSV::CatalogueProductSV(QString &productName, QString &productPri
     m_unitPriceLabel = new QLabel(unitPrice);
 
     setupUI();
+
+    connect(m_addToBusketButton, &QPushButton::clicked, this, [this]() {
+        emit addToBasketClicked();
+    });
+
+    connect(m_buyButton, &QPushButton::clicked, this, [this]() {
+        emit buyClicked();
+    });
+}
+
+void CatalogueProductSV::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        emit openProductPage();
+    }
+    QWidget::mouseDoubleClickEvent(event);
 }
 
 void CatalogueProductSV::setupUI() {

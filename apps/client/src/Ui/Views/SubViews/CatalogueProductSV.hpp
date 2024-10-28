@@ -8,14 +8,22 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMouseEvent>
 
 class CatalogueProductSV : public QWidget {
     Q_OBJECT
 public:
     explicit CatalogueProductSV(QString &productName, QString &productPrice, QString &unitPrice, QString &imageBytes, QWidget *parent = nullptr);
-    virtual ~CatalogueProductSV() = default;
+    ~CatalogueProductSV() = default;
 
-    
+signals:
+    void addToBasketClicked();
+    void buyClicked();
+    void openProductPage();
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+
 private:
     void setupUI();
 

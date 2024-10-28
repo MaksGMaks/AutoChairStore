@@ -9,9 +9,11 @@ public:
     explicit PhotosModel(ApiManager &apiManager, QObject *parent = nullptr);
     virtual ~PhotosModel() = default;
 
-    QVector<Common::Photos> photos() const;
+    std::vector<Common::Photos> photos() const;
+
+    std::string getPhotoById(const std::string &id) const;
 
 private:
     ApiManager &m_apiManager;
-    QVector<Common::Photos> m_photos;
+    std::vector<Common::Photos> m_photos;
 };

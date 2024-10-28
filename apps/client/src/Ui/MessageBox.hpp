@@ -13,10 +13,12 @@ public:
                         const QString &rejectButtonText, const QMessageBox::Icon &icon);
 
     void showErrorMessage(const QString &message);
+    void showInformationMessage(const QString &title, const QString &message);
 
 signals:
     void approveButtonClicked();
     void rejectButtonClicked();
+    void anyAction();
 
 private slots:
     void onApproveButtonClicked();
