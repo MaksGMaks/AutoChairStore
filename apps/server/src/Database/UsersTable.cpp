@@ -1,4 +1,4 @@
-#include "UserTable.hpp"
+#include "UsersTable.hpp"
 
 UsersTable::UsersTable(sqlite3*& db) {
     dataBase = db;

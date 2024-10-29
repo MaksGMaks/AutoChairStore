@@ -2,10 +2,10 @@
 
 #include "ITable.hpp"
 
-class InventoryTable : public ITable {
+class ChildSeatTable : public ITable {
 public:
-    InventoryTable(sqlite3*& db);
-    virtual ~InventoryTable();
+    explicit ChildSeatTable(sqlite3*& db);
+    ~ChildSeatTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

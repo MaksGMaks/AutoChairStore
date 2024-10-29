@@ -26,5 +26,7 @@ private:
     boost::asio::io_service io_service;
     boost::system::error_code error;
 
+    void testUserTable();
+
     std::unique_ptr<DatabaseManager> dbManager;
 };
