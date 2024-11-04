@@ -1,6 +1,6 @@
 #include "PurchaseOrderInfoV.hpp"
 
-PurchaseOrderInfoV::PurchaseOrderInfoV(AccountViewModel *viewModel, QWidget *parent) 
+PurchaseOrderInfoV::PurchaseOrderInfoV(PurchaseOrderInfoVM *viewModel, QWidget *parent) 
 : IView(viewModel, parent) 
 , m_purchaseOrderVM(viewModel) {
     std::cout << "[PurchaseOrderInfoV::PurchaseOrderInfoV] constructor" << std::endl;
@@ -14,13 +14,16 @@ void PurchaseOrderInfoV::setupConnections() {
     connect(m_cancelOrderButton, &QPushButton::clicked, this, &PurchaseOrderInfoV::onCancelOrderButtonClicked);
     connect(m_backButton, &QPushButton::clicked, this, &PurchaseOrderInfoV::onBackButtonClicked);
 
-    connect(this, &PurchaseOrderInfoV::vmCancelOrder, m_purchaseOrderVM, &AccountViewModel::onCancelOrder);
-    connect(this, &PurchaseOrderInfoV::vmLoadSeat, m_purchaseOrderVM, &AccountViewModel::onLoadSeat);
+    connect(this, &PurchaseOrderInfoV::vmCancelOrder, m_purchaseOrderVM, &PurchaseOrderInfoVM::onCancelOrder);
+    connect(this, &PurchaseOrderInfoV::vmLoadSeat, m_purchaseOrderVM, &PurchaseOrderInfoVM::onLoadSeat);
+    connect(this, &PurchaseOrderInfoV::vmLoadProduct, m_purchaseOrderVM, &PurchaseOrderInfoVM::onLoadProduct);
 
-    connect(m_purchaseOrderVM, &AccountViewModel::baseSeatLoadedSuccess, this, &PurchaseOrderInfoV::onBaseSeatLoaded);
-    connect(m_purchaseOrderVM, &AccountViewModel::childSeatLoadedSuccess, this, &PurchaseOrderInfoV::onChildSeatLoaded);
-    connect(m_purchaseOrderVM, &AccountViewModel::sportSeatLoadedSuccess, this, &PurchaseOrderInfoV::onSportSeatLoaded);
-    connect(m_purchaseOrderVM, &AccountViewModel::luxurySeatLoadedSuccess, this, &PurchaseOrderInfoV::onLuxurySeatLoaded);
+    connect(m_purchaseOrderVM, &PurchaseOrderInfoVM::baseSeatLoadedSuccess, this, &PurchaseOrderInfoV::onBaseSeatLoaded);
+    connect(m_purchaseOrderVM, &PurchaseOrderInfoVM::childSeatLoadedSuccess, this, &PurchaseOrderInfoV::onChildSeatLoaded);
+    connect(m_purchaseOrderVM, &PurchaseOrderInfoVM::sportSeatLoadedSuccess, this, &PurchaseOrderInfoV::onSportSeatLoaded);
+    connect(m_purchaseOrderVM, &PurchaseOrderInfoVM::luxurySeatLoadedSuccess, this, &PurchaseOrderInfoV::onLuxurySeatLoaded);
+
+    connect(m_purchaseOrderVM, &PurchaseOrderInfoVM::productLoaded, this, &PurchaseOrderInfoV::onProductLoaded);
 }
 
 void PurchaseOrderInfoV::onLoadOrder(const QString &id) {
@@ -44,10 +47,9 @@ void PurchaseOrderInfoV::onLoadOrder(const QString &id) {
     } else {
         m_cancelOrderButton->setEnabled(true);
     }
-    
 
-    m_purchaseOrderVM->onLoadSeat(order.productId);
     emit vmLoadSeat(order.productId);
+    emit vmLoadProduct(order.productId);
 }
 
 void PurchaseOrderInfoV::onCancelOrderButtonClicked() {
@@ -64,24 +66,60 @@ void PurchaseOrderInfoV::onBaseSeatLoaded(const displayData::BaseSeat &seat) {
     std::cout << "[PurchaseOrderInfoV::onBaseSeatLoaded] Base seat loaded" << std::endl;
     m_baseSeatPage->loadSeat(seat);
     m_stackedWidget->setCurrentWidget(m_baseSeatPage);
+
+    QImage m_productImage = QImage();
+    m_productImage.loadFromData(QByteArray::fromHex(seat.image.toUtf8()));
+    m_imageLabel->setPixmap(QPixmap::fromImage(m_productImage).scaled(600, 400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_imageLabel->setAlignment(Qt::AlignCenter);
+}
+
+void PurchaseOrderInfoV::onProductLoaded(const displayData::Products &product) {
+    std::cout << "[PurchaseOrderInfoV::onProductLoaded] Product loaded" << std::endl;
+    m_titleLabel->setText(product.name);
+    m_priceLabel->setText("");
+    m_discountLabel->setText("");
+    int price = product.price.toInt();
+    if(product.hasDiscount == "TRUE") {
+        std::cout << "[PurchaseOrderInfoV::onProductLoaded] Product has discount" << std::endl;
+        m_priceLabel->setText(product.price);
+        m_discountLabel->setText("-" + product.discount + "%");
+        price = product.price.toInt() - (product.discount.toInt() * (product.price.toInt() / 100));
+    }
+    m_unitPriceLabel->setText(product.priceUnit);
+    m_totalPriceLabel->setText(QString::number(price));
 }
 
 void PurchaseOrderInfoV::onChildSeatLoaded(const displayData::ChildSeat &seat) {
     std::cout << "[PurchaseOrderInfoV::onChildSeatLoaded] Child seat loaded" << std::endl;
     m_childSeatPage->loadSeat(seat);
     m_stackedWidget->setCurrentWidget(m_childSeatPage);
+
+    QImage m_productImage = QImage();
+    m_productImage.loadFromData(QByteArray::fromHex(seat.image.toUtf8()));
+    m_imageLabel->setPixmap(QPixmap::fromImage(m_productImage).scaled(600, 400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_imageLabel->setAlignment(Qt::AlignCenter);
 }
 
 void PurchaseOrderInfoV::onSportSeatLoaded(const displayData::SportSeat &seat) {
     std::cout << "[PurchaseOrderInfoV::onSportSeatLoaded] Sport seat loaded" << std::endl;
     m_sportSeatPage->loadSeat(seat);
     m_stackedWidget->setCurrentWidget(m_sportSeatPage);
+
+    QImage m_productImage = QImage();
+    m_productImage.loadFromData(QByteArray::fromHex(seat.image.toUtf8()));
+    m_imageLabel->setPixmap(QPixmap::fromImage(m_productImage).scaled(600, 400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_imageLabel->setAlignment(Qt::AlignCenter);
 }
 
 void PurchaseOrderInfoV::onLuxurySeatLoaded(const displayData::LuxurySeat &seat) {
     std::cout << "[PurchaseOrderInfoV::onLuxurySeatLoaded] Luxery seat loaded" << std::endl;
     m_luxerySeatPage->loadSeat(seat);
     m_stackedWidget->setCurrentWidget(m_luxerySeatPage);
+
+    QImage m_productImage = QImage();
+    m_productImage.loadFromData(QByteArray::fromHex(seat.image.toUtf8()));
+    m_imageLabel->setPixmap(QPixmap::fromImage(m_productImage).scaled(600, 400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_imageLabel->setAlignment(Qt::AlignCenter);
 }
 
 void PurchaseOrderInfoV::onCancelOrder() {
@@ -203,10 +241,10 @@ void PurchaseOrderInfoV::setupProductInfo() {
     m_imageLabel = new QLabel();
     m_imageLabel->setFixedSize(600, 400);
     
-    m_discountLabel = new QLabel("25%");
-    m_totalPriceLabel = new QLabel("3000");
-    m_unitPriceLabel = new QLabel("грн");
-    m_priceLabel = new QLabel("4000");
+    m_discountLabel = new QLabel("");
+    m_totalPriceLabel = new QLabel("");
+    m_unitPriceLabel = new QLabel("");
+    m_priceLabel = new QLabel("");
 
     m_priceFont = m_priceLabel->font();
     m_priceFont.setPointSize(18);
@@ -215,6 +253,7 @@ void PurchaseOrderInfoV::setupProductInfo() {
     m_totalPriceLabel->setFont(m_priceFont);
     m_unitPriceLabel->setFont(m_priceFont);
     m_priceFont.setPointSize(10);
+    m_priceFont.setStrikeOut(true);
     m_priceLabel->setFont(m_priceFont);
 
     m_stackedWidget = new QStackedWidget();
@@ -224,14 +263,14 @@ void PurchaseOrderInfoV::setupProductInfo() {
     m_stackedWidget->addWidget(m_luxerySeatPage);
 
     m_totalPriceLayout = new QHBoxLayout();
-    m_totalPriceLayout->addItem(m_hLSpacer);
     m_totalPriceLayout->addWidget(m_discountLabel);
+    m_totalPriceLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Fixed));
     m_totalPriceLayout->addWidget(m_totalPriceLabel);
     m_totalPriceLayout->addWidget(m_unitPriceLabel);
     m_totalPriceLayout->addItem(m_hRSpacer);
 
     m_priceLayout = new QHBoxLayout();
-    m_priceLayout->addItem(m_hLSpacer);
+    m_priceLayout->addItem(new QSpacerItem(100, 20, QSizePolicy::Fixed, QSizePolicy::Fixed));
     m_priceLayout->addWidget(m_priceLabel);
     m_priceLayout->addItem(m_hRSpacer);
 

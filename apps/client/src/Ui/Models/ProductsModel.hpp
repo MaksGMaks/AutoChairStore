@@ -29,10 +29,13 @@ signals:
     void sportSeatsFetched();
     void luxurySeatsFetched();
 
+    void productLoaded(const Common::Products &product);
     void baseSeatLoadedSuccess(const Common::BaseSeat &seat);
     void childSeatLoadedSuccess(const Common::ChildSeat &seat);
     void sportSeatLoadedSuccess(const Common::SportSeat &seat);
     void luxurySeatLoadedSuccess(const Common::LuxurySeat &seat);
+
+    void addToBasketSuccess(const Common::Products &product);
 
 public slots:
     void onFetchProducts();
@@ -42,6 +45,9 @@ public slots:
     void onFetchLuxurySeats();
 
     void onLoadSeat(const std::string &id);
+    void onLoadProduct(const std::string &id);
+
+    void onAddToBasket(const std::string &id);
 
 private slots:
     void onErrorOccurred(const std::string &errorMessage);

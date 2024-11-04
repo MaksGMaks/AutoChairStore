@@ -4,7 +4,7 @@ AccountView *ViewFactory::getAccountView(AccountViewModel *viewModel, QWidget *p
     return new AccountView(viewModel, parent);
 }
 
-CatalogueView *ViewFactory::getCatalogueView(IViewModel *viewModel, QWidget *parent) {
+CatalogueView *ViewFactory::getCatalogueView(CatalogueViewModel *viewModel, QWidget *parent) {
     return new CatalogueView(viewModel, parent);
 }
 
@@ -12,14 +12,14 @@ LoginRegistrationView *ViewFactory::getLoginRegistrationView(LoginRegistrationVi
     return new LoginRegistrationView(viewModel, parent);
 }
 
-PurchaseOrderInfoV *ViewFactory::getPurchaseOrderInfoV(AccountViewModel *viewModel, QWidget *parent) {
+PurchaseOrderInfoV *ViewFactory::getPurchaseOrderInfoV(PurchaseOrderInfoVM *viewModel, QWidget *parent) {
     return new PurchaseOrderInfoV(viewModel, parent);
 }
 
-ProductPageView *ViewFactory::getProductPageView(CatalogueViewModel *viewModel, QWidget *parent) {
+ProductPageView *ViewFactory::getProductPageView(ProductPageViewModel *viewModel, QWidget *parent) {
     return new ProductPageView(viewModel, parent);
 }
 
-BasketView *ViewFactory::getBasketView(PurchaseOrderInfoVM *viewModel, QWidget *parent) {
+BasketView *ViewFactory::getBasketView(BasketViewModel *viewModel, QWidget *parent) {
     return new BasketView(viewModel, parent);
 }

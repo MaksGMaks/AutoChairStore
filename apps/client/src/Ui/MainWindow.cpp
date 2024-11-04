@@ -9,19 +9,21 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
     m_photosModel = std::move(modelFactory.getPhotosModel());
     
     // View Models
-    m_accountViewModel = std::move(vmFactory.getAccountVM(std::move(m_userModel), std::move(m_purchaseOrdersModel), std::move(m_productsModel), 
-                         std::move(m_photosModel)));
+    m_accountViewModel = std::move(vmFactory.getAccountVM(std::move(m_userModel), std::move(m_purchaseOrdersModel), std::move(m_productsModel)));
     m_loginRegistrationViewModel = std::move(vmFactory.getLoginRegistrationVM(std::move(m_userModel)));
-    m_catalogueViewModel = std::move(vmFactory.getCatalogueVM(std::move(m_productsModel)));
-    m_purchaseOrderInfoVM = std::move(vmFactory.getPurchaseOrderInfoVM(std::move(m_purchaseOrdersModel)));
+    m_catalogueViewModel = std::move(vmFactory.getCatalogueVM(std::move(m_productsModel), std::move(m_photosModel)));
+    m_purchaseOrderInfoVM = std::move(vmFactory.getPurchaseOrderInfoVM(std::move(m_purchaseOrdersModel), std::move(m_productsModel), 
+                         std::move(m_photosModel)));
+    m_productPageViewModel = std::move(vmFactory.getProductPageVM(std::move(m_productsModel), std::move(m_photosModel)));
+    m_basketViewModel = std::move(vmFactory.getBasketVM(std::move(m_productsModel), std::move(m_purchaseOrdersModel)));
 
     // Views
     m_accountView = std::move(viewFactory.getAccountView(std::move(m_accountViewModel)));
     m_catalogueView = std::move(viewFactory.getCatalogueView(std::move(m_catalogueViewModel)));
     m_loginRegistrationView = std::move(viewFactory.getLoginRegistrationView(std::move(m_loginRegistrationViewModel)));
-    m_purchaseOrderInfoV = std::move(viewFactory.getPurchaseOrderInfoV(std::move(m_accountViewModel)));
-    m_productPageView = std::move(viewFactory.getProductPageView(std::move(m_catalogueViewModel)));
-    m_basketView = std::move(viewFactory.getBasketView(std::move(m_purchaseOrderInfoVM)));
+    m_purchaseOrderInfoV = std::move(viewFactory.getPurchaseOrderInfoV(std::move(m_purchaseOrderInfoVM)));
+    m_productPageView = std::move(viewFactory.getProductPageView(std::move(m_productPageViewModel)));
+    m_basketView = std::move(viewFactory.getBasketView(std::move(m_basketViewModel)));
 
     setWindowTitle("Autochair Shop");
     resize(800, 600);
@@ -68,12 +70,17 @@ void MainWindow::setupConnections() {
         m_productPageView->onLoadOrder(id);
         m_stackedWidget->setCurrentWidget(m_productPageView);
     });
+
+    connect(m_productPageView, &ProductPageView::goBack, [this]() {
+        m_stackedWidget->setCurrentWidget(m_catalogueView);
+    });
 }
 
 void MainWindow::onLoginSuccessfull() {
     std::cout << "[MainWindow::onLoginSuccessfull] User logged in successfully" << std::endl;
     m_menu->setVisible(true);
     m_stackedWidget->setCurrentWidget(m_catalogueView);
+    m_photosModel->fetchPhotos();
     m_productsModel->fetchProducts();
 }
 
@@ -98,4 +105,5 @@ void MainWindow::onCatalogButtonClicked() {
     std::cout << "[MainWindow::onCatalogButtonClicked] Catalog button clicked" << std::endl;
     m_stackedWidget->setCurrentWidget(m_catalogueView);
     m_productsModel->fetchProducts();
+    m_photosModel->fetchPhotos();
 }

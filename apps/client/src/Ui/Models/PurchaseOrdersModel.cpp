@@ -19,6 +19,11 @@ void PurchaseOrdersModel::onPurchaseOrdersError(const std::string &message) {
     emit purchaseOrderError(message);
 }
 
+void PurchaseOrdersModel::onCancelOrder(const std::string &id) {
+    std::string test = id;
+    //m_apiManager.cancelOrder(id);
+}
+
 void PurchaseOrdersModel::onPurchaseOrdersFetched(const std::vector<Common::PurchaseOrders> &orders) {
     std::cout << "[PurchaseOrdersModel::onPurchaseOrdersFetched] Purchase orders fetched" << std::endl;
     m_purchaseOrders = orders;

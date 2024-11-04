@@ -14,19 +14,29 @@
 #include <QHeaderView>
 
 #include "IView.hpp"
-#include "Ui/ViewModels/PurchaseOrderInfoVM.hpp"
+#include "Ui/ViewModels/BasketViewModel.hpp"
 
 class BasketView : public IView {
     Q_OBJECT
 public:
-    explicit BasketView(PurchaseOrderInfoVM *viewModel, QWidget *parent = nullptr);
+    explicit BasketView(BasketViewModel *viewModel, QWidget *parent = nullptr);
     ~BasketView() = default;
+
+signals:
+    void addToBasket(const QString &id);
+    void createOrder(const displayData::PurchaseOrder &order);
+
+public slots:
+    void onAddToBasketButtonClicked(const QString &id);
+
+private slots:
+    void onProductLoaded(const displayData::Products &product);
 
 private:
     void setupConnections();
     void setupUi();
-
-    PurchaseOrderInfoVM *m_basketVM;
+    
+    BasketViewModel *m_basketVM;
 
     // ComboBoxes
     QComboBox *m_paidMethodComboBox;

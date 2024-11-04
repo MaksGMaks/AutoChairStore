@@ -11,7 +11,16 @@ public:
 
     std::vector<Common::Photos> photos() const;
 
-    std::string getPhotoById(const std::string &id) const;
+    std::string getPhotoById(const std::string &type, const std::string &id) const;
+    void fetchPhotos();
+
+signals:
+    void photosError(const std::string &errorMessage);
+
+private slots:
+    void onPhotosFetched(const std::vector<Common::Photos> &photos);
+    void onError(const std::string &errorMessage);
+
 
 private:
     ApiManager &m_apiManager;

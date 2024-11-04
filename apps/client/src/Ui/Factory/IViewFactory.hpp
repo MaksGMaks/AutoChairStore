@@ -12,9 +12,9 @@ public:
     virtual ~IViewFactory() = default;
 
     virtual AccountView *getAccountView(AccountViewModel *viewModel, QWidget *parent = nullptr) = 0;
-    virtual CatalogueView *getCatalogueView(IViewModel *viewModel, QWidget *parent = nullptr) = 0;
+    virtual CatalogueView *getCatalogueView(CatalogueViewModel *viewModel, QWidget *parent = nullptr) = 0;
     virtual LoginRegistrationView *getLoginRegistrationView(LoginRegistrationViewModel *viewModel, QWidget *parent = nullptr) = 0;
-    virtual PurchaseOrderInfoV *getPurchaseOrderInfoV(AccountViewModel *viewModel, QWidget *parent = nullptr) = 0;
-    virtual ProductPageView *getProductPageView(CatalogueViewModel *viewModel, QWidget *parent = nullptr) = 0;
-    virtual BasketView *getBasketView(PurchaseOrderInfoVM *viewModel, QWidget *parent = nullptr) = 0;
+    virtual PurchaseOrderInfoV *getPurchaseOrderInfoV(PurchaseOrderInfoVM *viewModel, QWidget *parent = nullptr) = 0;
+    virtual ProductPageView *getProductPageView(ProductPageViewModel *viewModel, QWidget *parent = nullptr) = 0;
+    virtual BasketView *getBasketView(BasketViewModel *viewModel, QWidget *parent = nullptr) = 0;
 };

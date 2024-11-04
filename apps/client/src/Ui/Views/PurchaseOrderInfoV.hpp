@@ -9,7 +9,7 @@
 #include <QStackedWidget>
 
 #include "IView.hpp"
-#include "Ui/ViewModels/AccountViewModel.hpp"
+#include "Ui/ViewModels/PurchaseOrderInfoVM.hpp"
 #include "SubViews/BaseSeatPage.hpp"
 #include "SubViews/ChildSeatPage.hpp"
 #include "SubViews/SportSeatPage.hpp"
@@ -18,12 +18,13 @@
 class PurchaseOrderInfoV : public IView {
     Q_OBJECT
 public:
-    explicit PurchaseOrderInfoV(AccountViewModel *viewModel, QWidget *parent = nullptr);
+    explicit PurchaseOrderInfoV(PurchaseOrderInfoVM *viewModel, QWidget *parent = nullptr);
     ~PurchaseOrderInfoV() = default;
 
 signals:
     void vmCancelOrder(const QString &id);
     void vmLoadSeat(const QString &id);
+    void vmLoadProduct(const QString &id);
     void goBack();
 
 public slots:
@@ -33,6 +34,7 @@ private slots:
     void onCancelOrderButtonClicked();
     void onBackButtonClicked();
 
+    void onProductLoaded(const displayData::Products &product);
     void onBaseSeatLoaded(const displayData::BaseSeat &seat);
     void onChildSeatLoaded(const displayData::ChildSeat &seat);
     void onSportSeatLoaded(const displayData::SportSeat &seat);
@@ -46,7 +48,7 @@ private:
     void setupProductInfo();
     void setupConnections();
 
-    AccountViewModel *m_purchaseOrderVM;
+    PurchaseOrderInfoVM *m_purchaseOrderVM;
     QString orderId;
 
     // Pages

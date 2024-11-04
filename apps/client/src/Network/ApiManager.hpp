@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include "NetworkManager.hpp"
+#include "TEST_PHOTOS.hpp"
 
 class ApiManager : public QObject {
     Q_OBJECT
@@ -32,6 +33,9 @@ public:
     void fetchSportSeats();
     void fetchLuxurySeats();
 
+    // Photos
+    void fetchPhotos();
+
 signals:
     // Login and registration
     void loginRegistrationError(const std::string &errorMessage);
@@ -58,6 +62,10 @@ signals:
     void sportSeatsFetched(const std::vector<Common::SportSeat> &sportSeats);
     void luxurySeatsFetched(const std::vector<Common::LuxurySeat> &luxurySeats);
 
+    // Photos
+    void photosError(const std::string &errorMessage);
+    void photosFetched(const std::vector<Common::Photos> &photos);
+
 private:
     NetworkManager &m_networkManager;
 
@@ -75,6 +83,6 @@ private:
     std::vector<Common::SportSeat> testSportSeats;
     std::vector<Common::LuxurySeat> testLuxurySeats;
 
-    
+    std::vector<Common::Photos> testPhotos;
 
 };

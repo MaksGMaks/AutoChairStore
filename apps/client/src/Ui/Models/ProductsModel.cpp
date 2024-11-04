@@ -140,3 +140,21 @@ void ProductsModel::onLoadSeat(const std::string &id) {
         }
     }
 }
+
+void ProductsModel::onLoadProduct(const std::string &id) {
+    for(auto product : m_products) {
+        if(product.id == id) {
+            emit productLoaded(product);
+            break;
+        }
+    }
+}
+
+void ProductsModel::onAddToBasket(const std::string &id) {
+    for(auto product : m_products) {
+        if(product.id == id) {
+            emit addToBasketSuccess(product);
+            break;
+        }
+    }
+}

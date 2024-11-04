@@ -14,9 +14,11 @@ public:
 signals:
     void purchaseOrderError(const std::string &message);
     void purchaseOrdersFetched();
+    void orderCancelled();
 
 public slots:
     void onFetchPurchaseOrders(const std::string &userId);
+    void onCancelOrder(const std::string &id);
 
 private slots:
     void onPurchaseOrdersFetched(const std::vector<Common::PurchaseOrders> &orders);

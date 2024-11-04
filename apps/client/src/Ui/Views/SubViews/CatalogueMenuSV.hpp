@@ -11,8 +11,15 @@ public:
     explicit CatalogueMenuSV(QWidget *parent = nullptr);
     ~CatalogueMenuSV() = default;
 
+signals:
+    void openBaseSeats();
+    void openChildSeats();
+    void openSportSeats();
+    void openLuxurySeats();
+
 private:
     void setupUI();
+    void setupConnections();
 
     // Buttons
     QPushButton *m_baseSeatsButton;

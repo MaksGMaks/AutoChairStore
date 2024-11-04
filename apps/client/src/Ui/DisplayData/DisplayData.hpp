@@ -14,24 +14,28 @@ namespace displayData {
     struct Products {
         QString id{};
         QString name{};
+        QString type{};
         QString photo{};
         QString price{};
         QString priceUnit{};
+        QString hasDiscount{};
+        QString discount{};
 
         bool operator==(const Products &rhs) const {
-            return id == rhs.id && name == rhs.name && photo == rhs.photo && price == rhs.price && priceUnit == rhs.priceUnit;
+            return id == rhs.id && name == rhs.name && type == rhs.type && photo == rhs.photo && price == rhs.price && priceUnit == rhs.priceUnit && 
+                   hasDiscount == rhs.hasDiscount && discount == rhs.discount;
         }
     };
 
     struct PurchaseOrder {
         QString id{};
         QString userId{};
-        QString packageId{};
         QString productId{};
         QString productName{};
         QString paidType{};
-        QString date{};
         QString destination{};
+        QString packageId{};
+        QString date{};
         QString status{};
 
         bool operator==(const PurchaseOrder &rhs) const {

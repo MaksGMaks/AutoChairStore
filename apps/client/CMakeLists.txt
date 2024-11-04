@@ -39,7 +39,6 @@ set(MODEL_SOURCES
 set(NETWORK_SOURCES
     ${CLIENT_SOURCES_DIR}/Network/ApiManager.cpp
     ${CLIENT_SOURCES_DIR}/Network/NetworkManager.cpp
-    ${CLIENT_SOURCES_DIR}/Network/EmailSender.cpp
 )
 
 set(VIEW_SOURCES 
@@ -55,6 +54,7 @@ set(VIEW_SOURCES
 set(VIEWMODEL_SOURCES 
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/AccountViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/CatalogueViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/ProductPageViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/LoginRegistrationViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/PurchaseOrderInfoVM.cpp
@@ -63,7 +63,10 @@ set(VIEWMODEL_SOURCES
 set(SUBVIEW_SOURCES
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueMenuSV.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueProductSV.cpp
-    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchSV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchBaseSeatV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchChildSeatV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchSportSeatV.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/CatalogueSearchLuxurySeatV.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/BaseSeatPage.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/ChildSeatPage.cpp
     ${CLIENT_SOURCES_DIR}/Ui/Views/SubViews/SportSeatPage.cpp

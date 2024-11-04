@@ -7,11 +7,11 @@
 #include <QVBoxLayout>
 #include <QListWidgetItem>
 
-class CatalogueSearchSV : public QWidget {
+class CatalogueSearchChildSeatV : public QWidget {
     Q_OBJECT
 public:
-    explicit CatalogueSearchSV(QWidget *parent = nullptr);
-    ~CatalogueSearchSV() = default;
+    explicit CatalogueSearchChildSeatV(QWidget *parent = nullptr);
+    ~CatalogueSearchChildSeatV() = default;
 
 private:
     void setupUI();
@@ -20,9 +20,13 @@ private:
     QVBoxLayout *m_layout;
 
     // test data
-    QListWidget *m_listWidget1;
-    QListWidget *m_listWidget2;
-    QListWidget *m_listWidget3;
+    QListWidget *m_brandListWidget;
+    QListWidget *m_ageListWidget;
+    QListWidget *m_weightListWidget;
+    QListWidget *m_heightListWidget;
+    QListWidget *m_safetyKeyListWidget;
+    QListWidget *m_fasteningListWidget;
+    QListWidget *m_drivewayListWidget;
 
     QCheckBox *m_checkBox1;
     QCheckBox *m_checkBox2;

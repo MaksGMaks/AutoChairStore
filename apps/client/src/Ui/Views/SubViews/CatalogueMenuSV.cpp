@@ -3,6 +3,25 @@
 CatalogueMenuSV::CatalogueMenuSV(QWidget *parent) 
 : QWidget(parent) {
     setupUI();
+    setupConnections();
+}
+
+void CatalogueMenuSV::setupConnections() {
+    connect(m_baseSeatsButton, &QPushButton::clicked, this, [this]() {
+        emit openBaseSeats();
+    });
+
+    connect(m_childSeatsBusketButton, &QPushButton::clicked, this, [this]() {
+        emit openChildSeats();
+    });
+
+    connect(m_sportSeatsButton, &QPushButton::clicked, this, [this]() {
+        emit openSportSeats();
+    });
+
+    connect(m_luxureSeatsButton, &QPushButton::clicked, this, [this]() {
+        emit openLuxurySeats();
+    });
 }
 
 void CatalogueMenuSV::setupUI() {

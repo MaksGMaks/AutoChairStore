@@ -10,7 +10,7 @@
 class AccountViewModel : public IViewModel {
     Q_OBJECT
 public:
-    explicit AccountViewModel(UsersModel *usrModel, PurchaseOrdersModel *ordersModel, ProductsModel *prodModel, PhotosModel *photoModel, QObject *parent = nullptr);
+    explicit AccountViewModel(UsersModel *usrModel, PurchaseOrdersModel *ordersModel, ProductsModel *prodModel, QObject *parent = nullptr);
     virtual ~AccountViewModel() = default;
 
     displayData::Users user() const;
@@ -29,12 +29,6 @@ signals:
     void deleteAccountSuccessfully();
 
     void modelFetchPurchaseOrders(const std::string &userId);
-    void modelCancelOrder(const std::string &id);
-    void modelLoadSeat(const std::string &id);
-    void baseSeatLoadedSuccess(const displayData::BaseSeat &seat);
-    void childSeatLoadedSuccess(const displayData::ChildSeat &seat);
-    void sportSeatLoadedSuccess(const displayData::SportSeat &seat);
-    void luxurySeatLoadedSuccess(const displayData::LuxurySeat &seat);
     void purchaseOrdersFetched();
     
 
@@ -47,19 +41,13 @@ public slots:
     void onDeleteAccount(const QString &email, const QString &code);
 
     void onFetchPurchaseOrders(const QString &userId);
-    void onCancelOrder(const QString &id);
-    void onLoadSeat(const QString &id);
+    
 private slots:
     void onFetchUser();
     void onPasswordChanged();
     void onDeleteAccountSuccess();
 
     void onPurchaseOrdersFetched();
-    void onCancelOrderSuccess();
-    void onLoadBaseSeatSuccess(const Common::BaseSeat &seat);
-    void onLoadChildSeatSuccess(const Common::ChildSeat &seat);
-    void onLoadSportSeatSuccess(const Common::SportSeat &seat);
-    void onLoadLuxurySeatSuccess(const Common::LuxurySeat &seat);
 
 private:
     UsersModel *m_userModel;
@@ -74,10 +62,4 @@ private:
     displayData::Users convertUserToDisplayData(const Common::Users &user);
 
     displayData::PurchaseOrder convertPurchaseOrderToDisplayData(const Common::PurchaseOrders &order);
-
-    displayData::BaseSeat convertBaseSeatToDisplayData(const Common::BaseSeat &seat);
-    displayData::ChildSeat convertChildSeatToDisplayData(const Common::ChildSeat &seat);
-    displayData::SportSeat convertSportSeatToDisplayData(const Common::SportSeat &seat);
-    displayData::LuxurySeat convertLuxurySeatToDisplayData(const Common::LuxurySeat &seat);
-
 };

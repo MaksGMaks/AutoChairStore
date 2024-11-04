@@ -9,7 +9,7 @@
 #include <QStackedWidget>
 
 #include "IView.hpp"
-#include "Ui/ViewModels/CatalogueViewModel.hpp"
+#include "Ui/ViewModels/ProductPageViewModel.hpp"
 #include "SubViews/BaseSeatPage.hpp"
 #include "SubViews/ChildSeatPage.hpp"
 #include "SubViews/SportSeatPage.hpp"
@@ -18,16 +18,33 @@
 class ProductPageView : public IView {
     Q_OBJECT
 public:
-    explicit ProductPageView(CatalogueViewModel *viewModel, QWidget *parent = nullptr);
+    explicit ProductPageView(ProductPageViewModel *viewModel, QWidget *parent = nullptr);
     ~ProductPageView() = default;
 
     void onLoadOrder(const QString &id);
+
+signals:
+    void vmLoadSeat(const QString &id);
+
+    void goBack();
+    void buyProduct(const QString &id);
+    void addToCart(const QString &id);
+
+private slots:
+    void onBackButtonClicked();
+    void onBuyButtonClicked();
+    void onAddToCartButtonClicked();
+
+    void onBaseSeatLoadedSuccess(const displayData::BaseSeat &seat);
+    void onChildSeatLoadedSuccess(const displayData::ChildSeat &seat);
+    void onSportSeatLoadedSuccess(const displayData::SportSeat &seat);
+    void onLuxurySeatLoadedSuccess(const displayData::LuxurySeat &seat);
 
 private:
     void setupConnections();
     void setupUi();
 
-    CatalogueViewModel *m_productPageVM;
+    ProductPageViewModel *m_productPageVM;
     QString productId;
 
     // Labels

@@ -43,7 +43,9 @@ private:
     AccountViewModel *m_accountViewModel;
     LoginRegistrationViewModel *m_loginRegistrationViewModel;
     CatalogueViewModel *m_catalogueViewModel;
+    ProductPageViewModel *m_productPageViewModel;
     PurchaseOrderInfoVM *m_purchaseOrderInfoVM;
+    BasketViewModel *m_basketViewModel;
     
     // Views
     AccountView *m_accountView;

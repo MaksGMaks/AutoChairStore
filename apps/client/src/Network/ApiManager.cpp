@@ -146,7 +146,14 @@ void ApiManager::fetchLuxurySeats() {
     emit luxurySeatsFetched(testLuxurySeats);
 }
 
+void ApiManager::fetchPhotos() {
+    std::cout << "[ApiManager::fetchPhotos] Fetching photos" << std::endl;
+    emit photosFetched(testPhotos);
+}
+
 void ApiManager::setTests() {
+    test::test_photos utils;
+
     testUsers.reserve(5);
     Common::Users user;
     user.id = "0";
@@ -158,18 +165,18 @@ void ApiManager::setTests() {
     testCode = "12345678";
     testEmails = {"kozak@gmail.com", "test123@gmail.com", "test321@hotmail.com", "max@lpnu.ua", "gachi@gmail.com"};
 
-    testProducts.reserve(5);
+    testProducts.reserve(20);
     for(int i = 0; i < 20; i++) {
         Common::Products product;
         product.id = std::to_string(i);
         product.productName = "Product " + std::to_string(i);
         product.productType = (i < 5) ? "1" : (i < 10) ? "2" : (i < 15) ? "3" : "4";
         product.productTypeId = std::to_string(i % 5);
-        product.price = 100 + (i * 10);
+        product.price = std::to_string(20000 + (i * 1000));
         product.priceUnit = "грн";
         product.quantity = 10;
-        product.hasDiscount = false;
-        product.discount = "0";
+        product.hasDiscount = (i % 2 == 0) ? "TRUE" : "FALSE";
+        product.discount = "50";
         product.isReadyToSell = true;
         testProducts.push_back(product);
     }
@@ -240,5 +247,30 @@ void ApiManager::setTests() {
         seat.customDesign = "Custom design " + std::to_string(i);
         seat.description = "Description " + std::to_string(i);
         testLuxurySeats.push_back(seat);
+    }
+
+    testPhotos.reserve(20);
+    for(int i = 0; i < 20; i++) {
+        Common::Photos photo;
+        photo.id = std::to_string(i);
+        photo.productType = (i < 5) ? "1" : (i < 10) ? "2" : (i < 15) ? "3" : "4";
+        photo.productTypeId = std::to_string(i % 5);
+        testPhotos.push_back(photo);
+    }
+
+    for(auto &photo : testPhotos) {
+        if(photo.productType == "1") {
+            photo.image = (photo.productTypeId == "0") ? utils.seat1 : (photo.productTypeId == "1") ? utils.seat2 : (photo.productTypeId == "2") 
+            ? utils.seat3 : (photo.productTypeId == "3") ? utils.seat4 : utils.seat5;
+        } else if(photo.productType == "2") {
+            photo.image = (photo.productTypeId == "0") ? utils.childSeat1 : (photo.productTypeId == "1") ? utils.childSeat2 : (photo.productTypeId == "2")
+            ? utils.childSeat3 : (photo.productTypeId == "3") ? utils.childSeat4 : utils.childSeat5;
+        } else if(photo.productType == "3") {
+            photo.image = (photo.productTypeId == "0") ? utils.sportSeat1 : (photo.productTypeId == "1") ? utils.sportSeat2 : (photo.productTypeId == "2")
+            ? utils.sportSeat3 : (photo.productTypeId == "3") ? utils.sportSeat4 : utils.sportSeat5;
+        } else {
+            photo.image = (photo.productTypeId == "0") ? utils.luxurySeat1 : (photo.productTypeId == "1") ? utils.luxurySeat2 : (photo.productTypeId == "2")
+            ? utils.luxurySeat3 : (photo.productTypeId == "3") ? utils.luxurySeat4 : utils.luxurySeat5;
+        }
     }
 }

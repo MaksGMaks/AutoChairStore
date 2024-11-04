@@ -1,11 +1,21 @@
 #include "BasketView.hpp"
 
-BasketView::BasketView(PurchaseOrderInfoVM *viewModel, QWidget *parent)
+BasketView::BasketView(BasketViewModel *viewModel, QWidget *parent)
     : IView(viewModel, parent)
     , m_basketVM(viewModel) {
     std::cout << "[BasketView::BasketView] constructor" << std::endl;
     setupUi();
     setupConnections();
+}
+
+void BasketView::onAddToBasketButtonClicked(const QString &id) {
+    std::cout << "[BasketView::onAddToBasketButtonClicked] Add to basket button clicked" << std::endl;
+    emit addToBasket(id);
+}
+
+void BasketView::onProductLoaded(const displayData::Products &product) {
+    std::cout << "[BasketView::onProductLoaded] Product loaded" << std::endl;
+
 }
 
 void BasketView::setupConnections() {
@@ -16,6 +26,7 @@ void BasketView::setupUi() {
     std::cout << "[BasketView::setupUi] setupUi" << std::endl;
     m_paidMethodComboBox = new QComboBox();
     m_paidMethodComboBox->addItems({"Cash", "Card"});
+    m_paidMethodComboBox->setEnabled(false);
     m_deliveryMethodComboBox = new QComboBox();
     m_deliveryMethodComboBox->addItems({"Nova poshta", "Ukr Poshta"});
 
@@ -67,12 +78,12 @@ void BasketView::setupUi() {
     m_cancelButton = new QPushButton("Cancel");
 
     m_ordersTable = new QTableWidget();
-    m_ordersTable->setColumnCount(6);
-    m_ordersTable->setHorizontalHeaderLabels({"id", "type", "typeId", "Product Name", "Price", "Unit"});
+    m_ordersTable->setColumnCount(4);
+    m_ordersTable->setHorizontalHeaderLabels({"id", "Product Name", "Price", "Unit"});
     m_ordersTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_ordersTable->setColumnWidth(3, 424);
-    m_ordersTable->setColumnWidth(4, 100);
-    m_ordersTable->setColumnWidth(5, 100);
+    m_ordersTable->setColumnWidth(1, 424);
+    m_ordersTable->setColumnWidth(2, 100);
+    m_ordersTable->setColumnWidth(3, 100);
 
     for(int i = 0; i < m_ordersTable->columnCount(); i++) {
         m_ordersTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Fixed);
