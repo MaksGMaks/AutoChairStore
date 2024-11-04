@@ -90,8 +90,6 @@ void BasketView::setupUi() {
     }
     m_ordersTable->setFixedWidth(626);
     m_ordersTable->setColumnHidden(0, true);
-    m_ordersTable->setColumnHidden(1, true);
-    m_ordersTable->setColumnHidden(2, true);
 
     QHBoxLayout *m_productsLayout = new QHBoxLayout();
     m_productsLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum));
