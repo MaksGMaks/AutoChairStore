@@ -19,7 +19,7 @@ DatabaseManager::DatabaseManager(TableFactory &tableFactory) {
 DatabaseManager::~DatabaseManager() {}
 
 void DatabaseManager::readRequest(Common::Request request, Common::Dataset &entity) {
-    
+    std::cout << "[DatabaseManager::readRequest] reading request" << std::endl;
     if(entity["TABLE:"].front() == Common::Users::TABLE_NAME) {
         switch (request)
         {
