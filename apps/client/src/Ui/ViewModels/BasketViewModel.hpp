@@ -16,7 +16,7 @@ public:
 signals:
     void modelAddToBasket(const std::string &id);
     void modelCreateOrder(const Common::PurchaseOrders &order);
-    void addedToBasket(const displayData::Products &product);
+    void addedToBasket();
     void orderCreated(const QString &message);
 
 public slots:

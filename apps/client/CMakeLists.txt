@@ -53,6 +53,7 @@ set(VIEW_SOURCES
 
 set(VIEWMODEL_SOURCES 
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/AccountViewModel.cpp
+    ${CLIENT_SOURCES_DIR}/Ui/ViewModels/BasketViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/CatalogueViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/ProductPageViewModel.cpp
     ${CLIENT_SOURCES_DIR}/Ui/ViewModels/IViewModel.cpp

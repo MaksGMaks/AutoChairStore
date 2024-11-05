@@ -5,10 +5,10 @@ BasketViewModel::BasketViewModel(ProductsModel *productsModel, PurchaseOrdersMod
 , m_productsModel(productsModel)
 , m_purchaseOrdersModel(purchaseOrdersModel) {
     connect(this, &BasketViewModel::modelAddToBasket, m_productsModel, &ProductsModel::onAddToBasket);
-    connect(this, &BasketViewModel::modelCreateOrder, m_purchaseOrdersModel, &PurchaseOrdersModel::onCreateOrder);
+//    connect(this, &BasketViewModel::modelCreateOrder, m_purchaseOrdersModel, &PurchaseOrdersModel::onCreateOrder);
 
     connect(m_productsModel, &ProductsModel::addToBasketSuccess, this, &BasketViewModel::onAddedToBasket);
-    connect(m_purchaseOrdersModel, &PurchaseOrdersModel::orderCreated, this, &BasketViewModel::onOrderCreated);
+//    connect(m_purchaseOrdersModel, &PurchaseOrdersModel::orderCreated, this, &BasketViewModel::onOrderCreated);
 }
 
 QVector<displayData::Products> BasketViewModel::productsInBasket() const {
@@ -25,7 +25,7 @@ void BasketViewModel::onCreateOrder(const displayData::PurchaseOrder &order) {
 
 void BasketViewModel::onAddedToBasket(const Common::Products &product) {
     m_productsInBasket.push_back(convertToDisplayData(product));
-    emit addedToBasket(convertToDisplayData(product));
+    emit addedToBasket();
 }
 
 void BasketViewModel::onOrderCreated(const std::string &message) {

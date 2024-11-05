@@ -13,7 +13,7 @@ void BasketView::onAddToBasketButtonClicked(const QString &id) {
     emit addToBasket(id);
 }
 
-void BasketView::onProductLoaded(const displayData::Products &product) {
+void BasketView::onProductLoaded() {
     std::cout << "[BasketView::onProductLoaded] Product loaded" << std::endl;
 
 }

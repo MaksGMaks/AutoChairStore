@@ -30,7 +30,7 @@ public slots:
     void onAddToBasketButtonClicked(const QString &id);
 
 private slots:
-    void onProductLoaded(const displayData::Products &product);
+    void onProductLoaded();
 
 private:
     void setupConnections();
