@@ -14,5 +14,6 @@ public:
     virtual bool deleteAt(Common::Dataset &entity) = 0;
     virtual Common::Dataset getAll() = 0;
     virtual void get(Common::Dataset &entity) = 0;
+    virtual void getColumns(Common::Dataset &entity) = 0;
 
 };

@@ -2,10 +2,10 @@
 
 #include "ITable.hpp"
 
-class ProductsTable : public ITable {
+class LuxurySeatTable : public ITable {
 public:
-    ProductsTable(sqlite3*& db);
-    virtual ~ProductsTable();
+    explicit LuxurySeatTable(sqlite3*& db);
+    ~LuxurySeatTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

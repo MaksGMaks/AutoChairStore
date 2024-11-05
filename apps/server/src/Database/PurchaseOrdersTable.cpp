@@ -7,12 +7,12 @@ PurchaseOrdersTable::PurchaseOrdersTable(sqlite3*& db) {
 PurchaseOrdersTable::~PurchaseOrdersTable() {}
 
 bool PurchaseOrdersTable::add(Common::Dataset &entity) {
-    std::string query = "INSERT INTO " + std::string(Common::PurchaseOrders::TABLE_NAME) + " (userId, productInfoId, isPrePaid, isFullPaid, shouldPaid, destination, packageId, deliveryDate) "
-                        "VALUES ('" + entity[Common::PurchaseOrders::USERID_KEY].front() + "', '" + entity[Common::PurchaseOrders::PRODUCTINFOID_KEY].front() + "', '"
-                        + entity[Common::PurchaseOrders::ISPREPAID_KEY].front() + "', '" + entity[Common::PurchaseOrders::ISFULLPAID_KEY].front() + "', '"
-                        + entity[Common::PurchaseOrders::SHOULDPAID_KEY].front() + "', '" + entity[Common::PurchaseOrders::DESTINATION_KEY].front() + "', '"
-                        + entity[Common::PurchaseOrders::PACKAGEID_KEY].front() + "', '" + entity[Common::PurchaseOrders::DELIVERYDATE_KEY].front() + "');";
-    
+    std::string query = "INSERT INTO " + std::string(Common::PurchaseOrders::TABLE_NAME) + " (userId, productId, paidType, destination, packageId, deliveryDate, status) "
+                        "VALUES ('" + entity[Common::PurchaseOrders::USERID_KEY].front() + "', '" + entity[Common::PurchaseOrders::PRODUCTID_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::PAIDTYPE_KEY].front() + "', '" + entity[Common::PurchaseOrders::DESTINATION_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::PACKAGEID_KEY].front() + "', '" + entity[Common::PurchaseOrders::DELIVERYDATE_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::STATUS_KEY].front() + "');";
+
     return database::execute_query(query, dataBase);
 }
 
@@ -21,34 +21,31 @@ bool PurchaseOrdersTable::update(Common::Dataset &data) {
 
     auto id_list = data[Common::PurchaseOrders::ID_KEY];
     auto userId_list = data[Common::PurchaseOrders::USERID_KEY];
-    auto productionInfoId_list = data[Common::PurchaseOrders::PRODUCTINFOID_KEY];
-    auto isPrePaid_list = data[Common::PurchaseOrders::ISPREPAID_KEY];
-    auto isFullPaid_list = data[Common::PurchaseOrders::ISFULLPAID_KEY];
-    auto shouldPaid_list = data[Common::PurchaseOrders::SHOULDPAID_KEY];
+    auto productId_list = data[Common::PurchaseOrders::PRODUCTID_KEY];
+    auto paidType_list = data[Common::PurchaseOrders::PAIDTYPE_KEY];
     auto destination_list = data[Common::PurchaseOrders::DESTINATION_KEY];
     auto packageId_list = data[Common::PurchaseOrders::PACKAGEID_KEY];
     auto deliveryDate_list = data[Common::PurchaseOrders::DELIVERYDATE_KEY];
-    
+    auto status_list = data[Common::PurchaseOrders::STATUS_KEY];
+
     for (auto element : data[Common::PurchaseOrders::ID_KEY]) {
-        query += "UPDATE " + std::string(Common::PurchaseOrders::TABLE_NAME) + " SET " + std::string(Common::PurchaseOrders::USERID_KEY) + " = '" + 
-        userId_list.front() + "', " + std::string(Common::PurchaseOrders::PRODUCTINFOID_KEY) + " = '" + 
-        productionInfoId_list.front() + "', " + std::string(Common::PurchaseOrders::ISPREPAID_KEY) + " = '" + 
-        isPrePaid_list.front() + "', " + std::string(Common::PurchaseOrders::ISFULLPAID_KEY) + " = '" + 
-        isFullPaid_list.front() + "', " + std::string(Common::PurchaseOrders::SHOULDPAID_KEY) + " = '" + 
-        shouldPaid_list.front() + "', " + std::string(Common::PurchaseOrders::DESTINATION_KEY) + " = '" + 
-        destination_list.front() + "', " + std::string(Common::PurchaseOrders::PACKAGEID_KEY) + " = '" + 
-        packageId_list.front() + "', " + std::string(Common::PurchaseOrders::DELIVERYDATE_KEY) + " = '" + 
-        deliveryDate_list.front() + "' WHERE " + std::string(Common::PurchaseOrders::ID_KEY) + " = " + 
-        id_list.front() + ";";
+        query += "UPDATE " + std::string(Common::PurchaseOrders::TABLE_NAME) + " SET " + std::string(Common::PurchaseOrders::USERID_KEY) + " = '" +
+                 userId_list.front() + "', " + std::string(Common::PurchaseOrders::PRODUCTID_KEY) + " = '" +
+                 productId_list.front() + "', " + std::string(Common::PurchaseOrders::PAIDTYPE_KEY) + " = '" +
+                 paidType_list.front() + "', " + std::string(Common::PurchaseOrders::DESTINATION_KEY) + " = '" +
+                 destination_list.front() + "', " + std::string(Common::PurchaseOrders::PACKAGEID_KEY) + " = '" +
+                 packageId_list.front() + "', " + std::string(Common::PurchaseOrders::DELIVERYDATE_KEY) + " = '" +
+                 deliveryDate_list.front() + "', " + std::string(Common::PurchaseOrders::STATUS_KEY) + " = '" +
+                 status_list.front() + "' WHERE " + std::string(Common::PurchaseOrders::ID_KEY) + " = " +
+                 id_list.front() + ";";
 
         userId_list.pop_front();
-        productionInfoId_list.pop_front();
-        isPrePaid_list.pop_front();
-        isFullPaid_list.pop_front();
-        shouldPaid_list.pop_front();
+        productId_list.pop_front();
+        paidType_list.pop_front();
         destination_list.pop_front();
         packageId_list.pop_front();
         deliveryDate_list.pop_front();
+        status_list.pop_front();
         id_list.pop_front();
     }
 
@@ -67,7 +64,7 @@ Common::Dataset PurchaseOrdersTable::getAll() {
 }
 
 void PurchaseOrdersTable::get(Common::Dataset &entity) {
-    Common::Data values = entity["COLUMNS"];
+    Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
     if (!values.empty()) {
@@ -79,5 +76,29 @@ void PurchaseOrdersTable::get(Common::Dataset &entity) {
 
     sql += " FROM " + std::string(Common::PurchaseOrders::TABLE_NAME) + " WHERE id = " + entity[Common::PurchaseOrders::ID_KEY].front() + ";";
     entity.clear();
+    entity = database::selectAllFromTable(sql, dataBase);
+}
+
+void PurchaseOrdersTable::getColumns(Common::Dataset &entity) {
+    Common::Data columns = entity[Common::COLUMN_KEY];
+    std::string sql = "SELECT * FROM " + std::string(Common::PurchaseOrders::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
+    Common::Data values = entity[columns.front()];
+    sql += values.front();
+    values.pop_front();
+    for(auto value : values) {
+        sql += "', '" + value;
+    }
+    sql += "')";
+    columns.pop_front();
+    for(auto column : columns) {
+        values = entity[column];
+        sql += "AND " + column + "IN ('" + values.front();
+        values.pop_front();
+        for(auto value : values) {
+            sql += "', '" + value;
+        }
+        sql += "')";
+    }
+    sql += ";";
     entity = database::selectAllFromTable(sql, dataBase);
 }
