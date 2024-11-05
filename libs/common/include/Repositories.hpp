@@ -5,6 +5,11 @@
 #include <unordered_map>
 
 namespace Common {
+    static constexpr const char *COLUMN_KEY = "COLUMNS";
+    static constexpr const char *TABLE_KEY = "TABLE:";
+    static constexpr const char *REQUEST_KEY = "REQUEST:";
+    static constexpr const char *RESPONSE_KEY = "RESPONSE:";
+
     struct Users {
         static constexpr const char *TABLE_NAME             = "Users";
         static constexpr const char *ID_KEY                 = "id";
@@ -210,7 +215,8 @@ namespace Common {
         ADD = 1,
         DELETE = 2,
         UPDATE = 3,
-        GETALL = 4
+        GETALL = 4,
+        GETSPECIAL = 5
     };
 
 }

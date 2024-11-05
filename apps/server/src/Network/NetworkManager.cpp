@@ -19,7 +19,7 @@ void NetworkManager::do_accept() {
         auto socket = boost::asio::ip::tcp::socket(io_service);
         acceptor_.accept(socket);
         nlohmann::json jsonObj = read(socket);
-        Common::Request request = static_cast<Common::Request>(std::stoi(jsonObj.at("Request").get<std::string>()));
+        Common::Request request = static_cast<Common::Request>(std::stoi(jsonObj.at(Common::REQUEST_KEY).get<std::string>()));
         Common::Dataset clientUsers = Serializer::deserialize(jsonObj);
         dbManager->readRequest(request, clientUsers);
         send(socket, clientUsers);

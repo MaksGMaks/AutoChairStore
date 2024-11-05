@@ -65,7 +65,7 @@ Common::Dataset ChildSeatTable::getAll() {
 }
 
 void ChildSeatTable::get(Common::Dataset &entity) {
-    Common::Data values = entity["COLUMNS"];
+    Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
 
@@ -77,5 +77,29 @@ void ChildSeatTable::get(Common::Dataset &entity) {
     }
 
     sql += " FROM " + std::string(Common::ChildSeat::TABLE_NAME) + ";";
+    entity = database::selectAllFromTable(sql, dataBase);
+}
+
+void ChildSeatTable::getColumns(Common::Dataset &entity) {
+    Common::Data columns = entity[Common::COLUMN_KEY];
+    std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
+    Common::Data values = entity[columns.front()];
+    sql += values.front();
+    values.pop_front();
+    for(auto value : values) {
+        sql += "', '" + value;
+    }
+    sql += "')";
+    columns.pop_front();
+    for(auto column : columns) {
+        values = entity[column];
+        sql += "AND " + column + "IN ('" + values.front();
+        values.pop_front();
+        for(auto value : values) {
+            sql += "', '" + value;
+        }
+        sql += "')";
+    }
+    sql += ";";
     entity = database::selectAllFromTable(sql, dataBase);
 }

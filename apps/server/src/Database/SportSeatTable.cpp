@@ -62,7 +62,7 @@ Common::Dataset SportSeatTable::getAll() {
 }
 
 void SportSeatTable::get(Common::Dataset &entity) {
-    Common::Data values = entity["COLUMNS"];
+    Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
 
@@ -74,5 +74,29 @@ void SportSeatTable::get(Common::Dataset &entity) {
     }
 
     sql += " FROM " + std::string(Common::SportSeat::TABLE_NAME) + ";";
+    entity = database::selectAllFromTable(sql, dataBase);
+}
+
+void SportSeatTable::getColumns(Common::Dataset &entity) {
+    Common::Data columns = entity[Common::COLUMN_KEY];
+    std::string sql = "SELECT * FROM " + std::string(Common::SportSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
+    Common::Data values = entity[columns.front()];
+    sql += values.front();
+    values.pop_front();
+    for(auto value : values) {
+        sql += "', '" + value;
+    }
+    sql += "')";
+    columns.pop_front();
+    for(auto column : columns) {
+        values = entity[column];
+        sql += "AND " + column + "IN ('" + values.front();
+        values.pop_front();
+        for(auto value : values) {
+            sql += "', '" + value;
+        }
+        sql += "')";
+    }
+    sql += ";";
     entity = database::selectAllFromTable(sql, dataBase);
 }

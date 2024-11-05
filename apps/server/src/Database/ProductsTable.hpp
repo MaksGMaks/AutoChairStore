@@ -12,6 +12,7 @@ public:
     bool deleteAt(Common::Dataset &entity) override;
     Common::Dataset getAll() override; 
     void get(Common::Dataset &entity) override;
+    void getColumns(Common::Dataset &entity) override;
 
 private:
     sqlite3* dataBase;

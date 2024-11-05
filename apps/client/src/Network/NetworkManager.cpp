@@ -13,7 +13,7 @@ NetworkManager::NetworkManager()
 
 void NetworkManager::sendRequest(const Common::Dataset data, const Common::Request request) {
     nlohmann::json dataJson = Serializer::serialize(data);
-    dataJson["Request"] = std::to_string(static_cast<int>(request)); 
+    dataJson[Common::REQUEST_KEY] = std::to_string(static_cast<int>(request)); 
     std::string message = dataJson.dump() + "\n";
     boost::asio::write(socket, boost::asio::buffer(message), error);
     if (!error) {
