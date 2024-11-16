@@ -11,7 +11,7 @@
 
 class NetworkManager {
 public:
-    NetworkManager(std::unique_ptr<DatabaseManager> dbMan);
+    NetworkManager(std::shared_ptr<DatabaseManager> dbMan);
     ~NetworkManager() = default;
 
     nlohmann::json read(boost::asio::ip::tcp::socket &socket);
@@ -24,6 +24,6 @@ private:
 
     boost::asio::io_service io_service;
 
-    std::unique_ptr<DatabaseManager> dbManager;
+    std::shared_ptr<DatabaseManager> dbManager;
     boost::asio::ip::tcp::acceptor acceptor_;
 };

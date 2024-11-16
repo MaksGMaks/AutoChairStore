@@ -10,10 +10,12 @@
 
 #include "TableFactory.hpp"
 
+#include "Tests.hpp"
+
 class DatabaseManager {
 public:
     explicit DatabaseManager(TableFactory &tableFactory);
-    ~DatabaseManager();
+    ~DatabaseManager() = default;
 
     void readRequest(Common::Request request, Common::Dataset &entity);
 private:
@@ -27,4 +29,7 @@ private:
     std::unique_ptr<ITable> childSeats;
     std::unique_ptr<ITable> luxurySeats;
     std::unique_ptr<ITable> sportSeats;
+
+    // Tests
+    void runTests();
 };

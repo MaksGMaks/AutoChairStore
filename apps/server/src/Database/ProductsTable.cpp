@@ -4,9 +4,8 @@ ProductsTable::ProductsTable(sqlite3*& db) {
     dataBase = db;
 }
 
-ProductsTable::~ProductsTable() {}
-
 bool ProductsTable::add(Common::Dataset &entity) {
+    std::cout << "[ProductsTable::add] Adding product" << std::endl;
     std::string query = "INSERT INTO " + std::string(Common::Products::TABLE_NAME) + " (productName, productType, productTypeId, price, priceUnit, quantity, hasDiscount, discount, isReadyToSell) "
                         "VALUES ('" + entity[Common::Products::PRODUCTNAME_KEY].front() + "', '" + entity[Common::Products::PRODUCTTYPE_KEY].front() + "', '"
                         + entity[Common::Products::PRODUCTTYPEID_KEY].front() + "', '" + entity[Common::Products::PRICE_KEY].front() + "', '"
@@ -18,6 +17,7 @@ bool ProductsTable::add(Common::Dataset &entity) {
 }
 
 bool ProductsTable::update(Common::Dataset &data) {
+    std::cout << "[ProductsTable::update] Updating product" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::Products::ID_KEY];
@@ -60,16 +60,20 @@ bool ProductsTable::update(Common::Dataset &data) {
 }
 
 bool ProductsTable::deleteAt(Common::Dataset &entity) {
+    std::cout << "[ProductsTable::deleteAt] Deleting product" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::Products::TABLE_NAME) + " WHERE id = " + entity[Common::Products::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset ProductsTable::getAll() {
-    return database::selectAllFromTable(std::string(Common::Products::TABLE_NAME), dataBase);
+    std::cout << "[ProductsTable::getAll] Getting all products" << std::endl;
+    std::string sql = "SELECT * FROM " + std::string(Common::Products::TABLE_NAME) + ";";
+    return database::selectAllFromTable(sql, dataBase);
 }
 
 void ProductsTable::get(Common::Dataset &entity) {
+    std::cout << "[ProductsTable::get] Getting product" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -86,6 +90,7 @@ void ProductsTable::get(Common::Dataset &entity) {
 }
 
 void ProductsTable::getColumns(Common::Dataset &entity) {
+    std::cout << "[ProductsTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::Products::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];
@@ -98,7 +103,7 @@ void ProductsTable::getColumns(Common::Dataset &entity) {
     columns.pop_front();
     for(auto column : columns) {
         values = entity[column];
-        sql += "AND " + column + "IN ('" + values.front();
+        sql += " AND " + column + " IN ('" + values.front();
         values.pop_front();
         for(auto value : values) {
             sql += "', '" + value;

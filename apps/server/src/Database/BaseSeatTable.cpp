@@ -5,6 +5,7 @@ BaseSeatTable::BaseSeatTable(sqlite3*& db) {
 }
 
 bool BaseSeatTable::add(Common::Dataset &entity) {
+    std::cout << "[BaseSeatTable::add] Adding base seat" << std::endl;
     std::string query = "INSERT INTO " + std::string(Common::BaseSeat::TABLE_NAME) + " (brand, suitableFor, color, material, type, description) "
                         "VALUES ('" + entity[Common::BaseSeat::BRAND_KEY].front() + "', '" + entity[Common::BaseSeat::SUITABLEFOR_KEY].front() + "', '"
                         + entity[Common::BaseSeat::COLOR_KEY].front() + "', '" + entity[Common::BaseSeat::MATERIAL_KEY].front() + "', '"
@@ -14,6 +15,7 @@ bool BaseSeatTable::add(Common::Dataset &entity) {
 }
 
 bool BaseSeatTable::update(Common::Dataset &data) {
+    std::cout << "[BaseSeatTable::update] Updating base seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::BaseSeat::ID_KEY];
@@ -47,17 +49,20 @@ bool BaseSeatTable::update(Common::Dataset &data) {
 }
 
 bool BaseSeatTable::deleteAt(Common::Dataset &entity) {
+    std::cout << "[BaseSeatTable::deleteAt] Deleting base seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::BaseSeat::TABLE_NAME) + " WHERE id = " + entity[Common::BaseSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset BaseSeatTable::getAll() {
+    std::cout << "[BaseSeatTable::getAll] Getting all base seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::BaseSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void BaseSeatTable::get(Common::Dataset &entity) {
+    std::cout << "[BaseSeatTable::get] Getting base seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -73,6 +78,7 @@ void BaseSeatTable::get(Common::Dataset &entity) {
 }
 
 void BaseSeatTable::getColumns(Common::Dataset &entity) {
+    std::cout << "[BaseSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::BaseSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];
@@ -85,7 +91,7 @@ void BaseSeatTable::getColumns(Common::Dataset &entity) {
     columns.pop_front();
     for(auto column : columns) {
         values = entity[column];
-        sql += "AND " + column + "IN ('" + values.front();
+        sql += " AND " + column + " IN ('" + values.front();
         values.pop_front();
         for(auto value : values) {
             sql += "', '" + value;

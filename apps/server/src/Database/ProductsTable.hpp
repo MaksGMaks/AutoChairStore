@@ -4,8 +4,8 @@
 
 class ProductsTable : public ITable {
 public:
-    ProductsTable(sqlite3*& db);
-    virtual ~ProductsTable();
+    explicit ProductsTable(sqlite3*& db);
+    ~ProductsTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

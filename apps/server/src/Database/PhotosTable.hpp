@@ -4,8 +4,8 @@
 
 class PhotosTable : public ITable {
 public:
-    PhotosTable(sqlite3*& db);
-    virtual ~PhotosTable();
+    explicit PhotosTable(sqlite3*& db);
+    ~PhotosTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

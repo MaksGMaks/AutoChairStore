@@ -4,8 +4,8 @@
 
 class UsersTable : public ITable {
 public:
-    UsersTable(sqlite3*& db);
-    virtual ~UsersTable();
+    explicit UsersTable(sqlite3*& db);
+    ~UsersTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

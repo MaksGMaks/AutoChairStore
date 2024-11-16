@@ -78,10 +78,12 @@ void MainWindow::setupConnections() {
 
 void MainWindow::onLoginSuccessfull() {
     std::cout << "[MainWindow::onLoginSuccessfull] User logged in successfully" << std::endl;
-    m_menu->setVisible(true);
-    m_stackedWidget->setCurrentWidget(m_catalogueView);
+    setEnabled(false);
     m_photosModel->fetchPhotos();
     m_productsModel->fetchProducts();
+    setEnabled(true);
+    m_menu->setVisible(true);
+    m_stackedWidget->setCurrentWidget(m_catalogueView);
 }
 
 void MainWindow::onAccountDeleted() {
@@ -103,7 +105,7 @@ void MainWindow::onPurchaseBusketButtonClicked() {
 
 void MainWindow::onCatalogButtonClicked() {
     std::cout << "[MainWindow::onCatalogButtonClicked] Catalog button clicked" << std::endl;
-    m_stackedWidget->setCurrentWidget(m_catalogueView);
     m_productsModel->fetchProducts();
     m_photosModel->fetchPhotos();
+    m_stackedWidget->setCurrentWidget(m_catalogueView);
 }

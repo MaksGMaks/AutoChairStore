@@ -1,6 +1,6 @@
 #include "NetworkManager.hpp"
 
-NetworkManager::NetworkManager(std::unique_ptr<DatabaseManager> dbMan)
+NetworkManager::NetworkManager(std::shared_ptr<DatabaseManager> dbMan)
 : dbManager(std::move(dbMan))
 , acceptor_(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8080)) {
     std::cout << "[NetworkManager::NetworkManager] constructor" << std::endl;

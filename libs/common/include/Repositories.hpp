@@ -9,6 +9,8 @@ namespace Common {
     static constexpr const char *TABLE_KEY = "TABLE:";
     static constexpr const char *REQUEST_KEY = "REQUEST:";
     static constexpr const char *RESPONSE_KEY = "RESPONSE:";
+    static constexpr const char *SUCCESS = "SUCCESS";
+    static constexpr const char *FAILURE = "FAILURE";
 
     struct Users {
         static constexpr const char *TABLE_NAME             = "Users";

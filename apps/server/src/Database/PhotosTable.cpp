@@ -4,10 +4,9 @@ PhotosTable::PhotosTable(sqlite3*& db) {
     dataBase = db;
 }
 
-PhotosTable::~PhotosTable() {}
-
 bool PhotosTable::add(Common::Dataset &entity) {
-    std::string query = "INSERT INTO " + std::string(Common::Photos::TABLE_NAME) + " (productTypem productTypeId, image) "
+    std::cout << "[PhotosTable::add] Adding photo" << std::endl;
+    std::string query = "INSERT INTO " + std::string(Common::Photos::TABLE_NAME) + " (productType, productTypeId, image) "
                         "VALUES ('" + entity[Common::Photos::PRODUCTTYPE_KEY].front() + "', '" + entity[Common::Photos::PRODUCTTYPEID_KEY].front() + "', '"
                         + entity[Common::Photos::IMAGE_KEY].front() + "');";
     
@@ -15,6 +14,7 @@ bool PhotosTable::add(Common::Dataset &entity) {
 }
 
 bool PhotosTable::update(Common::Dataset &data) {
+    std::cout << "[PhotosTable::update] Updating photo" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::Photos::ID_KEY];
@@ -39,16 +39,20 @@ bool PhotosTable::update(Common::Dataset &data) {
 }
 
 bool PhotosTable::deleteAt(Common::Dataset &entity) {
+    std::cout << "[PhotosTable::deleteAt] Deleting photo" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::Photos::TABLE_NAME) + " WHERE id = " + entity[Common::Photos::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset PhotosTable::getAll() {
-    return database::selectAllFromTable(std::string(Common::Photos::TABLE_NAME), dataBase);
+    std::cout << "[PhotosTable::getAll] Getting all photos" << std::endl;
+    std::string sql = "SELECT * FROM " + std::string(Common::Photos::TABLE_NAME) + ";";
+    return database::selectAllFromTable(sql, dataBase);
 }
 
 void PhotosTable::get(Common::Dataset &entity) {
+    std::cout << "[PhotosTable::get] Getting photo" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -65,6 +69,7 @@ void PhotosTable::get(Common::Dataset &entity) {
 }
 
 void PhotosTable::getColumns(Common::Dataset &entity) {
+    std::cout << "[PhotosTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::Users::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];
@@ -77,7 +82,7 @@ void PhotosTable::getColumns(Common::Dataset &entity) {
     columns.pop_front();
     for(auto column : columns) {
         values = entity[column];
-        sql += "AND " + column + "IN ('" + values.front();
+        sql += " AND " + column + " IN ('" + values.front();
         values.pop_front();
         for(auto value : values) {
             sql += "', '" + value;

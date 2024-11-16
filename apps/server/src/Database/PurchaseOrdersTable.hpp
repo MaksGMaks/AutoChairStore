@@ -4,8 +4,8 @@
 
 class PurchaseOrdersTable : public ITable {
 public:
-    PurchaseOrdersTable(sqlite3*& db);
-    virtual ~PurchaseOrdersTable();
+    explicit PurchaseOrdersTable(sqlite3*& db);
+    ~PurchaseOrdersTable() = default;
 
     bool add(Common::Dataset &entity) override;
     bool update(Common::Dataset &data) override;

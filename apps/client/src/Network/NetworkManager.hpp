@@ -7,9 +7,6 @@
 #include "Repositories.hpp"
 #include "StructureSerializer.hpp"
 
-namespace bt_ai = boost::asio;
-namespace bt_ip = bt_ai::ip;
-
 class NetworkManager {
 public:
     NetworkManager();
@@ -18,6 +15,6 @@ public:
 
 private:
     boost::asio::io_service io_service;
-    bt_ip::tcp::socket socket;
+    boost::asio::ip::tcp::socket socket;
     boost::system::error_code error;
 };

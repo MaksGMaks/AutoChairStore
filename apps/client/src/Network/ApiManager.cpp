@@ -7,26 +7,62 @@ ApiManager::ApiManager(NetworkManager &networkManager) : m_networkManager(networ
 void ApiManager::loginUser(const Common::Users &entity) {
     std::cout << "[ApiManager::loginUser] Logging in user" << std::endl;
     
-    for(auto &user : testUsers) {
-        if(entity.email == user.email && entity.password == user.password) {
-            emit userLoginSuccessfull(user);
-            return;
-        }
+    // for(auto &user : testUsers) {
+    //     if(entity.email == user.email && entity.password == user.password) {
+    //         emit userLoginSuccessfull(user);
+    //         return;
+    //     }
+    // }
+
+    Common::Request request = Common::Request::GETSPECIAL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
+    data[Common::COLUMN_KEY] = {Common::Users::EMAIL_KEY, Common::Users::PASSWORD_KEY};
+    data[Common::Users::EMAIL_KEY] = {entity.email};
+    data[Common::Users::PASSWORD_KEY] = {entity.password};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+    if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+        Common::Users user;
+        user.id = response[Common::Users::ID_KEY].front();
+        user.name = response[Common::Users::NAME_KEY].front();
+        user.surname = response[Common::Users::SURNAME_KEY].front();
+        user.email = response[Common::Users::EMAIL_KEY].front();
+        emit userLoginSuccessfull(user);
+    } else {
+        emit loginRegistrationError("Invalid email or password");
     }
-    emit loginRegistrationError("Invalid email or password");
 }
 
 void ApiManager::registerUser(const Common::Users &entity, const std::string &code) {
     std::cout << "[ApiManager::registerUser] Registering user" << std::endl;
+    // if(code == testCode) {
+    //     for(auto &user : testUsers) {
+    //         if(entity.email == user.email) {
+    //             emit loginRegistrationError("Email already exists");
+    //             return;
+    //         }
+    //     }
+    //     testUsers.push_back(entity);
+    //     emit userRegisteredSuccessfully(entity);
+    // } else {
+    //     emit loginRegistrationError("Invalid code");
+    // }
     if(code == testCode) {
-        for(auto &user : testUsers) {
-            if(entity.email == user.email) {
-                emit loginRegistrationError("Email already exists");
-                return;
-            }
+        Common::Request request = Common::Request::ADD;
+        Common::Dataset data;
+        data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
+        data[Common::Users::NAME_KEY] = {entity.name};
+        data[Common::Users::SURNAME_KEY] = {entity.surname};
+        data[Common::Users::EMAIL_KEY] = {entity.email};
+        data[Common::Users::PASSWORD_KEY] = {entity.password};
+        m_networkManager.sendRequest(data, request);
+        Common::Dataset response = m_networkManager.readResponse();
+        if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+            emit userRegisteredSuccessfully(entity);
+        } else {
+            emit loginRegistrationError("Email already exists");
         }
-        testUsers.push_back(entity);
-        emit userRegisteredSuccessfully(entity);
     } else {
         emit loginRegistrationError("Invalid code");
     }
@@ -112,42 +148,305 @@ void ApiManager::deleteAccount(const std::string &email, const std::string &code
 void ApiManager::fetchPurchaseOrders(const std::string &userId) {
     std::cout << "[ApiManager::fetchPurchaseOrders] Fetching purchase orders" << std::endl;
     
-    std::vector<Common::PurchaseOrders> orders;
-    for(auto &order : testOrders) {
-        if(order.userId == userId) {
+    // std::vector<Common::PurchaseOrders> orders;
+    // for(auto &order : testOrders) {
+    //     if(order.userId == userId) {
+    //         orders.push_back(order);
+    //     }
+    // }
+    // emit purchaseOrdersFetched(orders);
+
+    Common::Request request = Common::Request::GETSPECIAL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::PurchaseOrders::TABLE_NAME};
+    data[Common::COLUMN_KEY] = {Common::PurchaseOrders::USERID_KEY};
+    data[Common::PurchaseOrders::USERID_KEY] = {userId};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+        std::vector<Common::PurchaseOrders> orders;
+        Common::Data ids = response[Common::PurchaseOrders::ID_KEY];
+        Common::Data userIds = response[Common::PurchaseOrders::USERID_KEY];
+        Common::Data productIds = response[Common::PurchaseOrders::PRODUCTID_KEY];
+        Common::Data paidTypes = response[Common::PurchaseOrders::PAIDTYPE_KEY];
+        Common::Data destinations = response[Common::PurchaseOrders::DESTINATION_KEY];
+        Common::Data packageIds = response[Common::PurchaseOrders::PACKAGEID_KEY];
+        Common::Data deliveryDates = response[Common::PurchaseOrders::DELIVERYDATE_KEY];
+        Common::Data statuses = response[Common::PurchaseOrders::STATUS_KEY];
+
+        for(auto id : ids) {
+            Common::PurchaseOrders order;
+            order.id = id;
+            order.userId = userIds.front();
+            userIds.pop_front();
+            order.productId = productIds.front();
+            productIds.pop_front();
+            order.paidType = paidTypes.front();
+            paidTypes.pop_front();
+            order.destination = destinations.front();
+            destinations.pop_front();
+            order.packageId = packageIds.front();
+            packageIds.pop_front();
+            order.deliveryDate = deliveryDates.front();
+            deliveryDates.pop_front();
+            order.status = statuses.front();
+            statuses.pop_front();
+
             orders.push_back(order);
         }
+
+        emit purchaseOrdersFetched(orders);
+    } else {
+        emit purchaseOrdersError("Error fetching purchase orders");
     }
-    emit purchaseOrdersFetched(orders);
 }
 
 void ApiManager::fetchProducts() {
     std::cout << "[ApiManager::fetchProducts] Fetching products" << std::endl;
-    emit productsFetched(testProducts);
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::Products::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    std::vector<Common::Products> products;
+    Common::Data ids = response[Common::Products::ID_KEY];
+    Common::Data productNames = response[Common::Products::PRODUCTNAME_KEY];
+    Common::Data productTypes = response[Common::Products::PRODUCTTYPE_KEY];
+    Common::Data productTypeIds = response[Common::Products::PRODUCTTYPEID_KEY];
+    Common::Data prices = response[Common::Products::PRICE_KEY];
+    Common::Data priceUnits = response[Common::Products::PRICEUNIT_KEY];
+    Common::Data quantities = response[Common::Products::QUANTITY_KEY];
+    Common::Data hasDiscounts = response[Common::Products::HASDISCOUNT_KEY];
+    Common::Data discounts = response[Common::Products::DISCOUNT_KEY];
+    Common::Data isReadyToSells = response[Common::Products::ISREADYTOSELL_KEY];
+
+    for(auto id : ids) {
+        Common::Products product;
+        product.id = id;
+        product.productName = productNames.front();
+        productNames.pop_front();
+        product.productType = productTypes.front();
+        productTypes.pop_front();
+        product.productTypeId = productTypeIds.front();
+        productTypeIds.pop_front();
+        product.price = prices.front();
+        prices.pop_front();
+        product.priceUnit = priceUnits.front();
+        priceUnits.pop_front();
+        product.quantity = std::stoi(quantities.front());
+        quantities.pop_front();
+        product.hasDiscount = hasDiscounts.front();
+        hasDiscounts.pop_front();
+        product.discount = discounts.front();
+        discounts.pop_front();
+        product.isReadyToSell = isReadyToSells.front() == "TRUE";
+        isReadyToSells.pop_front();
+
+        products.push_back(product);
+    }
+
+    emit productsFetched(products);
 }
 
 void ApiManager::fetchBaseSeats() {
     std::cout << "[ApiManager::fetchBaseSeats] Fetching base seats" << std::endl;
-    emit baseSeatsFetched(testBaseSeats);
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::BaseSeat::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    std::vector<Common::BaseSeat> baseSeats;
+    Common::Data ids = response[Common::BaseSeat::ID_KEY];
+    Common::Data brands = response[Common::BaseSeat::BRAND_KEY];
+    Common::Data suitableFors = response[Common::BaseSeat::SUITABLEFOR_KEY];
+    Common::Data colors = response[Common::BaseSeat::COLOR_KEY];
+    Common::Data materials = response[Common::BaseSeat::MATERIAL_KEY];
+    Common::Data types = response[Common::BaseSeat::TYPE_KEY];
+    Common::Data descriptions = response[Common::BaseSeat::DESCRIPTION_KEY];
+
+    for(auto id : ids) {
+        Common::BaseSeat seat;
+        seat.id = id;
+        seat.brand = brands.front();
+        brands.pop_front();
+        seat.suitableFor = suitableFors.front();
+        suitableFors.pop_front();
+        seat.color = colors.front();
+        colors.pop_front();
+        seat.material = materials.front();
+        materials.pop_front();
+        seat.type = types.front();
+        types.pop_front();
+        seat.description = descriptions.front();
+        descriptions.pop_front();
+
+        baseSeats.push_back(seat);
+    }
+
+    emit baseSeatsFetched(baseSeats);
 }
 
 void ApiManager::fetchChildSeats() {
     std::cout << "[ApiManager::fetchChildSeats] Fetching child seats" << std::endl;
-    emit childSeatsFetched(testChildSeats);
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::ChildSeat::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    std::vector<Common::ChildSeat> childSeats;
+    Common::Data ids = response[Common::ChildSeat::ID_KEY];
+    Common::Data brands = response[Common::ChildSeat::BRAND_KEY];
+    Common::Data ages = response[Common::ChildSeat::AGE_KEY];
+    Common::Data weights = response[Common::ChildSeat::WEIGHT_KEY];
+    Common::Data heights = response[Common::ChildSeat::HEIGHT_KEY];
+    Common::Data safetyKeys = response[Common::ChildSeat::SAFETYKEY_KEY];
+    Common::Data fastenings = response[Common::ChildSeat::FASTENING_KEY];
+    Common::Data driveways = response[Common::ChildSeat::DRIVEWAY_KEY];
+    Common::Data childDescriptions = response[Common::ChildSeat::DESCRIPTION_KEY];
+
+    for(auto id : ids) {
+        Common::ChildSeat seat;
+        seat.id = id;
+        seat.brand = brands.front();
+        brands.pop_front();
+        seat.age = ages.front();
+        ages.pop_front();
+        seat.weight = weights.front();
+        weights.pop_front();
+        seat.height = heights.front();
+        heights.pop_front();
+        seat.safetyKey = safetyKeys.front();
+        safetyKeys.pop_front();
+        seat.fastening = fastenings.front();
+        fastenings.pop_front();
+        seat.driveway = driveways.front();
+        driveways.pop_front();
+        seat.description = childDescriptions.front();
+        childDescriptions.pop_front();
+
+        childSeats.push_back(seat);
+    }
+
+    emit childSeatsFetched(childSeats);
 }
 
 void ApiManager::fetchSportSeats() {
     std::cout << "[ApiManager::fetchSportSeats] Fetching sport seats" << std::endl;
-    emit sportSeatsFetched(testSportSeats);
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::SportSeat::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    std::vector<Common::SportSeat> sportSeats;
+    Common::Data ids = response[Common::SportSeat::ID_KEY];
+    Common::Data brands = response[Common::SportSeat::BRAND_KEY];
+    Common::Data suitableFors = response[Common::SportSeat::SUITABLEFOR_KEY];
+    Common::Data shellTypes = response[Common::SportSeat::SHELLTYPE_KEY];
+    Common::Data shellMaterials = response[Common::SportSeat::SHELLMATERIAL_KEY];
+    Common::Data coverMaterials = response[Common::SportSeat::COVERMATERIAL_KEY];
+    Common::Data colors = response[Common::SportSeat::COLOR_KEY];
+    Common::Data sportDescriptions = response[Common::SportSeat::DESCRIPTION_KEY];
+
+    for(auto id : ids) {
+        Common::SportSeat seat;
+        seat.id = id;
+        seat.brand = brands.front();
+        brands.pop_front();
+        seat.suitableFor = suitableFors.front();
+        suitableFors.pop_front();
+        seat.shellType = shellTypes.front();
+        shellTypes.pop_front();
+        seat.shellMaterial = shellMaterials.front();
+        shellMaterials.pop_front();
+        seat.coverMaterial = coverMaterials.front();
+        coverMaterials.pop_front();
+        seat.color = colors.front();
+        colors.pop_front();
+        seat.description = sportDescriptions.front();
+        sportDescriptions.pop_front();
+
+        sportSeats.push_back(seat);
+    }
+
+    emit sportSeatsFetched(sportSeats);
 }
 
 void ApiManager::fetchLuxurySeats() {
     std::cout << "[ApiManager::fetchLuxurySeats] Fetching luxury seats" << std::endl;
-    emit luxurySeatsFetched(testLuxurySeats);
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::LuxurySeat::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+
+    std::vector<Common::LuxurySeat> luxurySeats;
+    Common::Data ids = response[Common::LuxurySeat::ID_KEY];
+    Common::Data brands = response[Common::LuxurySeat::BRAND_KEY];
+    Common::Data suitableFors = response[Common::LuxurySeat::SUITABLEFOR_KEY];
+    Common::Data colors = response[Common::LuxurySeat::COLOR_KEY];
+    Common::Data materials = response[Common::LuxurySeat::MATERIAL_KEY];
+    Common::Data comfortLevels = response[Common::LuxurySeat::COMFORTLEVEL_KEY];
+    Common::Data customDesigns = response[Common::LuxurySeat::CUSTOMDESIGN_KEY];
+    Common::Data luxuryDescriptions = response[Common::LuxurySeat::DESCRIPTION_KEY];
+
+    for(auto id : ids) {
+        Common::LuxurySeat seat;
+        seat.id = id;
+        seat.brand = brands.front();
+        brands.pop_front();
+        seat.suitableFor = suitableFors.front();
+        suitableFors.pop_front();
+        seat.color = colors.front();
+        colors.pop_front();
+        seat.material = materials.front();
+        materials.pop_front();
+        seat.comfortLevel = comfortLevels.front();
+        comfortLevels.pop_front();
+        seat.customDesign = customDesigns.front();
+        customDesigns.pop_front();
+        seat.description = luxuryDescriptions.front();
+        luxuryDescriptions.pop_front();
+
+        luxurySeats.push_back(seat);
+    }
+
+    emit luxurySeatsFetched(luxurySeats);
 }
 
 void ApiManager::fetchPhotos() {
-    std::cout << "[ApiManager::fetchPhotos] Fetching photos" << std::endl;
+    // std::cout << "[ApiManager::fetchPhotos] Fetching photos" << std::endl;
+    // Common::Request request = Common::Request::GETALL;
+    // Common::Dataset data;
+    // data[Common::TABLE_KEY] = {Common::Photos::TABLE_NAME};
+    // m_networkManager.sendRequest(data, request);
+    // Common::Dataset response = m_networkManager.readResponse();
+
+    // std::cout << "[ApiManager::fetchPhotos] Response: " << response[Common::RESPONSE_KEY].front() << std::endl;
+    // std::vector<Common::Photos> photos;
+    // Common::Data ids = response[Common::Photos::ID_KEY];
+    // Common::Data productTypes = response[Common::Photos::PRODUCTTYPE_KEY];
+    // Common::Data productTypeIds = response[Common::Photos::PRODUCTTYPEID_KEY];
+    // Common::Data images = response[Common::Photos::IMAGE_KEY];
+
+    // std::cout << "[ApiManager::fetchPhotos] ids size: " << ids.size() << std::endl;
+    // for(auto id : ids) {
+    //     Common::Photos photo;
+    //     photo.id = id;
+    //     photo.productType = productTypes.front();
+    //     productTypes.pop_front();
+    //     photo.productTypeId = productTypeIds.front();
+    //     productTypeIds.pop_front();
+    //     photo.image = images.front();
+    //     images.pop_front();
+
+    //     photos.push_back(photo);
+    // }
+
     emit photosFetched(testPhotos);
 }
 

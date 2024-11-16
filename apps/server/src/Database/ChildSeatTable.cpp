@@ -5,6 +5,7 @@ ChildSeatTable::ChildSeatTable(sqlite3*& db) {
 }
 
 bool ChildSeatTable::add(Common::Dataset &entity) {
+    std::cout << "[ChildSeatTable::add] Adding child seat" << std::endl;
     std::string query = "INSERT INTO " + std::string(Common::ChildSeat::TABLE_NAME) + " (brand, age, weight, height, safetyKey, fastening, driveway, description) "
                         "VALUES ('" + entity[Common::ChildSeat::BRAND_KEY].front() + "', '" + entity[Common::ChildSeat::AGE_KEY].front() + "', '"
                         + entity[Common::ChildSeat::WEIGHT_KEY].front() + "', '" + entity[Common::ChildSeat::HEIGHT_KEY].front() + "', '"
@@ -15,6 +16,7 @@ bool ChildSeatTable::add(Common::Dataset &entity) {
 }
 
 bool ChildSeatTable::update(Common::Dataset &data) {
+    std::cout << "[ChildSeatTable::update] Updating child seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::ChildSeat::ID_KEY];
@@ -54,17 +56,20 @@ bool ChildSeatTable::update(Common::Dataset &data) {
 }
 
 bool ChildSeatTable::deleteAt(Common::Dataset &entity) {
+    std::cout << "[ChildSeatTable::deleteAt] Deleting child seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE id = " + entity[Common::ChildSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset ChildSeatTable::getAll() {
+    std::cout << "[ChildSeatTable::getAll] Getting all child seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void ChildSeatTable::get(Common::Dataset &entity) {
+    std::cout << "[ChildSeatTable::get] Getting child seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -81,6 +86,7 @@ void ChildSeatTable::get(Common::Dataset &entity) {
 }
 
 void ChildSeatTable::getColumns(Common::Dataset &entity) {
+    std::cout << "[ChildSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];
@@ -93,7 +99,7 @@ void ChildSeatTable::getColumns(Common::Dataset &entity) {
     columns.pop_front();
     for(auto column : columns) {
         values = entity[column];
-        sql += "AND " + column + "IN ('" + values.front();
+        sql += " AND " + column + " IN ('" + values.front();
         values.pop_front();
         for(auto value : values) {
             sql += "', '" + value;
