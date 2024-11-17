@@ -21,13 +21,15 @@ void BasketViewModel::onAddToBasket(const QString &id) {
 }
 
 void BasketViewModel::onCreateOrder(const displayData::PurchaseOrder &order) {
-    Common::PurchaseOrders orders = convertDisplayDataToPurchaseOrder(order);
-    orders.userId = m_userModel->user().id;
-    orders.status = "Sending to delivery";
+    Common::PurchaseOrders ordersInfo = convertDisplayDataToPurchaseOrder(order);
+    ordersInfo.userId = m_userModel->user().id;
+    ordersInfo.status = "Sending to delivery";
+    std::vector<Common::PurchaseOrders> orders;
     for(auto &product : m_productsInBasket) {
-        orders.productId = product.id.toStdString();
-        emit modelCreateOrder(orders);
+        ordersInfo.productId = product.id.toStdString();
+        orders.push_back(ordersInfo);
     }
+    emit modelCreateOrder(orders);
 }
 
 void BasketViewModel::onAddedToBasket(const Common::Products &product) {

@@ -5,37 +5,11 @@ PurchaseOrdersTable::PurchaseOrdersTable(sqlite3*& db) {
 }
 
 bool PurchaseOrdersTable::add(Common::Dataset &entity) {
-    auto id_list = entity[Common::PurchaseOrders::ID_KEY];
-    auto userId_list = entity[Common::PurchaseOrders::USERID_KEY];
-    auto productId_list = entity[Common::PurchaseOrders::PRODUCTID_KEY];
-    auto paidType_list = entity[Common::PurchaseOrders::PAIDTYPE_KEY];
-    auto deliveryType_list = entity[Common::PurchaseOrders::DELIVERYTYPE_KEY];
-    auto destination_list = entity[Common::PurchaseOrders::DESTINATION_KEY];
-    auto packageId_list = entity[Common::PurchaseOrders::PACKAGEID_KEY];
-    auto deliveryDate_list = entity[Common::PurchaseOrders::DELIVERYDATE_KEY];
-    auto status_list = entity[Common::PurchaseOrders::STATUS_KEY];
-    
-    std::string query = "";
-
-    for (auto element : entity[Common::PurchaseOrders::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::PurchaseOrders::TABLE_NAME) + " (" + std::string(Common::PurchaseOrders::USERID_KEY) + ", " +
-                 std::string(Common::PurchaseOrders::PRODUCTID_KEY) + ", " + std::string(Common::PurchaseOrders::PAIDTYPE_KEY) + ", " +
-                 std::string(Common::PurchaseOrders::DELIVERYTYPE_KEY) + ", " + std::string(Common::PurchaseOrders::DESTINATION_KEY) + ", " +
-                 std::string(Common::PurchaseOrders::PACKAGEID_KEY) + ", " + std::string(Common::PurchaseOrders::DELIVERYDATE_KEY) + ", " +
-                 std::string(Common::PurchaseOrders::STATUS_KEY) + ") VALUES ('" + userId_list.front() + "', '" + productId_list.front() + "', '" +
-                 paidType_list.front() + "', '" + deliveryType_list.front() + "', '" + destination_list.front() + "', '" + packageId_list.front() +
-                 "', '" + deliveryDate_list.front() + "', '" + status_list.front() + "');";
-        
-        userId_list.pop_front();
-        productId_list.pop_front();
-        paidType_list.pop_front();
-        deliveryType_list.pop_front();
-        destination_list.pop_front();
-        packageId_list.pop_front();
-        deliveryDate_list.pop_front();
-        status_list.pop_front();
-        id_list.pop_front();
-    }
+    std::string query = "INSERT INTO " + std::string(Common::PurchaseOrders::TABLE_NAME) + " (userId, productId, paidType, destination, packageId, deliveryDate, status) "
+                        "VALUES ('" + entity[Common::PurchaseOrders::USERID_KEY].front() + "', '" + entity[Common::PurchaseOrders::PRODUCTID_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::PAIDTYPE_KEY].front() + "', '" + entity[Common::PurchaseOrders::DESTINATION_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::PACKAGEID_KEY].front() + "', '" + entity[Common::PurchaseOrders::DELIVERYDATE_KEY].front() + "', '" +
+                        entity[Common::PurchaseOrders::STATUS_KEY].front() + "');";
 
     return database::execute_query(query, dataBase);
 }

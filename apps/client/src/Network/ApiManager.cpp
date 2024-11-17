@@ -6,14 +6,6 @@ ApiManager::ApiManager(NetworkManager &networkManager) : m_networkManager(networ
 
 void ApiManager::loginUser(const Common::Users &entity) {
     std::cout << "[ApiManager::loginUser] Logging in user" << std::endl;
-    
-    // for(auto &user : testUsers) {
-    //     if(entity.email == user.email && entity.password == user.password) {
-    //         emit userLoginSuccessfull(user);
-    //         return;
-    //     }
-    // }
-
     Common::Request request = Common::Request::GETSPECIAL;
     Common::Dataset data;
     data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
@@ -147,15 +139,6 @@ void ApiManager::deleteAccount(const std::string &email, const std::string &code
 
 void ApiManager::fetchPurchaseOrders(const std::string &userId) {
     std::cout << "[ApiManager::fetchPurchaseOrders] Fetching purchase orders" << std::endl;
-    
-    // std::vector<Common::PurchaseOrders> orders;
-    // for(auto &order : testOrders) {
-    //     if(order.userId == userId) {
-    //         orders.push_back(order);
-    //     }
-    // }
-    // emit purchaseOrdersFetched(orders);
-
     Common::Request request = Common::Request::GETSPECIAL;
     Common::Dataset data;
     data[Common::TABLE_KEY] = {Common::PurchaseOrders::TABLE_NAME};
@@ -450,10 +433,31 @@ void ApiManager::fetchPhotos() {
     emit photosFetched(photos);
 }
 
-void ApiManager::createPurchaseOrder(const Common::PurchaseOrders &entity) {
+void ApiManager::createPurchaseOrder(const std::vector<Common::PurchaseOrders> &entity) {
     std::cout << "[ApiManager::createPurchaseOrder] Creating purchase order" << std::endl;
-    testOrders.push_back(entity);
-    emit orderCreated();
+    bool success = true;
+    for(auto order : entity) {
+        Common::Request request = Common::Request::ADD;
+        Common::Dataset data;
+        data[Common::TABLE_KEY] = {Common::PurchaseOrders::TABLE_NAME};
+        data[Common::PurchaseOrders::USERID_KEY] = {order.userId};
+        data[Common::PurchaseOrders::PRODUCTID_KEY] = {order.productId};
+        data[Common::PurchaseOrders::PAIDTYPE_KEY] = {order.paidType};
+        data[Common::PurchaseOrders::DESTINATION_KEY] = {order.destination};
+        data[Common::PurchaseOrders::PACKAGEID_KEY] = {order.packageId};
+        data[Common::PurchaseOrders::DELIVERYDATE_KEY] = {order.deliveryDate};
+        data[Common::PurchaseOrders::STATUS_KEY] = {order.status};
+        m_networkManager.sendRequest(data, request);
+        Common::Dataset response = m_networkManager.readResponse();
+        if(response[Common::RESPONSE_KEY].front() == Common::FAILURE) {
+            success = false;
+        }
+    }
+    if(success) {
+        emit orderCreated();
+    } else {
+        emit purchaseOrdersError("Error creating purchase order");
+    }
 }
 
 void ApiManager::setTests() {

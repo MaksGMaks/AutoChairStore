@@ -5,23 +5,9 @@ PhotosTable::PhotosTable(sqlite3*& db) {
 }
 
 bool PhotosTable::add(Common::Dataset &entity) {
-    std::string query = "";
-
-    auto id_list = entity[Common::Photos::ID_KEY];
-    auto productType_list = entity[Common::Photos::PRODUCTTYPE_KEY];
-    auto productTypeId_list = entity[Common::Photos::PRODUCTTYPEID_KEY];
-    auto image_list = entity[Common::Photos::IMAGE_KEY];
-
-    for(auto element : entity[Common::Photos::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::Photos::TABLE_NAME) + " (" + std::string(Common::Photos::PRODUCTTYPE_KEY) + ", " + 
-        std::string(Common::Photos::PRODUCTTYPEID_KEY) + ", " + std::string(Common::Photos::IMAGE_KEY) + ") VALUES ('" + 
-        productType_list.front() + "', '" + productTypeId_list.front() + "', '" + image_list.front() + "');";
-
-        productType_list.pop_front();
-        productTypeId_list.pop_front();
-        image_list.pop_front();
-        id_list.pop_front();
-    }
+    std::string query = "INSERT INTO " + std::string(Common::Photos::TABLE_NAME) + " (productType, productTypeId, image) "
+                        "VALUES ('" + entity[Common::Photos::PRODUCTTYPE_KEY].front() + "', '" + entity[Common::Photos::PRODUCTTYPEID_KEY].front() + "', '"
+                        + entity[Common::Photos::IMAGE_KEY].front() + "');";
     
     return database::execute_query(query, dataBase);
 }

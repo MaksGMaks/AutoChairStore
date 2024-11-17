@@ -5,35 +5,11 @@ SportSeatTable::SportSeatTable(sqlite3*& db) {
 }
 
 bool SportSeatTable::add(Common::Dataset &entity) {
-    std::string query = "";
-
-    auto id_list = entity[Common::SportSeat::ID_KEY];
-    auto brand_list = entity[Common::SportSeat::BRAND_KEY];
-    auto suitableFor_list = entity[Common::SportSeat::SUITABLEFOR_KEY];
-    auto shellType_list = entity[Common::SportSeat::SHELLTYPE_KEY];
-    auto shellMaterial_list = entity[Common::SportSeat::SHELLMATERIAL_KEY];
-    auto coverMaterial_list = entity[Common::SportSeat::COVERMATERIAL_KEY];
-    auto color_list = entity[Common::SportSeat::COLOR_KEY];
-    auto description_list = entity[Common::SportSeat::DESCRIPTION_KEY];
-
-    for(auto element : entity[Common::SportSeat::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::SportSeat::TABLE_NAME) + " (" + std::string(Common::SportSeat::BRAND_KEY) + ", " + 
-        std::string(Common::SportSeat::SUITABLEFOR_KEY) + ", " + std::string(Common::SportSeat::SHELLTYPE_KEY) + ", " + 
-        std::string(Common::SportSeat::SHELLMATERIAL_KEY) + ", " + std::string(Common::SportSeat::COVERMATERIAL_KEY) + ", " + 
-        std::string(Common::SportSeat::COLOR_KEY) + ", " + std::string(Common::SportSeat::DESCRIPTION_KEY) + ") VALUES ('" + 
-        brand_list.front() + "', '" + suitableFor_list.front() + "', '" + shellType_list.front() + "', '" + 
-        shellMaterial_list.front() + "', '" + coverMaterial_list.front() + "', '" + color_list.front() + "', '" + 
-        description_list.front() + "');";
-
-        brand_list.pop_front();
-        suitableFor_list.pop_front();
-        shellType_list.pop_front();
-        shellMaterial_list.pop_front();
-        coverMaterial_list.pop_front();
-        color_list.pop_front();
-        description_list.pop_front();
-        id_list.pop_front();
-    }
+    std::string query = "INSERT INTO " + std::string(Common::SportSeat::TABLE_NAME) + " (brand, suitableFor, shellType, shellMaterial, coverMaterial, color, description) "
+                        "VALUES ('" + entity[Common::SportSeat::BRAND_KEY].front() + "', '" + entity[Common::SportSeat::SUITABLEFOR_KEY].front() + "', '"
+                        + entity[Common::SportSeat::SHELLTYPE_KEY].front() + "', '" + entity[Common::SportSeat::SHELLMATERIAL_KEY].front() + "', '"
+                        + entity[Common::SportSeat::COVERMATERIAL_KEY].front() + "', '" + entity[Common::SportSeat::COLOR_KEY].front() + "', '"
+                        + entity[Common::SportSeat::DESCRIPTION_KEY].front() + "');";
 
     return database::execute_query(query, dataBase);
 }

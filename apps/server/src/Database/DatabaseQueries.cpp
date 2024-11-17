@@ -124,7 +124,7 @@ bool database::execute_query(const std::string query, sqlite3*& db) {
 }
 
 Common::Dataset database::selectAllFromTable(const std::string &sql, sqlite3* db) {
-    Common::Dataset dataset;
+    Common::Dataset dataset = {};
     sqlite3_stmt* stmt;
 
     if (sqlite3_open("AutoChairShop.db", &db) != SQLITE_OK) {

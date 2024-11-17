@@ -25,7 +25,7 @@ public:
 
     // Purchase orders
     void fetchPurchaseOrders(const std::string &userId);
-    void createPurchaseOrder(const Common::PurchaseOrders &entity);
+    void createPurchaseOrder(const std::vector<Common::PurchaseOrders> &entity);
 
     // Product
     void fetchProducts();
