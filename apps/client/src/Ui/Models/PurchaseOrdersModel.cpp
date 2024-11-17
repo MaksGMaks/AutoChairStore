@@ -5,6 +5,7 @@ PurchaseOrdersModel::PurchaseOrdersModel(ApiManager &apiManager, QObject *parent
 m_apiManager(apiManager) {
     connect(&m_apiManager, &ApiManager::purchaseOrdersFetched, this, &PurchaseOrdersModel::onPurchaseOrdersFetched);
     connect(&m_apiManager, &ApiManager::purchaseOrdersError, this, &PurchaseOrdersModel::onPurchaseOrdersError);
+    connect(&m_apiManager, &ApiManager::orderCreated, this, &PurchaseOrdersModel::onOrderCreated);
 }
 
 std::vector<Common::PurchaseOrders> PurchaseOrdersModel::purchaseOrders() const {
@@ -19,9 +20,17 @@ void PurchaseOrdersModel::onPurchaseOrdersError(const std::string &message) {
     emit purchaseOrderError(message);
 }
 
+void PurchaseOrdersModel::onCreateOrder(const Common::PurchaseOrders &order) {
+    m_apiManager.createPurchaseOrder(order);
+}
+
 void PurchaseOrdersModel::onCancelOrder(const std::string &id) {
     std::string test = id;
     //m_apiManager.cancelOrder(id);
+}
+
+void PurchaseOrdersModel::onOrderCreated() {
+    emit orderCreated();
 }
 
 void PurchaseOrdersModel::onPurchaseOrdersFetched(const std::vector<Common::PurchaseOrders> &orders) {

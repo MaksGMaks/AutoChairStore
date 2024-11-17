@@ -3,12 +3,13 @@
 #include "IViewModel.hpp"
 #include "Ui/Models/ProductsModel.hpp"
 #include "Ui/Models/PurchaseOrdersModel.hpp"
+#include "Ui/Models/UsersModel.hpp"
 #include "Ui/DisplayData/DisplayData.hpp"
 
 class BasketViewModel : public IViewModel {
     Q_OBJECT
 public:
-    explicit BasketViewModel(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, QObject *parent = nullptr);
+    explicit BasketViewModel(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, UsersModel *usrModel, QObject *parent = nullptr);
     ~BasketViewModel() = default;
 
     QVector<displayData::Products> productsInBasket() const;
@@ -17,7 +18,7 @@ signals:
     void modelAddToBasket(const std::string &id);
     void modelCreateOrder(const Common::PurchaseOrders &order);
     void addedToBasket();
-    void orderCreated(const QString &message);
+    void orderCreated();
 
 public slots:
     void onAddToBasket(const QString &id);
@@ -26,11 +27,12 @@ public slots:
 
 private slots:
     void onAddedToBasket(const Common::Products &product);
-    void onOrderCreated(const std::string &message);
+    void onOrderCreated();
 
 private:
     ProductsModel *m_productsModel;
     PurchaseOrdersModel *m_purchaseOrdersModel;
+    UsersModel *m_userModel;
 
     QVector<displayData::Products> m_productsInBasket;
 

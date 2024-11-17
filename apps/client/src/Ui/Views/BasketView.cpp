@@ -15,22 +15,94 @@ void BasketView::onAddToBasketButtonClicked(const QString &id) {
 
 void BasketView::onProductLoaded() {
     std::cout << "[BasketView::onProductLoaded] Product loaded" << std::endl;
+    QVector<displayData::Products> products = m_basketVM->productsInBasket();
+    m_ordersTable->clearContents();
+    m_ordersTable->setRowCount(products.size());
+    int row = 0;
+    int totalPrice = 0;
+    for(auto &product : products) {
+        m_ordersTable->setItem(row, 0, new QTableWidgetItem(product.id));
+        m_ordersTable->setItem(row, 1, new QTableWidgetItem(product.name));
+        int price = product.price.toInt();
+        if(product.hasDiscount == "TRUE") {
+            price = product.price.toInt() - (product.discount.toInt() * (product.price.toInt() / 100));
+        }
+        m_ordersTable->setItem(row, 2, new QTableWidgetItem(QString::number(price)));
+        totalPrice += price;
+        m_ordersTable->setItem(row, 3, new QTableWidgetItem(product.priceUnit));
+        row++;
+    }
+    m_ordersTable->setColumnHidden(0, true);
+    m_totalPriceValueLabel->setText(QString::number(totalPrice + (100 * products.size())));
+    m_deliveryPriceValueLabel->setText(QString::number(100 * products.size()));
+}
 
+void BasketView::onBuyButtonClicked() {
+    std::cout << "[BasketView::onBuyButtonClicked] Buy button clicked" << std::endl;
+    if(m_basketVM->productsInBasket().empty()) {
+        m_errorMessageBox->showErrorMessage("Basket is empty");
+        return;
+    }
+    if(m_adressLineEdit->text().isEmpty()) {
+        m_errorMessageBox->showErrorMessage("Adress is empty");
+        return;
+    }
+    displayData::PurchaseOrder order;
+    order.paidType = m_paidMethodComboBox->currentText();
+    order.deliveryType = m_deliveryMethodComboBox->currentText();
+    order.destination = m_adressLineEdit->text();
+    emit createOrder(order);
+}
+
+void BasketView::onOrderCreated() {
+    std::cout << "[BasketView::onOrderCreated] Order created" << std::endl;
+    m_basketVM->productsInBasket().clear();
+    m_ordersTable->clearContents();
+    m_totalPriceValueLabel->clear();
+    m_deliveryPriceValueLabel->clear();
+    m_adressLineEdit->clear();
+    m_successMessageBox->showInformationMessage("Success!", "Your order has been created");
+}
+
+void BasketView::onCanceledButtonClicked() {
+    std::cout << "[BasketView::onCanceledButtonClicked] Cancel button clicked" << std::endl;
+    m_ordersTable->clearContents();
+    m_totalPriceValueLabel->clear();
+    m_deliveryPriceValueLabel->clear();
+    m_adressLineEdit->clear();
+}
+
+void BasketView::onRemoveButtonClicked() {
+    std::cout << "[BasketView::onRemoveButtonClicked] Remove button clicked" << std::endl;
+    int row = m_ordersTable->currentRow();
+    QString id = m_ordersTable->item(row, 0)->text();
+    m_basketVM->onRemoveFromBasket(id);
 }
 
 void BasketView::setupConnections() {
     std::cout << "[BasketView::setupConnections] setupConnections" << std::endl;
+    connect(m_basketVM, &BasketViewModel::addedToBasket, this, &BasketView::onProductLoaded);
+    connect(m_basketVM, &BasketViewModel::orderCreated, this, &BasketView::onOrderCreated);
+
+    connect(this, &BasketView::createOrder, m_basketVM, &BasketViewModel::onCreateOrder);
+    connect(this, &BasketView::addToBasket, m_basketVM, &BasketViewModel::onAddToBasket);
+
+    connect(m_buyButton, &QPushButton::clicked, this, &BasketView::onBuyButtonClicked);
+    connect(m_ordersTable, &QTableWidget::cellDoubleClicked, this, &BasketView::onRemoveButtonClicked);
 }
 
 void BasketView::setupUi() {
     std::cout << "[BasketView::setupUi] setupUi" << std::endl;
+    m_errorMessageBox = new MessageBox();
+    m_successMessageBox = new MessageBox();
+
     m_paidMethodComboBox = new QComboBox();
     m_paidMethodComboBox->addItems({"Cash", "Card"});
     m_paidMethodComboBox->setEnabled(false);
     m_deliveryMethodComboBox = new QComboBox();
     m_deliveryMethodComboBox->addItems({"Nova poshta", "Ukr Poshta"});
 
-    m_totalPriceLabel = new QLabel("Total price:");
+    m_totalPriceLabel = new QLabel("Total price(inc. del):");
     m_totalPriceValueLabel = new QLabel("");
     m_priceUnitLabel = new QLabel("");
     m_deliveryPriceLabel = new QLabel("Delivery price:");
@@ -88,6 +160,7 @@ void BasketView::setupUi() {
     for(int i = 0; i < m_ordersTable->columnCount(); i++) {
         m_ordersTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Fixed);
     }
+    m_ordersTable->verticalHeader()->setVisible(false);
     m_ordersTable->setFixedWidth(626);
     m_ordersTable->setColumnHidden(0, true);
 

@@ -151,6 +151,12 @@ void ApiManager::fetchPhotos() {
     emit photosFetched(testPhotos);
 }
 
+void ApiManager::createPurchaseOrder(const Common::PurchaseOrders &entity) {
+    std::cout << "[ApiManager::createPurchaseOrder] Creating purchase order" << std::endl;
+    testOrders.push_back(entity);
+    emit orderCreated();
+}
+
 void ApiManager::setTests() {
     test::test_photos utils;
 

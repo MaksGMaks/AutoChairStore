@@ -4,8 +4,8 @@ AccountViewModel* ViewModelFactory::getAccountVM(UsersModel *usrModel, PurchaseO
     return new AccountViewModel(usrModel, ordersModel, prodModel, parent);
 }
 
-BasketViewModel* ViewModelFactory::getBasketVM(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, QObject *parent) {
-    return new BasketViewModel(productsModel, purchaseOrdersModel, parent);
+BasketViewModel* ViewModelFactory::getBasketVM(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, UsersModel *usrModel, QObject *parent) {
+    return new BasketViewModel(productsModel, purchaseOrdersModel, usrModel, parent);
 }
 
 ProductPageViewModel* ViewModelFactory::getProductPageVM(ProductsModel *productsModel, PhotosModel *photosModel, QObject *parent) {

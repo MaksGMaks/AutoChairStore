@@ -33,6 +33,7 @@ namespace displayData {
         QString productId{};
         QString productName{};
         QString paidType{};
+        QString deliveryType{};
         QString destination{};
         QString packageId{};
         QString date{};
