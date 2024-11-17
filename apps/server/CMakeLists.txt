@@ -8,6 +8,7 @@ set(SERVER_BUILD_DIR ${CMAKE_BINARY_DIR}/apps/server)
 find_package(SQLite3 REQUIRED)
 find_package(Boost QUIET)
 find_package(nlohmann_json REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # Check if the Conan-provided
 if(TARGET Boost::boost)
@@ -39,6 +40,7 @@ set(ALL_SERVER_SOURCES
     ${SERVER_SOURCES_DIR}/main.cpp
     ${DATABASE}
     ${SERVER_SOURCES_DIR}/Network/NetworkManager.cpp
+    ${SERVER_SOURCES_DIR}/Network/EmailSender.cpp
 )
 
 # Create server executable
@@ -53,6 +55,8 @@ target_link_libraries(${PROJECT_NAME}
     CommonLibrary
     nlohmann_json::nlohmann_json
     SQLite::SQLite3
+    OpenSSL::SSL
+    OpenSSL::Crypto
     )
 
 # Set the destination directory for the executable
