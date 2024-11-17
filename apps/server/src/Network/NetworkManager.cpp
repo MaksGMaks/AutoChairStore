@@ -41,5 +41,18 @@ void NetworkManager::send(boost::asio::ip::tcp::socket &socket, const Common::Da
     std::cout << "[NetworkManager::send] sending" << std::endl;
     nlohmann::json user_json = Serializer::serialize(user);
     std::string message = user_json.dump() + "\nEND_RESPONCE\n";
-    boost::asio::async_write(socket, boost::asio::buffer(message), [](boost::system::error_code /*ec*/, std::size_t /*length*/) {});
+
+    if(message.size() > 10000) {
+        std::string patch = "";
+        std::string fullMessage = message;
+        size_t posit = 0;
+        for(; posit < fullMessage.size() - (fullMessage.size() % 10000); posit += 10000) {
+            patch = fullMessage.substr(posit, 10000);
+            boost::asio::async_write(socket, boost::asio::buffer(patch), [](boost::system::error_code /*ec*/, std::size_t /*length*/) {});
+        }
+        patch = fullMessage.substr(posit, (fullMessage.size() - (posit * 10000)));
+        boost::asio::async_write(socket, boost::asio::buffer(patch), [](boost::system::error_code /*ec*/, std::size_t /*length*/) {});
+    } else {
+        boost::asio::async_write(socket, boost::asio::buffer(message), [](boost::system::error_code /*ec*/, std::size_t /*length*/) {});
+    }
 }
