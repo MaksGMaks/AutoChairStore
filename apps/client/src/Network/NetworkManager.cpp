@@ -12,7 +12,7 @@ void NetworkManager::sendRequest(const Common::Dataset data, const Common::Reque
     }
     nlohmann::json dataJson = Serializer::serialize(data);
     dataJson[Common::REQUEST_KEY] = std::to_string(static_cast<int>(request)); 
-    std::string message = dataJson.dump() + "\n";
+    std::string message = dataJson.dump() + "\nEND_REQUEST\n";
     boost::asio::write(socket, boost::asio::buffer(message), error);
     if (!error) {
         std::cout << "Client sent request" << std::endl;
@@ -24,13 +24,14 @@ void NetworkManager::sendRequest(const Common::Dataset data, const Common::Reque
 Common::Dataset NetworkManager::readResponse() {
     std::cout << "Client reading response" << std::endl;
     boost::asio::streambuf receive_buffer;
-    boost::asio::read_until(socket, receive_buffer, "\n", error);
+    boost::asio::read_until(socket, receive_buffer, "\nEND_RESPONCE\n", error);
     Common::Dataset serverData;
     if (error && error != boost::asio::error::eof) {
         std::cout << "Receive failed: " << error.message() << std::endl;
     } else {
         std::string data = boost::asio::buffer_cast<const char*>(receive_buffer.data());
-        data.pop_back();
+        for(int i = 0; i < 13; i++)
+            data.pop_back();
         auto jsonObj = nlohmann::json::parse(data);
         serverData = Serializer::deserialize(jsonObj);
     }

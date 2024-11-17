@@ -29,9 +29,10 @@ void NetworkManager::do_accept() {
 nlohmann::json NetworkManager::read(boost::asio::ip::tcp::socket &socket) {
     std::cout << "[NetworkManager::read] reading" << std::endl;
     boost::asio::streambuf buf;
-    boost::asio::read_until(socket, buf, "\n");
+    boost::asio::read_until(socket, buf, "\nEND_REQUEST\n");
     std::string data = boost::asio::buffer_cast<const char*>(buf.data());
-    data.pop_back();
+    for(int i = 0; i < 12; i++)
+        data.pop_back();
     nlohmann::json jsonObj = nlohmann::json::parse(data);
     return jsonObj;
 }
@@ -39,6 +40,6 @@ nlohmann::json NetworkManager::read(boost::asio::ip::tcp::socket &socket) {
 void NetworkManager::send(boost::asio::ip::tcp::socket &socket, const Common::Dataset user) {
     std::cout << "[NetworkManager::send] sending" << std::endl;
     nlohmann::json user_json = Serializer::serialize(user);
-    std::string message = user_json.dump() + "\n";
+    std::string message = user_json.dump() + "\nEND_RESPONCE\n";
     boost::asio::async_write(socket, boost::asio::buffer(message), [](boost::system::error_code /*ec*/, std::size_t /*length*/) {});
 }

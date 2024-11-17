@@ -419,35 +419,35 @@ void ApiManager::fetchLuxurySeats() {
 }
 
 void ApiManager::fetchPhotos() {
-    // std::cout << "[ApiManager::fetchPhotos] Fetching photos" << std::endl;
-    // Common::Request request = Common::Request::GETALL;
-    // Common::Dataset data;
-    // data[Common::TABLE_KEY] = {Common::Photos::TABLE_NAME};
-    // m_networkManager.sendRequest(data, request);
-    // Common::Dataset response = m_networkManager.readResponse();
+    std::cout << "[ApiManager::fetchPhotos] Fetching photos" << std::endl;
+    Common::Request request = Common::Request::GETALL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::Photos::TABLE_NAME};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
 
-    // std::cout << "[ApiManager::fetchPhotos] Response: " << response[Common::RESPONSE_KEY].front() << std::endl;
-    // std::vector<Common::Photos> photos;
-    // Common::Data ids = response[Common::Photos::ID_KEY];
-    // Common::Data productTypes = response[Common::Photos::PRODUCTTYPE_KEY];
-    // Common::Data productTypeIds = response[Common::Photos::PRODUCTTYPEID_KEY];
-    // Common::Data images = response[Common::Photos::IMAGE_KEY];
+    std::cout << "[ApiManager::fetchPhotos] Response: " << response[Common::RESPONSE_KEY].front() << std::endl;
+    std::vector<Common::Photos> photos;
+    Common::Data ids = response[Common::Photos::ID_KEY];
+    Common::Data productTypes = response[Common::Photos::PRODUCTTYPE_KEY];
+    Common::Data productTypeIds = response[Common::Photos::PRODUCTTYPEID_KEY];
+    Common::Data images = response[Common::Photos::IMAGE_KEY];
 
-    // std::cout << "[ApiManager::fetchPhotos] ids size: " << ids.size() << std::endl;
-    // for(auto id : ids) {
-    //     Common::Photos photo;
-    //     photo.id = id;
-    //     photo.productType = productTypes.front();
-    //     productTypes.pop_front();
-    //     photo.productTypeId = productTypeIds.front();
-    //     productTypeIds.pop_front();
-    //     photo.image = images.front();
-    //     images.pop_front();
+    std::cout << "[ApiManager::fetchPhotos] ids size: " << ids.size() << std::endl;
+    for(auto id : ids) {
+        Common::Photos photo;
+        photo.id = id;
+        photo.productType = productTypes.front();
+        productTypes.pop_front();
+        photo.productTypeId = productTypeIds.front();
+        productTypeIds.pop_front();
+        photo.image = images.front();
+        images.pop_front();
 
-    //     photos.push_back(photo);
-    // }
+        photos.push_back(photo);
+    }
 
-    emit photosFetched(testPhotos);
+    emit photosFetched(photos);
 }
 
 void ApiManager::setTests() {
