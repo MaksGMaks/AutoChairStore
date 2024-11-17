@@ -15,13 +15,16 @@ signals:
     void purchaseOrderError(const std::string &message);
     void purchaseOrdersFetched();
     void orderCancelled();
+    void orderCreated();
 
 public slots:
     void onFetchPurchaseOrders(const std::string &userId);
+    void onCreateOrder(const Common::PurchaseOrders &order);
     void onCancelOrder(const std::string &id);
 
 private slots:
     void onPurchaseOrdersFetched(const std::vector<Common::PurchaseOrders> &orders);
+    void onOrderCreated();
     void onPurchaseOrdersError(const std::string &message);
 
 private:

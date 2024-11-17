@@ -1,7 +1,9 @@
 #include "MainWindow.hpp"
 
 MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, ViewFactory &viewFactory, QWidget *parent)
-    : QMainWindow(parent) {
+: QMainWindow(parent) {
+    m_messageBox = new MessageBox();
+    
     // Models
     m_userModel = std::move(modelFactory.getUserModel());
     m_productsModel = std::move(modelFactory.getProductsModel());
@@ -15,7 +17,7 @@ MainWindow::MainWindow(ModelFactory &modelFactory, ViewModelFactory &vmFactory, 
     m_purchaseOrderInfoVM = std::move(vmFactory.getPurchaseOrderInfoVM(std::move(m_purchaseOrdersModel), std::move(m_productsModel), 
                          std::move(m_photosModel)));
     m_productPageViewModel = std::move(vmFactory.getProductPageVM(std::move(m_productsModel), std::move(m_photosModel)));
-    m_basketViewModel = std::move(vmFactory.getBasketVM(std::move(m_productsModel), std::move(m_purchaseOrdersModel)));
+    m_basketViewModel = std::move(vmFactory.getBasketVM(std::move(m_productsModel), std::move(m_purchaseOrdersModel), std::move(m_userModel)));
 
     // Views
     m_accountView = std::move(viewFactory.getAccountView(std::move(m_accountViewModel)));
@@ -74,6 +76,31 @@ void MainWindow::setupConnections() {
     connect(m_productPageView, &ProductPageView::goBack, [this]() {
         m_stackedWidget->setCurrentWidget(m_catalogueView);
     });
+
+    connect(m_catalogueView, &CatalogueView::addToBasket, [this](const QString &id) {
+        m_basketView->onAddToBasketButtonClicked(id);
+    });
+    
+    connect(m_catalogueView, &CatalogueView::buyProduct, [this](const QString &id) {
+        m_stackedWidget->setCurrentWidget(m_basketView);
+        m_basketView->onAddToBasketButtonClicked(id);
+    });
+    
+    connect(m_basketViewModel, &BasketViewModel::addedToBasket, [this]() {
+        if(m_stackedWidget->currentWidget() == m_productPageView || m_stackedWidget->currentWidget() == m_catalogueView) {
+            m_messageBox->showInformationMessage("Success", "Product added to basket");
+        }
+    });
+
+    connect(m_productPageView, &ProductPageView::buyProduct, [this](const QString &id) {
+        m_stackedWidget->setCurrentWidget(m_basketView);
+        m_basketView->onAddToBasketButtonClicked(id);
+    });
+
+    connect(m_productPageView, &ProductPageView::addToCart, [this](const QString &id) {
+        m_basketView->onAddToBasketButtonClicked(id);
+    });
+
 }
 
 void MainWindow::onLoginSuccessfull() {

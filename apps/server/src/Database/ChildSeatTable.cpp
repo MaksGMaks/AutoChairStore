@@ -5,12 +5,38 @@ ChildSeatTable::ChildSeatTable(sqlite3*& db) {
 }
 
 bool ChildSeatTable::add(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::add] Adding child seat" << std::endl;
-    std::string query = "INSERT INTO " + std::string(Common::ChildSeat::TABLE_NAME) + " (brand, age, weight, height, safetyKey, fastening, driveway, description) "
-                        "VALUES ('" + entity[Common::ChildSeat::BRAND_KEY].front() + "', '" + entity[Common::ChildSeat::AGE_KEY].front() + "', '"
-                        + entity[Common::ChildSeat::WEIGHT_KEY].front() + "', '" + entity[Common::ChildSeat::HEIGHT_KEY].front() + "', '"
-                        + entity[Common::ChildSeat::SAFETYKEY_KEY].front() + "', '" + entity[Common::ChildSeat::FASTENING_KEY].front() + "', '"
-                        + entity[Common::ChildSeat::DRIVEWAY_KEY].front() + "', '" + entity[Common::ChildSeat::DESCRIPTION_KEY].front() + "');";
+    std::string query = "";
+
+    auto id_list = entity[Common::ChildSeat::ID_KEY];
+    auto brand_list = entity[Common::ChildSeat::BRAND_KEY];
+    auto age_list = entity[Common::ChildSeat::AGE_KEY];
+    auto weight_list = entity[Common::ChildSeat::WEIGHT_KEY];
+    auto height_list = entity[Common::ChildSeat::HEIGHT_KEY];
+    auto safetyKey_list = entity[Common::ChildSeat::SAFETYKEY_KEY];
+    auto fastening_list = entity[Common::ChildSeat::FASTENING_KEY];
+    auto driveway_list = entity[Common::ChildSeat::DRIVEWAY_KEY];
+    auto description_list = entity[Common::ChildSeat::DESCRIPTION_KEY];
+
+    for(auto element : entity[Common::ChildSeat::ID_KEY]) {
+        query += "INSERT INTO " + std::string(Common::ChildSeat::TABLE_NAME) + " (" + std::string(Common::ChildSeat::BRAND_KEY) + ", " + 
+        std::string(Common::ChildSeat::AGE_KEY) + ", " + std::string(Common::ChildSeat::WEIGHT_KEY) + ", " + 
+        std::string(Common::ChildSeat::HEIGHT_KEY) + ", " + std::string(Common::ChildSeat::SAFETYKEY_KEY) + ", " + 
+        std::string(Common::ChildSeat::FASTENING_KEY) + ", " + std::string(Common::ChildSeat::DRIVEWAY_KEY) + ", " + 
+        std::string(Common::ChildSeat::DESCRIPTION_KEY) + ") VALUES ('" + 
+        brand_list.front() + "', '" + age_list.front() + "', '" + weight_list.front() + "', '" + 
+        height_list.front() + "', '" + safetyKey_list.front() + "', '" + fastening_list.front() + "', '" + 
+        driveway_list.front() + "', '" + description_list.front() + "');";
+
+        brand_list.pop_front();
+        age_list.pop_front();
+        weight_list.pop_front();
+        height_list.pop_front();
+        safetyKey_list.pop_front();
+        fastening_list.pop_front();
+        driveway_list.pop_front();
+        description_list.pop_front();
+        id_list.pop_front();
+    }
     
     return database::execute_query(query, dataBase);
 }

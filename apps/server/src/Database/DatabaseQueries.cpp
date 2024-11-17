@@ -31,6 +31,7 @@ bool database::create_db(sqlite3*& db) {
                         "userId INTEGER,"
                         "productId INTEGER,"
                         "paidType INTEGER,"
+                        "deliveryType INTEGER,"
                         "destination TEXT,"
                         "packageId VARCHAR(255),"
                         "deliveryDate DATETIME,"

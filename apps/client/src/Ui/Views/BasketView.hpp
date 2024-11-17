@@ -31,12 +31,19 @@ public slots:
 
 private slots:
     void onProductLoaded();
+    void onBuyButtonClicked();
+    void onCanceledButtonClicked();
+    void onRemoveButtonClicked();
+    void onOrderCreated();
 
 private:
     void setupConnections();
     void setupUi();
     
     BasketViewModel *m_basketVM;
+
+    MessageBox *m_errorMessageBox;
+    MessageBox *m_successMessageBox;
 
     // ComboBoxes
     QComboBox *m_paidMethodComboBox;

@@ -5,11 +5,27 @@ UsersTable::UsersTable(sqlite3*& db) {
 }
 
 bool UsersTable::add(Common::Dataset &entity) {
-    std::cout << "[UsersTable::add] Adding user" << std::endl;
-    std::string query = "INSERT INTO " + std::string(Common::Users::TABLE_NAME) + " (name, surname, email, password) "
-                        "VALUES ('" + entity[Common::Users::NAME_KEY].front() + "', '" + entity[Common::Users::SURNAME_KEY].front() + "', '"
-                        + entity[Common::Users::EMAIL_KEY].front() + "', '" + entity[Common::Users::PASSWORD_KEY].front() + "');";
-    
+    std::string query = "";
+
+    auto id_list = entity[Common::Users::ID_KEY];
+    auto name_list = entity[Common::Users::NAME_KEY];
+    auto surname_list = entity[Common::Users::SURNAME_KEY];
+    auto email_list = entity[Common::Users::EMAIL_KEY];
+    auto password_list = entity[Common::Users::PASSWORD_KEY];
+
+    for(auto element : entity[Common::Users::ID_KEY]) {
+        query += "INSERT INTO " + std::string(Common::Users::TABLE_NAME) + " (" + std::string(Common::Users::NAME_KEY) + ", " + 
+        std::string(Common::Users::SURNAME_KEY) + ", " + std::string(Common::Users::EMAIL_KEY) + ", " + 
+        std::string(Common::Users::PASSWORD_KEY) + ") VALUES ('" + name_list.front() + "', '" + 
+        surname_list.front() + "', '" + email_list.front() + "', '" + password_list.front() + "');";
+
+        name_list.pop_front();
+        surname_list.pop_front();
+        email_list.pop_front();
+        password_list.pop_front();
+        id_list.pop_front();
+    }
+
     return database::execute_query(query, dataBase);
 }
 

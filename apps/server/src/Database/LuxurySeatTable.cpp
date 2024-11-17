@@ -5,12 +5,35 @@ LuxurySeatTable::LuxurySeatTable(sqlite3*& db) {
 }
 
 bool LuxurySeatTable::add(Common::Dataset &entity) {
-    std::cout << "[LuxurySeatTable::add] Adding luxury seat" << std::endl;
-    std::string query = "INSERT INTO " + std::string(Common::LuxurySeat::TABLE_NAME) + " (brand, suitableFor, color, material, comfortLevel, customDesign, description) "
-                        "VALUES ('" + entity[Common::LuxurySeat::BRAND_KEY].front() + "', '" + entity[Common::LuxurySeat::SUITABLEFOR_KEY].front() + "', '"
-                        + entity[Common::LuxurySeat::COLOR_KEY].front() + "', '" + entity[Common::LuxurySeat::MATERIAL_KEY].front() + "', '"
-                        + entity[Common::LuxurySeat::COMFORTLEVEL_KEY].front() + "', '" + entity[Common::LuxurySeat::CUSTOMDESIGN_KEY].front() + "', '"
-                        + entity[Common::LuxurySeat::DESCRIPTION_KEY].front() + "');";
+    std::string query = "";
+
+    auto id_list = entity[Common::LuxurySeat::ID_KEY];
+    auto brand_list = entity[Common::LuxurySeat::BRAND_KEY];
+    auto suitableFor_list = entity[Common::LuxurySeat::SUITABLEFOR_KEY];
+    auto color_list = entity[Common::LuxurySeat::COLOR_KEY];
+    auto material_list = entity[Common::LuxurySeat::MATERIAL_KEY];
+    auto comfortLevel_list = entity[Common::LuxurySeat::COMFORTLEVEL_KEY];
+    auto customDesign_list = entity[Common::LuxurySeat::CUSTOMDESIGN_KEY];
+    auto description_list = entity[Common::LuxurySeat::DESCRIPTION_KEY];
+
+    for(auto element : entity[Common::LuxurySeat::ID_KEY]) {
+        query += "INSERT INTO " + std::string(Common::LuxurySeat::TABLE_NAME) + " (" + std::string(Common::LuxurySeat::BRAND_KEY) + ", " + 
+        std::string(Common::LuxurySeat::SUITABLEFOR_KEY) + ", " + std::string(Common::LuxurySeat::COLOR_KEY) + ", " + 
+        std::string(Common::LuxurySeat::MATERIAL_KEY) + ", " + std::string(Common::LuxurySeat::COMFORTLEVEL_KEY) + ", " + 
+        std::string(Common::LuxurySeat::CUSTOMDESIGN_KEY) + ", " + std::string(Common::LuxurySeat::DESCRIPTION_KEY) + ") VALUES ('" + 
+        brand_list.front() + "', '" + suitableFor_list.front() + "', '" + color_list.front() + "', '" + 
+        material_list.front() + "', '" + comfortLevel_list.front() + "', '" + customDesign_list.front() + "', '" + 
+        description_list.front() + "');";
+
+        brand_list.pop_front();
+        suitableFor_list.pop_front();
+        color_list.pop_front();
+        material_list.pop_front();
+        comfortLevel_list.pop_front();
+        customDesign_list.pop_front();
+        description_list.pop_front();
+        id_list.pop_front();
+    }
 
     return database::execute_query(query, dataBase);
 }

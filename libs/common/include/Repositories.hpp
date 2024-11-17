@@ -189,6 +189,7 @@ namespace Common {
         static constexpr const char *USERID_KEY             = "userId";
         static constexpr const char *PRODUCTID_KEY          = "productId";
         static constexpr const char *PAIDTYPE_KEY           = "paidType";
+        static constexpr const char *DELIVERYTYPE_KEY       = "deliveryType";
         static constexpr const char *DESTINATION_KEY        = "destination";
         static constexpr const char *PACKAGEID_KEY          = "packageId";
         static constexpr const char *DELIVERYDATE_KEY       = "deliveryDate";
@@ -198,6 +199,7 @@ namespace Common {
         std::string userId{};
         std::string productId{};
         std::string paidType{};
+        std::string deliveryType{};
         std::string destination{};
         std::string packageId{};
         std::string deliveryDate{};

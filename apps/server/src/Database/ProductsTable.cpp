@@ -5,13 +5,40 @@ ProductsTable::ProductsTable(sqlite3*& db) {
 }
 
 bool ProductsTable::add(Common::Dataset &entity) {
-    std::cout << "[ProductsTable::add] Adding product" << std::endl;
-    std::string query = "INSERT INTO " + std::string(Common::Products::TABLE_NAME) + " (productName, productType, productTypeId, price, priceUnit, quantity, hasDiscount, discount, isReadyToSell) "
-                        "VALUES ('" + entity[Common::Products::PRODUCTNAME_KEY].front() + "', '" + entity[Common::Products::PRODUCTTYPE_KEY].front() + "', '"
-                        + entity[Common::Products::PRODUCTTYPEID_KEY].front() + "', '" + entity[Common::Products::PRICE_KEY].front() + "', '"
-                        + entity[Common::Products::PRICEUNIT_KEY].front() + "', '" + entity[Common::Products::QUANTITY_KEY].front() + "', '"
-                        + entity[Common::Products::HASDISCOUNT_KEY].front() + "', '" + entity[Common::Products::DISCOUNT_KEY].front() + "', '"
-                        + entity[Common::Products::ISREADYTOSELL_KEY].front() + "');";
+    std::string query = "";
+
+    auto id_list = entity[Common::Products::ID_KEY];
+    auto productName_list = entity[Common::Products::PRODUCTNAME_KEY];
+    auto productType_list = entity[Common::Products::PRODUCTTYPE_KEY];
+    auto productTypeId_list = entity[Common::Products::PRODUCTTYPEID_KEY];
+    auto price_list = entity[Common::Products::PRICE_KEY];
+    auto priceUnit_list = entity[Common::Products::PRICEUNIT_KEY];
+    auto quantity_list = entity[Common::Products::QUANTITY_KEY];
+    auto hasDiscount_list = entity[Common::Products::HASDISCOUNT_KEY];
+    auto discount_list = entity[Common::Products::DISCOUNT_KEY];
+    auto isReadyToSell_list = entity[Common::Products::ISREADYTOSELL_KEY];
+
+    for(auto element : entity[Common::Products::ID_KEY]) {
+        query += "INSERT INTO " + std::string(Common::Products::TABLE_NAME) + " (" + std::string(Common::Products::PRODUCTNAME_KEY) + ", " + 
+        std::string(Common::Products::PRODUCTTYPE_KEY) + ", " + std::string(Common::Products::PRODUCTTYPEID_KEY) + ", " + 
+        std::string(Common::Products::PRICE_KEY) + ", " + std::string(Common::Products::PRICEUNIT_KEY) + ", " + 
+        std::string(Common::Products::QUANTITY_KEY) + ", " + std::string(Common::Products::HASDISCOUNT_KEY) + ", " + 
+        std::string(Common::Products::DISCOUNT_KEY) + ", " + std::string(Common::Products::ISREADYTOSELL_KEY) + ") VALUES ('" + 
+        productName_list.front() + "', '" + productType_list.front() + "', '" + productTypeId_list.front() + "', '" + 
+        price_list.front() + "', '" + priceUnit_list.front() + "', '" + quantity_list.front() + "', '" + 
+        hasDiscount_list.front() + "', '" + discount_list.front() + "', '" + isReadyToSell_list.front() + "');";
+
+        productName_list.pop_front();
+        productType_list.pop_front();
+        productTypeId_list.pop_front();
+        price_list.pop_front();
+        priceUnit_list.pop_front();
+        quantity_list.pop_front();
+        hasDiscount_list.pop_front();
+        discount_list.pop_front();
+        isReadyToSell_list.pop_front();
+        id_list.pop_front();
+    }
     
     return database::execute_query(query, dataBase);
 }

@@ -25,6 +25,7 @@ public:
 
     // Purchase orders
     void fetchPurchaseOrders(const std::string &userId);
+    void createPurchaseOrder(const Common::PurchaseOrders &entity);
 
     // Product
     void fetchProducts();
@@ -53,6 +54,7 @@ signals:
     // Purchase orders
     void purchaseOrdersError(const std::string &errorMessage);
     void purchaseOrdersFetched(const std::vector<Common::PurchaseOrders> &orders);
+    void orderCreated();
 
     // Product
     void productsError(const std::string &errorMessage);

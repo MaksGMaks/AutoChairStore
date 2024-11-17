@@ -5,11 +5,32 @@ BaseSeatTable::BaseSeatTable(sqlite3*& db) {
 }
 
 bool BaseSeatTable::add(Common::Dataset &entity) {
-    std::cout << "[BaseSeatTable::add] Adding base seat" << std::endl;
-    std::string query = "INSERT INTO " + std::string(Common::BaseSeat::TABLE_NAME) + " (brand, suitableFor, color, material, type, description) "
-                        "VALUES ('" + entity[Common::BaseSeat::BRAND_KEY].front() + "', '" + entity[Common::BaseSeat::SUITABLEFOR_KEY].front() + "', '"
-                        + entity[Common::BaseSeat::COLOR_KEY].front() + "', '" + entity[Common::BaseSeat::MATERIAL_KEY].front() + "', '"
-                        + entity[Common::BaseSeat::TYPE_KEY].front() + "', '" + entity[Common::BaseSeat::DESCRIPTION_KEY].front() + "');";
+    std::string query = "";
+
+    auto id_list = entity[Common::BaseSeat::ID_KEY];
+    auto brand_list = entity[Common::BaseSeat::BRAND_KEY];
+    auto suitableFor_list = entity[Common::BaseSeat::SUITABLEFOR_KEY];
+    auto color_list = entity[Common::BaseSeat::COLOR_KEY];
+    auto material_list = entity[Common::BaseSeat::MATERIAL_KEY];
+    auto type_list = entity[Common::BaseSeat::TYPE_KEY];
+    auto description_list = entity[Common::BaseSeat::DESCRIPTION_KEY];
+
+    for(auto element : entity[Common::BaseSeat::ID_KEY]) {
+        query += "INSERT INTO " + std::string(Common::BaseSeat::TABLE_NAME) + " (" + std::string(Common::BaseSeat::BRAND_KEY) + ", " + 
+        std::string(Common::BaseSeat::SUITABLEFOR_KEY) + ", " + std::string(Common::BaseSeat::COLOR_KEY) + ", " + 
+        std::string(Common::BaseSeat::MATERIAL_KEY) + ", " + std::string(Common::BaseSeat::TYPE_KEY) + ", " + 
+        std::string(Common::BaseSeat::DESCRIPTION_KEY) + ") VALUES ('" + 
+        brand_list.front() + "', '" + suitableFor_list.front() + "', '" + color_list.front() + "', '" + 
+        material_list.front() + "', '" + type_list.front() + "', '" + description_list.front() + "');";
+
+        brand_list.pop_front();
+        suitableFor_list.pop_front();
+        color_list.pop_front();
+        material_list.pop_front();
+        type_list.pop_front();
+        description_list.pop_front();
+        id_list.pop_front();
+    }
     
     return database::execute_query(query, dataBase);
 }

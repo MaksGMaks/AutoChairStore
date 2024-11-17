@@ -32,6 +32,7 @@ private:
     // Ui
     QStackedWidget *m_stackedWidget;
     Menu *m_menu;
+    MessageBox *m_messageBox;
 
     // Models
     UsersModel *m_userModel;

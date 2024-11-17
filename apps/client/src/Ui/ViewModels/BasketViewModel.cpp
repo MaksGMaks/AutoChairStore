@@ -1,14 +1,15 @@
 #include "BasketViewModel.hpp"
 
-BasketViewModel::BasketViewModel(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, QObject *parent)
+BasketViewModel::BasketViewModel(ProductsModel *productsModel, PurchaseOrdersModel *purchaseOrdersModel, UsersModel *usrModel, QObject *parent)
 : IViewModel(parent)
 , m_productsModel(productsModel)
-, m_purchaseOrdersModel(purchaseOrdersModel) {
+, m_purchaseOrdersModel(purchaseOrdersModel)
+, m_userModel(usrModel) {
     connect(this, &BasketViewModel::modelAddToBasket, m_productsModel, &ProductsModel::onAddToBasket);
-//    connect(this, &BasketViewModel::modelCreateOrder, m_purchaseOrdersModel, &PurchaseOrdersModel::onCreateOrder);
+    connect(this, &BasketViewModel::modelCreateOrder, m_purchaseOrdersModel, &PurchaseOrdersModel::onCreateOrder);
 
     connect(m_productsModel, &ProductsModel::addToBasketSuccess, this, &BasketViewModel::onAddedToBasket);
-//    connect(m_purchaseOrdersModel, &PurchaseOrdersModel::orderCreated, this, &BasketViewModel::onOrderCreated);
+    connect(m_purchaseOrdersModel, &PurchaseOrdersModel::orderCreated, this, &BasketViewModel::onOrderCreated);
 }
 
 QVector<displayData::Products> BasketViewModel::productsInBasket() const {
@@ -20,16 +21,24 @@ void BasketViewModel::onAddToBasket(const QString &id) {
 }
 
 void BasketViewModel::onCreateOrder(const displayData::PurchaseOrder &order) {
-    emit modelCreateOrder(convertDisplayDataToPurchaseOrder(order));
+    Common::PurchaseOrders orders = convertDisplayDataToPurchaseOrder(order);
+    orders.userId = m_userModel->user().id;
+    orders.status = "Sending to delivery";
+    for(auto &product : m_productsInBasket) {
+        orders.productId = product.id.toStdString();
+        emit modelCreateOrder(orders);
+    }
 }
 
 void BasketViewModel::onAddedToBasket(const Common::Products &product) {
     m_productsInBasket.push_back(convertToDisplayData(product));
+
     emit addedToBasket();
 }
 
-void BasketViewModel::onOrderCreated(const std::string &message) {
-    emit orderCreated(QString::fromStdString(message));
+void BasketViewModel::onOrderCreated() {
+    m_productsInBasket.clear();
+    emit orderCreated();
 }
 
 void BasketViewModel::onRemoveFromBasket(const QString &id) {
@@ -39,6 +48,7 @@ void BasketViewModel::onRemoveFromBasket(const QString &id) {
             break;
         }
     }
+    emit addedToBasket();
 }
 
 displayData::Products BasketViewModel::convertToDisplayData(const Common::Products &product) {
