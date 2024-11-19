@@ -28,32 +28,31 @@ void ApiManager::loginUser(const Common::Users &entity) {
 
 void ApiManager::registerUser(const Common::Users &entity, const std::string &code) {
     std::cout << "[ApiManager::registerUser] Registering user" << std::endl;
-    // if(code == testCode) {
-    //     for(auto &user : testUsers) {
-    //         if(entity.email == user.email) {
-    //             emit loginRegistrationError("Email already exists");
-    //             return;
-    //         }
-    //     }
-    //     testUsers.push_back(entity);
-    //     emit userRegisteredSuccessfully(entity);
-    // } else {
-    //     emit loginRegistrationError("Invalid code");
-    // }
-    if(code == testCode) {
-        Common::Request request = Common::Request::ADD;
-        Common::Dataset data;
-        data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
-        data[Common::Users::NAME_KEY] = {entity.name};
-        data[Common::Users::SURNAME_KEY] = {entity.surname};
-        data[Common::Users::EMAIL_KEY] = {entity.email};
-        data[Common::Users::PASSWORD_KEY] = {entity.password};
-        m_networkManager.sendRequest(data, request);
-        Common::Dataset response = m_networkManager.readResponse();
-        if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
-            emit userRegisteredSuccessfully(entity);
+    Common::Request request = Common::Request::GETSPECIAL;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::Verification::TABLE_NAME};
+    data[Common::COLUMN_KEY] = {Common::Verification::CODE_KEY};
+    data[Common::Verification::EMAIL_KEY] = {entity.email};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+    if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+        if(response[Common::Verification::CODE_KEY].front() == code) {
+            request = Common::Request::ADD;
+            data.clear();
+            data[Common::TABLE_KEY] = {Common::Users::TABLE_NAME};
+            data[Common::Users::NAME_KEY] = {entity.name};
+            data[Common::Users::SURNAME_KEY] = {entity.surname};
+            data[Common::Users::EMAIL_KEY] = {entity.email};
+            data[Common::Users::PASSWORD_KEY] = {entity.password};
+            m_networkManager.sendRequest(data, request);
+            response = m_networkManager.readResponse();
+            if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+                emit userRegisteredSuccessfully(entity);
+            } else {
+                emit loginRegistrationError("Email already exists");
+            }
         } else {
-            emit loginRegistrationError("Email already exists");
+            emit loginRegistrationError("Invalid code");
         }
     } else {
         emit loginRegistrationError("Invalid code");
@@ -62,12 +61,17 @@ void ApiManager::registerUser(const Common::Users &entity, const std::string &co
 
 void ApiManager::sendCode(const std::string &email) {
     std::cout << "[ApiManager::sendCode] Sending code to email: " << email << std::endl;
-    for(auto &testEmail : testEmails) {
-        if(email == testEmail) {
-            return;
-        }    
+    Common::Request request = Common::Request::SENDCODE;
+    Common::Dataset data;
+    data[Common::TABLE_KEY] = {Common::Verification::TABLE_NAME};
+    data[Common::Verification::EMAIL_KEY] = {email};
+    m_networkManager.sendRequest(data, request);
+    Common::Dataset response = m_networkManager.readResponse();
+    if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
+        emit codeSentSuccessfully();
+    } else {
+        emit loginRegistrationError("Can't send code to this email");
     }
-    emit loginRegistrationError("Can't send code to this email");
 }
 
 void ApiManager::editUser(const Common::Users &entity) {

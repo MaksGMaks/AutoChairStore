@@ -13,7 +13,6 @@ bool UsersTable::add(Common::Dataset &entity) {
 }
 
 bool UsersTable::update(Common::Dataset &data) {
-    std::cout << "[UsersTable::update] Updating user" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::Users::ID_KEY];
@@ -41,20 +40,17 @@ bool UsersTable::update(Common::Dataset &data) {
 }
 
 bool UsersTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[UsersTable::deleteAt] Deleting user" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::Users::TABLE_NAME) + " WHERE id = " + entity[Common::Users::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset UsersTable::getAll() {
-    std::cout << "[UsersTable::getAll] Getting all users" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::Users::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void UsersTable::get(Common::Dataset &entity) {
-    std::cout << "[UsersTable::get] Getting user" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -72,7 +68,6 @@ void UsersTable::get(Common::Dataset &entity) {
 }
 
 void UsersTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[UsersTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::Users::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

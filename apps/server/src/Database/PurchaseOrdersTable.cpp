@@ -15,7 +15,6 @@ bool PurchaseOrdersTable::add(Common::Dataset &entity) {
 }
 
 bool PurchaseOrdersTable::update(Common::Dataset &data) {
-    std::cout << "[PurchaseOrdersTable::update] Updating purchase order" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::PurchaseOrders::ID_KEY];
@@ -55,20 +54,17 @@ bool PurchaseOrdersTable::update(Common::Dataset &data) {
 }
 
 bool PurchaseOrdersTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[PurchaseOrdersTable::deleteAt] Deleting purchase order" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::PurchaseOrders::TABLE_NAME) + " WHERE id = " + entity[Common::PurchaseOrders::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset PurchaseOrdersTable::getAll() {
-    std::cout << "[PurchaseOrdersTable::getAll] Getting all purchase orders" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::PurchaseOrders::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void PurchaseOrdersTable::get(Common::Dataset &entity) {
-    std::cout << "[PurchaseOrdersTable::get] Getting purchase order" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -85,7 +81,6 @@ void PurchaseOrdersTable::get(Common::Dataset &entity) {
 }
 
 void PurchaseOrdersTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[PurchaseOrdersTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::PurchaseOrders::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

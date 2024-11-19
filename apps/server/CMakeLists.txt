@@ -31,6 +31,7 @@ set(DATABASE
     ${SERVER_SOURCES_DIR}/Database/PurchaseOrdersTable.cpp
     ${SERVER_SOURCES_DIR}/Database/SportSeatTable.cpp
     ${SERVER_SOURCES_DIR}/Database/UsersTable.cpp
+    ${SERVER_SOURCES_DIR}/Database/VerificationTable.cpp
 
     ${SERVER_SOURCES_DIR}/Database/Tests.cpp
     )

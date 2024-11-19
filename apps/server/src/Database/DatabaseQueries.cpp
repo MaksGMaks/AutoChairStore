@@ -78,7 +78,16 @@ bool database::create_db(sqlite3*& db) {
                         "coverMaterial VARCHAR(255) NOT NULL,"
                         "color VARCHAR(255) NOT NULL,"
                         "description TEXT NOT NULL"
-                        ");";
+                        ");"
+                    "CREATE TABLE IF NOT EXISTS verification_codes ("
+                        "email VARCHAR(255) NOT NULL UNIQUE,"
+                        "code VARCHAR(255),"
+                        "created_at TIMESTAMP NOT NULL"
+                        ");"
+                    "CREATE TRIGGER IF NOT EXISTS delete_old_rows BEFORE INSERT ON verification_codes"
+                    "BEGIN"
+                        "DELETE FROM verification_codes WHERE created_at < CURRENT_TIMESTAMP;"
+                    "END;";
     int rc = sqlite3_open("AutoChairShop.db", &db);
 
     if (rc != SQLITE_OK) {
@@ -124,7 +133,7 @@ bool database::execute_query(const std::string query, sqlite3*& db) {
 }
 
 Common::Dataset database::selectAllFromTable(const std::string &sql, sqlite3* db) {
-    Common::Dataset dataset = {};
+    Common::Dataset dataset = Common::Dataset{};
     sqlite3_stmt* stmt;
 
     if (sqlite3_open("AutoChairShop.db", &db) != SQLITE_OK) {

@@ -12,4 +12,5 @@ public:
     std::unique_ptr<ITable> makeChildSeatTable(sqlite3*& db) override;
     std::unique_ptr<ITable> makeLuxurySeatTable(sqlite3*& db) override;
     std::unique_ptr<ITable> makeSportSeatTable(sqlite3*& db) override;
+    std::unique_ptr<ITable> makeVerificationTable(sqlite3*& db) override;
 };

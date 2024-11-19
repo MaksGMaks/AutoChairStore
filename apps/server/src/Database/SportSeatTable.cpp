@@ -15,7 +15,6 @@ bool SportSeatTable::add(Common::Dataset &entity) {
 }
 
 bool SportSeatTable::update(Common::Dataset &data) {
-    std::cout << "[SportSeatTable::update] Updating sport seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::SportSeat::ID_KEY];
@@ -52,20 +51,17 @@ bool SportSeatTable::update(Common::Dataset &data) {
 }
 
 bool SportSeatTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[SportSeatTable::deleteAt] Deleting sport seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::SportSeat::TABLE_NAME) + " WHERE id = " + entity[Common::SportSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset SportSeatTable::getAll() {
-    std::cout << "[SportSeatTable::getAll] Getting all sport seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::SportSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void SportSeatTable::get(Common::Dataset &entity) {
-    std::cout << "[SportSeatTable::get] Getting sport seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -82,7 +78,6 @@ void SportSeatTable::get(Common::Dataset &entity) {
 }
 
 void SportSeatTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[SportSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::SportSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

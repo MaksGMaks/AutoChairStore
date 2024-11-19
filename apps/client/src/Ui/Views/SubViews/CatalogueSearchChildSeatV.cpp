@@ -6,51 +6,30 @@ CatalogueSearchChildSeatV::CatalogueSearchChildSeatV(QWidget *parent) : QWidget(
 
 void CatalogueSearchChildSeatV::setupUI() {
     std::cout << "[CatalogueSearchChildSeatV::setupUI] Setting up UI" << std::endl;
+    m_brandListWidget = new QListWidget();
+    m_ageListWidget = new QListWidget();
+    m_weightListWidget = new QListWidget();
+    m_heightListWidget = new QListWidget();
+    m_safetyKeyListWidget = new QListWidget();
+    m_fasteningListWidget = new QListWidget();
+    m_drivewayListWidget = new QListWidget();
 
-    m_checkBox1 = new QCheckBox("CheckBox 1");
-    m_checkBox2 = new QCheckBox("CheckBox 2");
-    m_checkBox3 = new QCheckBox("CheckBox 3");
-    m_checkBox4 = new QCheckBox("CheckBox 4");
-    m_checkBox5 = new QCheckBox("CheckBox 5");
-    m_checkBox6 = new QCheckBox("CheckBox 6");
-    m_checkBox7 = new QCheckBox("CheckBox 7");
-    m_checkBox8 = new QCheckBox("CheckBox 8");
-    m_checkBox9 = new QCheckBox("CheckBox 9");
-    m_checkBox10 = new QCheckBox("CheckBox 10");
-    m_checkBox11 = new QCheckBox("CheckBox 11");
-    m_checkBox12 = new QCheckBox("CheckBox 12");
-
-    std::vector<QCheckBox *> checkBoxes1 = {m_checkBox1, m_checkBox2, m_checkBox3, m_checkBox4};
-    std::vector<QCheckBox *> checkBoxes2 = {m_checkBox5, m_checkBox6, m_checkBox7};
-    std::vector<QCheckBox *> checkBoxes3 = {m_checkBox8, m_checkBox9, m_checkBox10, m_checkBox11, m_checkBox12};
-
-//     m_listWidget1 = new QListWidget();
-//     m_listWidget2 = new QListWidget();
-//     m_listWidget3 = new QListWidget();
-
-//     m_listWidget1->setFixedSize(200, 200);
-//     m_listWidget2->setFixedSize(200, 200);
-//     m_listWidget3->setFixedSize(200, 200);
-
-//     for (auto checkBox : checkBoxes1) {
-//     QListWidgetItem *item = new QListWidgetItem(m_listWidget1);
-//     m_listWidget1->setItemWidget(item, checkBox);
-// }
-
-// for (auto checkBox : checkBoxes2) {
-//     QListWidgetItem *item = new QListWidgetItem(m_listWidget2);
-//     m_listWidget2->setItemWidget(item, checkBox);
-// }
-
-// for (auto checkBox : checkBoxes3) {
-//     QListWidgetItem *item = new QListWidgetItem(m_listWidget3);
-//     m_listWidget3->setItemWidget(item, checkBox);
-// }
-
+    m_brandListWidget->setFixedSize(200, 200);
+    m_ageListWidget->setFixedSize(200, 200);
+    m_weightListWidget->setFixedSize(200, 200);
+    m_heightListWidget->setFixedSize(200, 200);
+    m_safetyKeyListWidget->setFixedSize(200, 200);
+    m_fasteningListWidget->setFixedSize(200, 200);
+    m_drivewayListWidget->setFixedSize(200, 200);
 
     m_layout = new QVBoxLayout();
-    // m_layout->addWidget(m_listWidget1);
-    // m_layout->addWidget(m_listWidget2);
-    // m_layout->addWidget(m_listWidget3);
+    m_layout->addWidget(m_brandListWidget);
+    m_layout->addWidget(m_ageListWidget);
+    m_layout->addWidget(m_weightListWidget);
+    m_layout->addWidget(m_heightListWidget);
+    m_layout->addWidget(m_safetyKeyListWidget);
+    m_layout->addWidget(m_fasteningListWidget);
+    m_layout->addWidget(m_drivewayListWidget);
+    
     setLayout(m_layout);
 }

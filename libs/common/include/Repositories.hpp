@@ -209,6 +209,22 @@ namespace Common {
             return id == rhs.id && userId == rhs.userId && productId == rhs.productId && paidType == rhs.paidType && 
                    destination == rhs.destination && packageId == rhs.packageId && deliveryDate == rhs.deliveryDate && status == rhs.status;
         }
+
+    };
+    
+    struct Verification {
+        static constexpr const char *TABLE_NAME         = "verification_codes";
+        static constexpr const char *EMAIL_KEY          = "email";
+        static constexpr const char *CODE_KEY           = "code";
+        static constexpr const char *CREATEDAT_KEY      = "created_at";
+
+        std::string email{};
+        std::string code{};
+        std::string createdAt{};
+
+        bool operator==(const Verification &rhs) const {
+            return email == rhs.email && code == rhs.code && createdAt == rhs.createdAt;
+        }
     };
     
     typedef std::list<std::string> Data;
@@ -220,7 +236,8 @@ namespace Common {
         DELETE = 2,
         UPDATE = 3,
         GETALL = 4,
-        GETSPECIAL = 5
+        GETSPECIAL = 5,
+        SENDCODE = 6
     };
 
 }

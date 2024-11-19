@@ -15,7 +15,6 @@ bool LuxurySeatTable::add(Common::Dataset &entity) {
 }
 
 bool LuxurySeatTable::update(Common::Dataset &data) {
-    std::cout << "[LuxurySeatTable::update] Updating luxury seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::LuxurySeat::ID_KEY];
@@ -52,20 +51,17 @@ bool LuxurySeatTable::update(Common::Dataset &data) {
 }
 
 bool LuxurySeatTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[LuxurySeatTable::deleteAt] Deleting luxury seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::LuxurySeat::TABLE_NAME) + " WHERE id = " + entity[Common::LuxurySeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset LuxurySeatTable::getAll() {
-    std::cout << "[LuxurySeatTable::getAll] Getting all luxury seats" << std::endl;
     const std::string query = "SELECT * FROM " + std::string(Common::LuxurySeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(query, dataBase);
 }
 
 void LuxurySeatTable::get(Common::Dataset &entity) {
-    std::cout << "[LuxurySeatTable::get] Getting luxury seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -82,7 +78,6 @@ void LuxurySeatTable::get(Common::Dataset &entity) {
 }
 
 void LuxurySeatTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[LuxurySeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::LuxurySeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

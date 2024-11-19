@@ -197,6 +197,7 @@ void CatalogueView::setupUI() {
 
     m_baseSeatSearch = new CatalogueSearchBaseSeatV();
     m_baseSeatSearch->setFixedWidth(200);
+    m_baseSeatSearch->setMinimumHeight(500);
 
     m_baseSeatLayout = new QHBoxLayout();
     m_baseSeatLayout->addWidget(m_baseSeatSearch);
@@ -207,6 +208,7 @@ void CatalogueView::setupUI() {
 
     m_childSeatSearch = new CatalogueSearchChildSeatV();
     m_childSeatSearch->setFixedWidth(200);
+    m_childSeatSearch->setMinimumHeight(500);
     
     m_childSeatLayout = new QHBoxLayout();
     m_childSeatLayout->addWidget(m_childSeatSearch);
@@ -217,6 +219,7 @@ void CatalogueView::setupUI() {
 
     m_sportSeatSearch = new CatalogueSearchSportSeatV();
     m_sportSeatSearch->setFixedWidth(200);
+    m_sportSeatSearch->setMinimumHeight(500);
 
     m_sportSeatLayout = new QHBoxLayout();
     m_sportSeatLayout->addWidget(m_sportSeatSearch);
@@ -227,6 +230,7 @@ void CatalogueView::setupUI() {
 
     m_luxurySeatSearch = new CatalogueSearchLuxurySeatV();
     m_luxurySeatSearch->setFixedWidth(200);
+    m_luxurySeatSearch->setMinimumHeight(500);
 
     m_luxurySeatLayout = new QHBoxLayout();
     m_luxurySeatLayout->addWidget(m_luxurySeatSearch);

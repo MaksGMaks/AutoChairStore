@@ -15,7 +15,6 @@ bool ChildSeatTable::add(Common::Dataset &entity) {
 }
 
 bool ChildSeatTable::update(Common::Dataset &data) {
-    std::cout << "[ChildSeatTable::update] Updating child seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::ChildSeat::ID_KEY];
@@ -55,20 +54,17 @@ bool ChildSeatTable::update(Common::Dataset &data) {
 }
 
 bool ChildSeatTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::deleteAt] Deleting child seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE id = " + entity[Common::ChildSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset ChildSeatTable::getAll() {
-    std::cout << "[ChildSeatTable::getAll] Getting all child seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void ChildSeatTable::get(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::get] Getting child seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -85,7 +81,6 @@ void ChildSeatTable::get(Common::Dataset &entity) {
 }
 
 void ChildSeatTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

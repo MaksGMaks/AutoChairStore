@@ -6,6 +6,9 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QListWidgetItem>
+#include <QLabel>
+#include <QVector>
+#include "Ui/DisplayData/DisplayData.hpp"
 
 class CatalogueSearchBaseSeatV : public QWidget {
     Q_OBJECT
@@ -13,31 +16,25 @@ public:
     explicit CatalogueSearchBaseSeatV(QWidget *parent = nullptr);
     ~CatalogueSearchBaseSeatV() = default;
 
+    void addFilters(const QVector<displayData::BaseSeat> &products);
+
 private:
     void setupUI();
 
     // Layout
     QVBoxLayout *m_layout;
 
-    // test data
+    // List widgets
     QListWidget *m_brandListWidget;
     QListWidget *m_suitedForListWidget;
     QListWidget *m_colorListWidget;
     QListWidget *m_materialListWidget;
     QListWidget *m_typeListWidget;
 
-    QCheckBox *m_checkBox1;
-    QCheckBox *m_checkBox2;
-    QCheckBox *m_checkBox3;
-    QCheckBox *m_checkBox4;
-    QCheckBox *m_checkBox5;
-    QCheckBox *m_checkBox6;
-    QCheckBox *m_checkBox7;
-    QCheckBox *m_checkBox8;
-    QCheckBox *m_checkBox9;
-    QCheckBox *m_checkBox10;
-    QCheckBox *m_checkBox11;
-    QCheckBox *m_checkBox12;
-
-
+    // Labels
+    QLabel *m_brandLabel;
+    QLabel *m_suitedForLabel;
+    QLabel *m_colorLabel;
+    QLabel *m_materialLabel;
+    QLabel *m_typeLabel;
 };
