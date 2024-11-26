@@ -14,6 +14,11 @@ void ApiManager::loginUser(const Common::Users &entity) {
     data[Common::Users::PASSWORD_KEY] = {entity.password};
     m_networkManager.sendRequest(data, request);
     Common::Dataset response = m_networkManager.readResponse();
+    for(auto &column : response) {
+        for(auto &value : column.second) {
+            std::cout << column.first << ": " << value << std::endl;
+        }
+    }
     if(response[Common::RESPONSE_KEY].front() == Common::SUCCESS) {
         Common::Users user;
         user.id = response[Common::Users::ID_KEY].front();

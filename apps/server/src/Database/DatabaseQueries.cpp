@@ -139,12 +139,14 @@ Common::Dataset database::selectAllFromTable(const std::string &sql, sqlite3* db
     if (sqlite3_open("AutoChairShop.db", &db) != SQLITE_OK) {
         std::cerr << "Cannot open database: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
+        dataset[Common::RESPONSE_KEY] = {Common::FAILURE};
         return dataset;
     }
 
     // Prepare the SQL statement
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
         std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        dataset[Common::RESPONSE_KEY] = {Common::FAILURE};
         return dataset;
     }
 
@@ -171,6 +173,12 @@ Common::Dataset database::selectAllFromTable(const std::string &sql, sqlite3* db
             }
         }
     }
+    if(dataset[columnNames[0]].empty()) {
+        dataset[Common::RESPONSE_KEY] = {Common::FAILURE};
+    } else {
+        dataset[Common::RESPONSE_KEY] = {Common::SUCCESS};
+    }
+    //dataset[Common::RESPONSE_KEY] = {Common::SUCCESS};
 
     // Finalize the statement
     sqlite3_finalize(stmt);

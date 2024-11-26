@@ -8,6 +8,56 @@ m_productsVM(viewModel) {
     setupConnections();
 }
 
+void CatalogueView::onFilteredProducts() {
+    std::cout << "[CatalogueView::onFilteredProducts] Filtered products" << std::endl;
+    QVector<displayData::Products> products = m_productsVM->products();
+    QVector<displayData::Products> baseSeats;
+    QVector<displayData::Products> childSeats;
+    QVector<displayData::Products> sportSeats;
+    QVector<displayData::Products> luxurySeats;
+    for(auto product : products) {
+        if(product.type == "1")
+            baseSeats.push_back(product);
+        else if(product.type == "2")
+            childSeats.push_back(product);
+        else if(product.type == "3")
+            sportSeats.push_back(product);
+        else if(product.type == "4")
+            luxurySeats.push_back(product);
+    }
+
+    m_baseSeatCatalogueList->clear();
+    m_childSeatCatalogueList->clear();
+    m_sportSeatCatalogueList->clear();
+    m_luxurySeatCatalogueList->clear();
+    
+    getProductList(1, baseSeats);
+    getProductList(2, childSeats);
+    getProductList(3, sportSeats);
+    getProductList(4, luxurySeats);
+
+    onBaseSeatsFetched();
+    onChildSeatsFetched();
+    onSportSeatsFetched();
+    onLuxurySeatsFetched();
+}
+
+void CatalogueView::onBaseSeatsCleared() {
+    emit vmClearBaseSeats();
+}
+
+void CatalogueView::onChildSeatsCleared() {
+    emit vmClearChildSeats();
+}
+
+void CatalogueView::onSportSeatsCleared() {
+    emit vmClearSportSeats();
+}
+
+void CatalogueView::onLuxurySeatsCleared() {
+    emit vmClearLuxurySeats();
+}
+
 void CatalogueView::openRefresh() {
     std::cout << "[CatalogueView::openRefresh] Opening refresh" << std::endl;
     fetchProducts();
@@ -22,26 +72,91 @@ void CatalogueView::fetchProducts() {
 void CatalogueView::setupConnections() {
     std::cout << "[CatalogueView::setupConnections] Setting up connections" << std::endl;
     connect(m_productsVM, &CatalogueViewModel::productsFetched, this, &CatalogueView::onProductsFetched);
+    connect(m_productsVM, &CatalogueViewModel::baseSeatsFetched, this, &CatalogueView::onBaseSeatsFetched);
+    connect(m_productsVM, &CatalogueViewModel::childSeatsFetched, this, &CatalogueView::onChildSeatsFetched);
+    connect(m_productsVM, &CatalogueViewModel::sportSeatsFetched, this, &CatalogueView::onSportSeatsFetched);
+    connect(m_productsVM, &CatalogueViewModel::luxurySeatsFetched, this, &CatalogueView::onLuxurySeatsFetched);
+
+    connect(m_productsVM, &CatalogueViewModel::productsFiltered, this, &CatalogueView::onFilteredProducts);
+
+    connect(m_baseSeatSearch, &CatalogueSearchBaseSeatV::filterClicked, this, [this](const QVector<QString> &brands, const QVector<QString> &suitedFors,
+    const QVector<QString> &colors, const QVector<QString> &materials, const QVector<QString> &types) {
+        std::cout << "[CatalogueView::setupConnections] Filtering base seats" << std::endl;
+        emit vmGetBaseSeatsByFilters(brands, suitedFors, colors, materials, types);
+    });
+
+    connect(m_baseSeatSearch, &CatalogueSearchBaseSeatV::clearClicked, this, [this]() {
+        std::cout << "[CatalogueView::setupConnections] Clearing base seats" << std::endl;
+        emit vmClearBaseSeats();
+    });
+
+    connect(m_childSeatSearch, &CatalogueSearchChildSeatV::filterClicked, this, [this](const QVector<QString> &brands, const QVector<QString> &ages, const QVector<QString> &weights,
+    const QVector<QString> &heights, const QVector<QString> &safetyKeys, const QVector<QString> &fastenings, const QVector<QString> &driveways) {
+        std::cout << "[CatalogueView::setupConnections] Filtering child seats" << std::endl;
+        emit vmGetChildSeatsByFilters(brands, ages, weights, heights, safetyKeys, fastenings, driveways);
+    });
+
+    connect(m_childSeatSearch, &CatalogueSearchChildSeatV::clearClicked, this, [this]() {
+        std::cout << "[CatalogueView::setupConnections] Clearing child seats" << std::endl;
+        emit vmClearChildSeats();
+    });
+
+    connect(m_sportSeatSearch, &CatalogueSearchSportSeatV::filterClicked, this, [this](const QVector<QString> &brands, const QVector<QString> &suitedFors, const QVector<QString> &shellTypes,
+    const QVector<QString> &shellMaterials, const QVector<QString> &coverMaterials, const QVector<QString> &colors) {
+        std::cout << "[CatalogueView::setupConnections] Filtering sport seats" << std::endl;
+        emit vmGetSportSeatsByFilters(brands, suitedFors, shellTypes, shellMaterials, coverMaterials, colors);
+    });
+
+    connect(m_sportSeatSearch, &CatalogueSearchSportSeatV::clearClicked, this, [this]() {
+        std::cout << "[CatalogueView::setupConnections] Clearing sport seats" << std::endl;
+        emit vmClearSportSeats();
+    });
+
+    connect(m_luxurySeatSearch, &CatalogueSearchLuxurySeatV::filterClicked, this, [this](const QVector<QString> &brands, const QVector<QString> &suitedFors, const QVector<QString> &colors,
+    const QVector<QString> &materials, const QVector<QString> &comforts, const QVector<QString> &customDesigns) {
+        std::cout << "[CatalogueView::setupConnections] Filtering luxury seats" << std::endl;
+        emit vmGetLuxurySeatsByFilters(brands, suitedFors, colors, materials, comforts, customDesigns);
+    });
+
+    connect(m_luxurySeatSearch, &CatalogueSearchLuxurySeatV::clearClicked, this, [this]() {
+        std::cout << "[CatalogueView::setupConnections] Clearing luxury seats" << std::endl;
+        emit vmClearLuxurySeats();
+    });
+    
     connect(this, &CatalogueView::vmFetchProducts, m_productsVM, &CatalogueViewModel::onFetchProducts);
+
+    connect(this, &CatalogueView::vmGetBaseSeatsByFilters, m_productsVM, &CatalogueViewModel::onGetBaseSeatsByFilters);
+    connect(this, &CatalogueView::vmGetChildSeatsByFilters, m_productsVM, &CatalogueViewModel::onGetChildSeatsByFilters);
+    connect(this, &CatalogueView::vmGetSportSeatsByFilters, m_productsVM, &CatalogueViewModel::onGetSportSeatsByFilters);
+    connect(this, &CatalogueView::vmGetLuxurySeatsByFilters, m_productsVM, &CatalogueViewModel::onGetLuxurySeatsByFilters);
+
+    connect(this, &CatalogueView::vmClearBaseSeats, m_productsVM, &CatalogueViewModel::onClearSeats);
+    connect(this, &CatalogueView::vmClearChildSeats, m_productsVM, &CatalogueViewModel::onClearSeats);
+    connect(this, &CatalogueView::vmClearSportSeats, m_productsVM, &CatalogueViewModel::onClearSeats);
+    connect(this, &CatalogueView::vmClearLuxurySeats, m_productsVM, &CatalogueViewModel::onClearSeats);
 
     connect(m_catalogueMenu, &CatalogueMenuSV::openBaseSeats, this, [this]() {
         std::cout << "[CatalogueView::setupConnections] Opening base seats" << std::endl;
         m_catalogueStackedWidget->setCurrentIndex(0);
+        emit vmFetchProducts();
     });
 
     connect(m_catalogueMenu, &CatalogueMenuSV::openChildSeats, this, [this]() {
         std::cout << "[CatalogueView::setupConnections] Opening child seats" << std::endl;
         m_catalogueStackedWidget->setCurrentIndex(1);
+        emit vmFetchProducts();
     });
 
     connect(m_catalogueMenu, &CatalogueMenuSV::openSportSeats, this, [this]() {
         std::cout << "[CatalogueView::setupConnections] Opening sport seats" << std::endl;
         m_catalogueStackedWidget->setCurrentIndex(2);
+        emit vmFetchProducts();
     });
 
     connect(m_catalogueMenu, &CatalogueMenuSV::openLuxurySeats, this, [this]() {
         std::cout << "[CatalogueView::setupConnections] Opening luxury seats" << std::endl;
         m_catalogueStackedWidget->setCurrentIndex(3);
+        emit vmFetchProducts();
     });
 }
 
@@ -71,6 +186,26 @@ void CatalogueView::onProductsFetched() {
     getProductList(2, childSeats);
     getProductList(3, sportSeats);
     getProductList(4, luxurySeats);
+}
+
+void CatalogueView::onBaseSeatsFetched() {
+    std::cout << "[CatalogueView::onBaseSeatsFetched] Base seats fetched" << std::endl;
+    m_baseSeatSearch->addFilters(m_productsVM->baseSeats());
+}
+
+void CatalogueView::onChildSeatsFetched() {
+    std::cout << "[CatalogueView::onChildSeatsFetched] Child seats fetched" << std::endl;
+    m_childSeatSearch->addFilters(m_productsVM->childSeats());
+}
+
+void CatalogueView::onSportSeatsFetched() {
+    std::cout << "[CatalogueView::onSportSeatsFetched] Sport seats fetched" << std::endl;
+    m_sportSeatSearch->addFilters(m_productsVM->sportSeats());
+}
+
+void CatalogueView::onLuxurySeatsFetched() {
+    std::cout << "[CatalogueView::onLuxurySeatsFetched] Luxury seats fetched" << std::endl;
+    m_luxurySeatSearch->addFilters(m_productsVM->luxurySeats());
 }
 
 void CatalogueView::getProductList(const int &id, const QVector<displayData::Products> &products) {

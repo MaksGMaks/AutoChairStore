@@ -33,11 +33,11 @@ std::vector<Common::LuxurySeat> ProductsModel::luxurySeats() const {
 }
 
 void ProductsModel::fetchProducts() {
-    m_apiManager.fetchProducts();
     m_apiManager.fetchBaseSeats();
     m_apiManager.fetchChildSeats();
     m_apiManager.fetchSportSeats();
     m_apiManager.fetchLuxurySeats();
+    m_apiManager.fetchProducts();
 }
 
 std::string ProductsModel::getNameById(const std::string &id) {

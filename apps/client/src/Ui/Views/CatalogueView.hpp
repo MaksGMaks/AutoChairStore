@@ -32,9 +32,34 @@ signals:
     void buyProduct(const QString &productId);
 
     void vmFetchProducts();
+    void vmGetBaseSeatsByFilters(const QVector<QString> &brands, const QVector<QString> &suitedFors, 
+                                 const QVector<QString> &colors, const QVector<QString> &materials, const QVector<QString> &types);
+    void vmGetChildSeatsByFilters(const QVector<QString> &brands, const QVector<QString> &ages, const QVector<QString> &weights, 
+                                  const QVector<QString> &heights, const QVector<QString> &safetyKeys, const QVector<QString> &fastenings, 
+                                  const QVector<QString> &driveways);
+    void vmGetSportSeatsByFilters(const QVector<QString> &brands, const QVector<QString> &suitedFors, const QVector<QString> &shellTypes,
+                                  const QVector<QString> &shellMaterials, const QVector<QString> &coverMaterials, const QVector<QString> &colors);
+    void vmGetLuxurySeatsByFilters(const QVector<QString> &brands, const QVector<QString> &suitedFors, const QVector<QString> &colors,
+                                   const QVector<QString> &materials, const QVector<QString> &comforts, const QVector<QString> &customDesigns);
+
+    void vmClearBaseSeats();
+    void vmClearChildSeats();
+    void vmClearSportSeats();
+    void vmClearLuxurySeats();
 
 private slots:
     void onProductsFetched();
+    void onBaseSeatsFetched();
+    void onChildSeatsFetched();
+    void onSportSeatsFetched();
+    void onLuxurySeatsFetched();
+
+    void onFilteredProducts();
+
+    void onBaseSeatsCleared();
+    void onChildSeatsCleared();
+    void onSportSeatsCleared();
+    void onLuxurySeatsCleared();
 
 private:
     void setupUI();

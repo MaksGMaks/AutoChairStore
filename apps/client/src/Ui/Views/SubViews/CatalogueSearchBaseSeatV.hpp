@@ -8,6 +8,7 @@
 #include <QListWidgetItem>
 #include <QLabel>
 #include <QVector>
+#include <QPushButton>
 #include "Ui/DisplayData/DisplayData.hpp"
 
 class CatalogueSearchBaseSeatV : public QWidget {
@@ -18,8 +19,18 @@ public:
 
     void addFilters(const QVector<displayData::BaseSeat> &products);
 
+signals:
+    void filterClicked(const QVector<QString> &brands, const QVector<QString> &suitedFors, 
+                       const QVector<QString> &colors, const QVector<QString> &materials, const QVector<QString> &types);
+    void clearClicked();
+
+private slots:
+    void onFilterButtonClicked();
+    void onClearButtonClicked();
+
 private:
     void setupUI();
+    void setupConnections();
 
     // Layout
     QVBoxLayout *m_layout;
@@ -37,4 +48,8 @@ private:
     QLabel *m_colorLabel;
     QLabel *m_materialLabel;
     QLabel *m_typeLabel;
+
+    // Buttons
+    QPushButton *m_filterButton;
+    QPushButton *m_clearButton;
 };
