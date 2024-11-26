@@ -31,3 +31,7 @@ std::unique_ptr<ITable> TableFactory::makeLuxurySeatTable(sqlite3*& db) {
 std::unique_ptr<ITable> TableFactory::makeSportSeatTable(sqlite3*& db) {
     return std::make_unique<SportSeatTable>(db);
 }
+
+std::unique_ptr<ITable> TableFactory::makeVerificationTable(sqlite3*& db) {
+    return std::make_unique<VerificationTable>(db);
+}

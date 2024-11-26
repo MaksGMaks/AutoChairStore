@@ -28,7 +28,7 @@ namespace database {
             productEntity[Common::TABLE_KEY] = {Common::Products::TABLE_NAME};
             productEntity[Common::Products::PRODUCTNAME_KEY].push_back("Product " + std::to_string(i));
             productEntity[Common::Products::PRODUCTTYPE_KEY].push_back((i < 5) ? "1" : (i < 10) ? "2" : (i < 15) ? "3" : "4");
-            productEntity[Common::Products::PRODUCTTYPEID_KEY].push_back(std::to_string(i % 5));
+            productEntity[Common::Products::PRODUCTTYPEID_KEY].push_back(std::to_string((i % 5) + 1));
             productEntity[Common::Products::PRICE_KEY].push_back(std::to_string(20000 + (i * 1000)));
             productEntity[Common::Products::PRICEUNIT_KEY].push_back("грн");
             productEntity[Common::Products::QUANTITY_KEY].push_back("10");
@@ -114,6 +114,8 @@ namespace database {
             luxurySeatEntity[Common::LuxurySeat::COMFORTLEVEL_KEY].push_back("Comfort level " + std::to_string(i));
             luxurySeatEntity[Common::LuxurySeat::CUSTOMDESIGN_KEY].push_back("Custom design " + std::to_string(i));
             luxurySeatEntity[Common::LuxurySeat::DESCRIPTION_KEY].push_back("Description " + std::to_string(i));
+
+            luxurySeatEntities.push_back(luxurySeatEntity);
         }
 
         luxurySeatEntityRequest = Common::Request::ADD;
@@ -123,23 +125,23 @@ namespace database {
             Common::Photos photo;
             photo.id = std::to_string(i);
             photo.productType = (i < 5) ? "1" : (i < 10) ? "2" : (i < 15) ? "3" : "4";
-            photo.productTypeId = std::to_string(i % 5);
+            photo.productTypeId = std::to_string((i % 5) + 1);
             testPhotos.push_back(photo);
         }
 
         for(auto &photo : testPhotos) {
             if(photo.productType == "1") {
-                photo.image = (photo.productTypeId == "0") ? utils.seat1 : (photo.productTypeId == "1") ? utils.seat2 : (photo.productTypeId == "2") 
-                ? utils.seat3 : (photo.productTypeId == "3") ? utils.seat4 : utils.seat5;
+                photo.image = (photo.productTypeId == "1") ? utils.seat1 : (photo.productTypeId == "2") ? utils.seat2 : (photo.productTypeId == "3") 
+                ? utils.seat3 : (photo.productTypeId == "4") ? utils.seat4 : utils.seat5;
             } else if(photo.productType == "2") {
-                photo.image = (photo.productTypeId == "0") ? utils.childSeat1 : (photo.productTypeId == "1") ? utils.childSeat2 : (photo.productTypeId == "2")
-                ? utils.childSeat3 : (photo.productTypeId == "3") ? utils.childSeat4 : utils.childSeat5;
+                photo.image = (photo.productTypeId == "1") ? utils.childSeat1 : (photo.productTypeId == "2") ? utils.childSeat2 : (photo.productTypeId == "3")
+                ? utils.childSeat3 : (photo.productTypeId == "4") ? utils.childSeat4 : utils.childSeat5;
             } else if(photo.productType == "3") {
-                photo.image = (photo.productTypeId == "0") ? utils.sportSeat1 : (photo.productTypeId == "1") ? utils.sportSeat2 : (photo.productTypeId == "2")
-                ? utils.sportSeat3 : (photo.productTypeId == "3") ? utils.sportSeat4 : utils.sportSeat5;
+                photo.image = (photo.productTypeId == "1") ? utils.sportSeat1 : (photo.productTypeId == "2") ? utils.sportSeat2 : (photo.productTypeId == "3")
+                ? utils.sportSeat3 : (photo.productTypeId == "4") ? utils.sportSeat4 : utils.sportSeat5;
             } else {
-                photo.image = (photo.productTypeId == "0") ? utils.luxurySeat1 : (photo.productTypeId == "1") ? utils.luxurySeat2 : (photo.productTypeId == "2")
-                ? utils.luxurySeat3 : (photo.productTypeId == "3") ? utils.luxurySeat4 : utils.luxurySeat5;
+                photo.image = (photo.productTypeId == "1") ? utils.luxurySeat1 : (photo.productTypeId == "2") ? utils.luxurySeat2 : (photo.productTypeId == "3")
+                ? utils.luxurySeat3 : (photo.productTypeId == "4") ? utils.luxurySeat4 : utils.luxurySeat5;
             }
         }
 

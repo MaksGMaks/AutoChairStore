@@ -16,7 +16,7 @@ public:
 
 signals:
     void modelAddToBasket(const std::string &id);
-    void modelCreateOrder(const Common::PurchaseOrders &order);
+    void modelCreateOrder(const std::vector<Common::PurchaseOrders> &entity);
     void addedToBasket();
     void orderCreated();
 

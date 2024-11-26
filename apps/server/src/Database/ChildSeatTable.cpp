@@ -5,44 +5,16 @@ ChildSeatTable::ChildSeatTable(sqlite3*& db) {
 }
 
 bool ChildSeatTable::add(Common::Dataset &entity) {
-    std::string query = "";
-
-    auto id_list = entity[Common::ChildSeat::ID_KEY];
-    auto brand_list = entity[Common::ChildSeat::BRAND_KEY];
-    auto age_list = entity[Common::ChildSeat::AGE_KEY];
-    auto weight_list = entity[Common::ChildSeat::WEIGHT_KEY];
-    auto height_list = entity[Common::ChildSeat::HEIGHT_KEY];
-    auto safetyKey_list = entity[Common::ChildSeat::SAFETYKEY_KEY];
-    auto fastening_list = entity[Common::ChildSeat::FASTENING_KEY];
-    auto driveway_list = entity[Common::ChildSeat::DRIVEWAY_KEY];
-    auto description_list = entity[Common::ChildSeat::DESCRIPTION_KEY];
-
-    for(auto element : entity[Common::ChildSeat::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::ChildSeat::TABLE_NAME) + " (" + std::string(Common::ChildSeat::BRAND_KEY) + ", " + 
-        std::string(Common::ChildSeat::AGE_KEY) + ", " + std::string(Common::ChildSeat::WEIGHT_KEY) + ", " + 
-        std::string(Common::ChildSeat::HEIGHT_KEY) + ", " + std::string(Common::ChildSeat::SAFETYKEY_KEY) + ", " + 
-        std::string(Common::ChildSeat::FASTENING_KEY) + ", " + std::string(Common::ChildSeat::DRIVEWAY_KEY) + ", " + 
-        std::string(Common::ChildSeat::DESCRIPTION_KEY) + ") VALUES ('" + 
-        brand_list.front() + "', '" + age_list.front() + "', '" + weight_list.front() + "', '" + 
-        height_list.front() + "', '" + safetyKey_list.front() + "', '" + fastening_list.front() + "', '" + 
-        driveway_list.front() + "', '" + description_list.front() + "');";
-
-        brand_list.pop_front();
-        age_list.pop_front();
-        weight_list.pop_front();
-        height_list.pop_front();
-        safetyKey_list.pop_front();
-        fastening_list.pop_front();
-        driveway_list.pop_front();
-        description_list.pop_front();
-        id_list.pop_front();
-    }
+    std::string query = "INSERT INTO " + std::string(Common::ChildSeat::TABLE_NAME) + " (brand, age, weight, height, safetyKey, fastening, driveway, description) "
+                        "VALUES ('" + entity[Common::ChildSeat::BRAND_KEY].front() + "', '" + entity[Common::ChildSeat::AGE_KEY].front() + "', '"
+                        + entity[Common::ChildSeat::WEIGHT_KEY].front() + "', '" + entity[Common::ChildSeat::HEIGHT_KEY].front() + "', '"
+                        + entity[Common::ChildSeat::SAFETYKEY_KEY].front() + "', '" + entity[Common::ChildSeat::FASTENING_KEY].front() + "', '"
+                        + entity[Common::ChildSeat::DRIVEWAY_KEY].front() + "', '" + entity[Common::ChildSeat::DESCRIPTION_KEY].front() + "');";
     
     return database::execute_query(query, dataBase);
 }
 
 bool ChildSeatTable::update(Common::Dataset &data) {
-    std::cout << "[ChildSeatTable::update] Updating child seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::ChildSeat::ID_KEY];
@@ -82,20 +54,17 @@ bool ChildSeatTable::update(Common::Dataset &data) {
 }
 
 bool ChildSeatTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::deleteAt] Deleting child seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE id = " + entity[Common::ChildSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset ChildSeatTable::getAll() {
-    std::cout << "[ChildSeatTable::getAll] Getting all child seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void ChildSeatTable::get(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::get] Getting child seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -112,7 +81,6 @@ void ChildSeatTable::get(Common::Dataset &entity) {
 }
 
 void ChildSeatTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[ChildSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::ChildSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

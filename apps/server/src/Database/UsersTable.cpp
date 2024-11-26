@@ -5,32 +5,14 @@ UsersTable::UsersTable(sqlite3*& db) {
 }
 
 bool UsersTable::add(Common::Dataset &entity) {
-    std::string query = "";
-
-    auto id_list = entity[Common::Users::ID_KEY];
-    auto name_list = entity[Common::Users::NAME_KEY];
-    auto surname_list = entity[Common::Users::SURNAME_KEY];
-    auto email_list = entity[Common::Users::EMAIL_KEY];
-    auto password_list = entity[Common::Users::PASSWORD_KEY];
-
-    for(auto element : entity[Common::Users::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::Users::TABLE_NAME) + " (" + std::string(Common::Users::NAME_KEY) + ", " + 
-        std::string(Common::Users::SURNAME_KEY) + ", " + std::string(Common::Users::EMAIL_KEY) + ", " + 
-        std::string(Common::Users::PASSWORD_KEY) + ") VALUES ('" + name_list.front() + "', '" + 
-        surname_list.front() + "', '" + email_list.front() + "', '" + password_list.front() + "');";
-
-        name_list.pop_front();
-        surname_list.pop_front();
-        email_list.pop_front();
-        password_list.pop_front();
-        id_list.pop_front();
-    }
-
+    std::string query = "INSERT INTO " + std::string(Common::Users::TABLE_NAME) + " (name, surname, email, password) "
+                        "VALUES ('" + entity[Common::Users::NAME_KEY].front() + "', '" + entity[Common::Users::SURNAME_KEY].front() + "', '"
+                        + entity[Common::Users::EMAIL_KEY].front() + "', '" + entity[Common::Users::PASSWORD_KEY].front() + "');";
+    
     return database::execute_query(query, dataBase);
 }
 
 bool UsersTable::update(Common::Dataset &data) {
-    std::cout << "[UsersTable::update] Updating user" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::Users::ID_KEY];
@@ -58,20 +40,17 @@ bool UsersTable::update(Common::Dataset &data) {
 }
 
 bool UsersTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[UsersTable::deleteAt] Deleting user" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::Users::TABLE_NAME) + " WHERE id = " + entity[Common::Users::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset UsersTable::getAll() {
-    std::cout << "[UsersTable::getAll] Getting all users" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::Users::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void UsersTable::get(Common::Dataset &entity) {
-    std::cout << "[UsersTable::get] Getting user" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -89,7 +68,6 @@ void UsersTable::get(Common::Dataset &entity) {
 }
 
 void UsersTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[UsersTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::Users::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

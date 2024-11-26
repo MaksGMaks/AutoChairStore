@@ -20,8 +20,8 @@ void PurchaseOrdersModel::onPurchaseOrdersError(const std::string &message) {
     emit purchaseOrderError(message);
 }
 
-void PurchaseOrdersModel::onCreateOrder(const Common::PurchaseOrders &order) {
-    m_apiManager.createPurchaseOrder(order);
+void PurchaseOrdersModel::onCreateOrder(const std::vector<Common::PurchaseOrders> &entity) {
+    m_apiManager.createPurchaseOrder(entity);
 }
 
 void PurchaseOrdersModel::onCancelOrder(const std::string &id) {

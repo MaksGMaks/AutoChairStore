@@ -5,38 +5,15 @@ BaseSeatTable::BaseSeatTable(sqlite3*& db) {
 }
 
 bool BaseSeatTable::add(Common::Dataset &entity) {
-    std::string query = "";
-
-    auto id_list = entity[Common::BaseSeat::ID_KEY];
-    auto brand_list = entity[Common::BaseSeat::BRAND_KEY];
-    auto suitableFor_list = entity[Common::BaseSeat::SUITABLEFOR_KEY];
-    auto color_list = entity[Common::BaseSeat::COLOR_KEY];
-    auto material_list = entity[Common::BaseSeat::MATERIAL_KEY];
-    auto type_list = entity[Common::BaseSeat::TYPE_KEY];
-    auto description_list = entity[Common::BaseSeat::DESCRIPTION_KEY];
-
-    for(auto element : entity[Common::BaseSeat::ID_KEY]) {
-        query += "INSERT INTO " + std::string(Common::BaseSeat::TABLE_NAME) + " (" + std::string(Common::BaseSeat::BRAND_KEY) + ", " + 
-        std::string(Common::BaseSeat::SUITABLEFOR_KEY) + ", " + std::string(Common::BaseSeat::COLOR_KEY) + ", " + 
-        std::string(Common::BaseSeat::MATERIAL_KEY) + ", " + std::string(Common::BaseSeat::TYPE_KEY) + ", " + 
-        std::string(Common::BaseSeat::DESCRIPTION_KEY) + ") VALUES ('" + 
-        brand_list.front() + "', '" + suitableFor_list.front() + "', '" + color_list.front() + "', '" + 
-        material_list.front() + "', '" + type_list.front() + "', '" + description_list.front() + "');";
-
-        brand_list.pop_front();
-        suitableFor_list.pop_front();
-        color_list.pop_front();
-        material_list.pop_front();
-        type_list.pop_front();
-        description_list.pop_front();
-        id_list.pop_front();
-    }
+    std::string query = "INSERT INTO " + std::string(Common::BaseSeat::TABLE_NAME) + " (brand, suitableFor, color, material, type, description) "
+                        "VALUES ('" + entity[Common::BaseSeat::BRAND_KEY].front() + "', '" + entity[Common::BaseSeat::SUITABLEFOR_KEY].front() + "', '"
+                        + entity[Common::BaseSeat::COLOR_KEY].front() + "', '" + entity[Common::BaseSeat::MATERIAL_KEY].front() + "', '"
+                        + entity[Common::BaseSeat::TYPE_KEY].front() + "', '" + entity[Common::BaseSeat::DESCRIPTION_KEY].front() + "');";
     
     return database::execute_query(query, dataBase);
 }
 
 bool BaseSeatTable::update(Common::Dataset &data) {
-    std::cout << "[BaseSeatTable::update] Updating base seat" << std::endl;
     std::string query = "";
 
     auto id_list = data[Common::BaseSeat::ID_KEY];
@@ -70,20 +47,17 @@ bool BaseSeatTable::update(Common::Dataset &data) {
 }
 
 bool BaseSeatTable::deleteAt(Common::Dataset &entity) {
-    std::cout << "[BaseSeatTable::deleteAt] Deleting base seat" << std::endl;
     const std::string query =
         "DELETE FROM " + std::string(Common::BaseSeat::TABLE_NAME) + " WHERE id = " + entity[Common::BaseSeat::ID_KEY].front() + ";";
     return database::execute_query(query, dataBase);
 }
 
 Common::Dataset BaseSeatTable::getAll() {
-    std::cout << "[BaseSeatTable::getAll] Getting all base seats" << std::endl;
     std::string sql = "SELECT * FROM " + std::string(Common::BaseSeat::TABLE_NAME) + ";";
     return database::selectAllFromTable(sql, dataBase);
 }
 
 void BaseSeatTable::get(Common::Dataset &entity) {
-    std::cout << "[BaseSeatTable::get] Getting base seat" << std::endl;
     Common::Data values = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT " + values.front();
     values.pop_front();
@@ -99,7 +73,6 @@ void BaseSeatTable::get(Common::Dataset &entity) {
 }
 
 void BaseSeatTable::getColumns(Common::Dataset &entity) {
-    std::cout << "[BaseSeatTable::getColumns] Getting columns" << std::endl;
     Common::Data columns = entity[Common::COLUMN_KEY];
     std::string sql = "SELECT * FROM " + std::string(Common::BaseSeat::TABLE_NAME) + " WHERE " + columns.front() + " IN ('";
     Common::Data values = entity[columns.front()];

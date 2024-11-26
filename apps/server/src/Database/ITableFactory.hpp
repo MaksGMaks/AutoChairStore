@@ -13,6 +13,7 @@
 #include "ChildSeatTable.hpp"
 #include "LuxurySeatTable.hpp"
 #include "SportSeatTable.hpp"
+#include "VerificationTable.hpp"
 
 class ITableFactory {
 public:
@@ -25,4 +26,5 @@ public:
     virtual std::unique_ptr<ITable> makeChildSeatTable(sqlite3*& db) = 0;
     virtual std::unique_ptr<ITable> makeLuxurySeatTable(sqlite3*& db) = 0;
     virtual std::unique_ptr<ITable> makeSportSeatTable(sqlite3*& db) = 0;
+    virtual std::unique_ptr<ITable> makeVerificationTable(sqlite3*& db) = 0;
 };

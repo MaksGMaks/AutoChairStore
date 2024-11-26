@@ -19,7 +19,7 @@ signals:
 
 public slots:
     void onFetchPurchaseOrders(const std::string &userId);
-    void onCreateOrder(const Common::PurchaseOrders &order);
+    void onCreateOrder(const std::vector<Common::PurchaseOrders> &entity);
     void onCancelOrder(const std::string &id);
 
 private slots:

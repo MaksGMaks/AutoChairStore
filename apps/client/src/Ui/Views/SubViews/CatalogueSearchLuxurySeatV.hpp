@@ -6,6 +6,10 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QListWidgetItem>
+#include <QLabel>
+#include <QVector>
+#include <QPushButton>
+#include "Ui/DisplayData/DisplayData.hpp"
 
 class CatalogueSearchLuxurySeatV : public QWidget {
     Q_OBJECT
@@ -13,13 +17,26 @@ public:
     explicit CatalogueSearchLuxurySeatV(QWidget *parent = nullptr);
     ~CatalogueSearchLuxurySeatV() = default;
 
+    void addFilters(const QVector<displayData::LuxurySeat> &products);
+
+signals:
+    void filterClicked(const QVector<QString> &brands, const QVector<QString> &suitedFors, 
+                       const QVector<QString> &colors, const QVector<QString> &materials, const QVector<QString> &comforts, 
+                       const QVector<QString> &customDesigns);
+    void clearClicked();
+
+private slots:
+    void onFilterButtonClicked();
+    void onClearButtonClicked();
+    
 private:
     void setupUI();
+    void setupConnections();
 
     // Layout
     QVBoxLayout *m_layout;
 
-    // test data
+    // List widgets
     QListWidget *m_brandListWidget;
     QListWidget *m_suitedForListWidget;
     QListWidget *m_colorListWidget;
@@ -27,18 +44,15 @@ private:
     QListWidget *m_comfortListWidget;
     QListWidget *m_customDesignListWidget;
 
-    QCheckBox *m_checkBox1;
-    QCheckBox *m_checkBox2;
-    QCheckBox *m_checkBox3;
-    QCheckBox *m_checkBox4;
-    QCheckBox *m_checkBox5;
-    QCheckBox *m_checkBox6;
-    QCheckBox *m_checkBox7;
-    QCheckBox *m_checkBox8;
-    QCheckBox *m_checkBox9;
-    QCheckBox *m_checkBox10;
-    QCheckBox *m_checkBox11;
-    QCheckBox *m_checkBox12;
+    // Labels
+    QLabel *m_brandLabel;
+    QLabel *m_suitedForLabel;
+    QLabel *m_colorLabel;
+    QLabel *m_materialLabel;
+    QLabel *m_comfortLabel;
+    QLabel *m_customDesignLabel;
 
-
+    // Buttons
+    QPushButton *m_filterButton;
+    QPushButton *m_clearButton;
 };
